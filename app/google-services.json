@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "873078107823",
+    "firebase_url": "https://paladium-fe491-default-rtdb.firebaseio.com",
+    "project_id": "paladium-fe491",
+    "storage_bucket": "paladium-fe491.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:873078107823:android:d87659bd84a57b5ec3ee5a",
+        "android_client_info": {
+          "package_name": "com.paladium"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "873078107823-bjijai8ik5n3b0uk0mcg7t786hka7448.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCYmYKDiA7FoOcptkEBfivgHW6Fl2TuaAY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "873078107823-bjijai8ik5n3b0uk0mcg7t786hka7448.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
