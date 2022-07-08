@@ -10,6 +10,8 @@ import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.paladium.Logica.Producto;
 
 import java.util.ArrayList;
@@ -17,6 +19,7 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity implements CustomRVAdapter_Products.ListItemClick{
 
     private DatabaseReference rootReference;
+    private StorageReference storageReference;
     private RecyclerView customRecyclerView;
     private Producto producto;
     private ArrayList<Producto> listaProductos;
@@ -27,8 +30,10 @@ public class MainActivity extends AppCompatActivity implements CustomRVAdapter_P
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        // Firebase---------------------------------------------------------------------------------
         rootReference = FirebaseDatabase.getInstance().getReference();
+        storageReference = FirebaseStorage.getInstance().getReference();
+        //------------------------------------------------------------------------------------------
         customRecyclerView = findViewById(R.id.main_recyclerV_CustomProducts);
         customRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);

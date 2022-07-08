@@ -3,6 +3,10 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/AndroidProyectsInteliJIdea/Paladium/app/src/main/res/drawable/icon_photo_gallery_48.xml" value="0.1205" />
+        <entry key="..\:/AndroidProyectsInteliJIdea/Paladium/app/src/main/res/layout/activity_main.xml" value="0.36666666666666664" />
+        <entry key="..\:/AndroidProyectsInteliJIdea/Paladium/app/src/main/res/layout/activity_product_description.xml" value="0.33" />
+        <entry key="..\:/AndroidProyectsInteliJIdea/Paladium/app/src/main/res/layout/custom_list_productos.xml" value="0.5" />
         <entry key="..\:/Users/DeathCrow/Documents/Paladium/app/src/main/res/layout/activity_main.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/DeathCrow/Documents/Paladium/app/src/main/res/layout/custom_list_productos.xml" value="0.30995475113122173" />
       </map>
