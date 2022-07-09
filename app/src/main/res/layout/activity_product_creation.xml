@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ProductDescription">
+    tools:context=".Vista.Activities.ProductCreation">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -25,7 +25,7 @@
                 android:id="@+id/imageButton"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@drawable/baseline_photo_camera_black_48dp" />
+                app:srcCompat="@drawable/baseline_photo_camera_black_48dp" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -73,7 +73,7 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:endIconDrawable="@drawable/baseline_qr_code_scanner_black_24dp"
+                app:endIconDrawable="@drawable/barcode_scanner_24px"
                 app:endIconMode="custom"
                 >
 

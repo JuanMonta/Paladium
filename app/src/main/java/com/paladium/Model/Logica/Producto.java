@@ -1,4 +1,4 @@
-package com.paladium.Logica;
+package com.paladium.Model.Logica;
 
 public class Producto {
 

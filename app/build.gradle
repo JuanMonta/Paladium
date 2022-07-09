@@ -14,6 +14,8 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        //----navigation bottom bar 3rth part Library---------------------------
+        vectorDrawables.useSupportLibrary = true
     }
 
     buildTypes {
@@ -30,12 +32,24 @@ android {
 
 dependencies {
 
-    implementation 'androidx.appcompat:appcompat:1.4.1'
-    implementation 'com.google.android.material:material:1.6.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.3'
+    implementation 'androidx.appcompat:appcompat:1.4.2'
+    implementation 'com.google.android.material:material:1.6.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 
     implementation 'com.google.firebase:firebase-storage:20.0.1'
     implementation 'com.google.firebase:firebase-database:20.0.5'
+    //-----------------navigation fragment---------------------------------
+    // https://github-com.translate.goog/oneHamidreza/MeowBottomNavigation?_x_tr_sl=en&_x_tr_tl=es&_x_tr_hl=es
+    // https://www.youtube.com/watch?v=MiphbOtSyWY
+    implementation 'androidx.navigation:navigation-fragment:2.5.0'
+    implementation 'androidx.navigation:navigation-ui:2.5.0'
+
+    //----navigation bottom bar 3rth part Library---------------------------
+    implementation 'com.etebarian:meow-bottom-navigation-java:1.2.0'
+    //implementation 'com.etebarian:meow-bottom-navigation:1.3.1'
+
+
+
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'

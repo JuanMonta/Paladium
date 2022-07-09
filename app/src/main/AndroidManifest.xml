@@ -16,10 +16,10 @@
         android:theme="@style/Theme.Paladium"
         tools:targetApi="31">
         <activity
-            android:name=".ProductDescription"
+            android:name=".Vista.Activities.ProductCreation"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".Vista.Activities.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

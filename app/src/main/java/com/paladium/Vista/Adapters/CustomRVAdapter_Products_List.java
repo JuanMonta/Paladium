@@ -1,4 +1,4 @@
-package com.paladium;
+package com.paladium.Vista.Adapters;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,11 +10,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.paladium.Logica.Producto;
+import com.paladium.Model.Logica.Producto;
+import com.paladium.R;
 
 import java.util.List;
 
-public class CustomRVAdapter_Products extends RecyclerView.Adapter<CustomRVAdapter_Products.ViewHolderListaProducts> {
+public class CustomRVAdapter_Products_List extends RecyclerView.Adapter<CustomRVAdapter_Products_List.ViewHolderListaProducts> {
 
     List<Producto> listaProducto;
 
@@ -24,7 +25,7 @@ public class CustomRVAdapter_Products extends RecyclerView.Adapter<CustomRVAdapt
 
     final private ListItemClick onclickListener;
 
-    public CustomRVAdapter_Products(List<Producto> listaProducto, ListItemClick listItemClick) {
+    public CustomRVAdapter_Products_List(List<Producto> listaProducto, ListItemClick listItemClick) {
         this.listaProducto = listaProducto;
         onclickListener = listItemClick;
     }

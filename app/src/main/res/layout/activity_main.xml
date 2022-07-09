@@ -5,16 +5,30 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".MainActivity" >
+    tools:context=".Vista.Activities.MainActivity" >
 
-    <Button
-        android:id="@+id/button2"
+
+    <FrameLayout
+        android:id="@+id/fragmentContainer"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="10">
+
+    </FrameLayout>
+
+    <com.etebarian.meowbottomnavigation.MeowBottomNavigation
+        android:id="@+id/activity_main_BottomNavigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Button" />
+        app:mbn_backgroundBottomColor="#375530"
+        app:mbn_shadowColor="#3F8133"
+        app:mbn_circleColor="#269738"
+        app:mbn_defaultIconColor="#FFFFFF"
+        app:mbn_selectedIconColor="#FFFFFF"
+        app:mbn_countTextColor="#011905"
+        app:mbn_countBackgroundColor="#FFFFFF"
+        app:mbn_rippleColor="#0509FD"
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/main_recyclerV_CustomProducts"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        />
+
 </LinearLayout>
