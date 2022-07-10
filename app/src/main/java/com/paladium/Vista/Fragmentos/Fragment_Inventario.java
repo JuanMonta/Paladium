@@ -1,21 +1,38 @@
 package com.paladium.Vista.Fragmentos;
 
+import android.content.Context;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.paladium.Model.Logica.Producto;
 import com.paladium.R;
+import com.paladium.Vista.Adapters.CustomRVAdapter_Products_List;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link Fragment_Inventario#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class Fragment_Inventario extends Fragment {
+public class Fragment_Inventario extends Fragment implements CustomRVAdapter_Products_List.ListItemClick{
+
+    private RecyclerView customRecyclerView;
+    private Producto producto;
+    private ArrayList<Producto> listaProductos;
+    private CustomRVAdapter_Products_List adapterProducts;
+    private Toast toast;
+    private Context mContext;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -62,5 +79,38 @@ public class Fragment_Inventario extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_inventario, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        mContext = view.getContext();
+        //------------------------------------------------------------------------------------------
+        customRecyclerView = view.findViewById(R.id.fragment_inventario_recyclerV_CustomProducts);
+        //customRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(view.getContext());
+        customRecyclerView.setLayoutManager(linearLayoutManager);
+
+         listaProductos = new ArrayList<>();
+        for (int i = 0; i < 20; i++) {
+            producto = new Producto();
+            producto.setNombre("Nombre: "+i);
+            producto.setCantidad(i);
+            producto.setPrecio(2.5+i);
+            listaProductos.add(producto);
+        }
+
+        adapterProducts = new CustomRVAdapter_Products_List(listaProductos, this);
+        customRecyclerView.setAdapter(adapterProducts);
+
+    }
+
+    @Override
+    public void onListenItemClick(int itemClicado) {
+        String mensajeToast = "item # "+itemClicado+" clicado.";
+        if(toast !=null){
+            toast.cancel();
+        }
+        toast.makeText(mContext, mensajeToast, Toast.LENGTH_SHORT).show();
     }
 }
