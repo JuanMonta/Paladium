@@ -21,13 +21,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:mbn_backgroundBottomColor="#375530"
-        app:mbn_shadowColor="#3F8133"
         app:mbn_circleColor="#269738"
-        app:mbn_defaultIconColor="#FFFFFF"
-        app:mbn_selectedIconColor="#FFFFFF"
-        app:mbn_countTextColor="#011905"
         app:mbn_countBackgroundColor="#FFFFFF"
+        app:mbn_countTextColor="#011905"
+        app:mbn_defaultIconColor="#FFFFFF"
         app:mbn_rippleColor="#0509FD"
+        app:mbn_selectedIconColor="#FFFFFF"
+        app:mbn_shadowColor="#3F8133"
 
         />
 

@@ -6,8 +6,13 @@ public class Producto {
 
     private String Nombre;
     private String Descripcion;
-    private int    Cantidad;
-    private double Precio;
+    private int Cantidad;
+    private String CodBarras;
+    private float Precio;
+    private float Costo;
+    private String Imagen;
+    private String productoFirebaseKey;
+
 
     public Producto() {
     }
@@ -36,11 +41,43 @@ public class Producto {
         Cantidad = cantidad;
     }
 
-    public double getPrecio() {
+    public String getCodBarras() {
+        return CodBarras;
+    }
+
+    public void setCodBarras(String codBarras) {
+        CodBarras = codBarras;
+    }
+
+    public float getPrecio() {
         return Precio;
     }
 
-    public void setPrecio(double precio) {
+    public void setPrecio(float precio) {
         Precio = precio;
+    }
+
+    public float getCosto() {
+        return Costo;
+    }
+
+    public void setCosto(float costo) {
+        Costo = costo;
+    }
+
+    public String getImagen() {
+        return Imagen;
+    }
+
+    public void setImagen(String imagen) {
+        Imagen = imagen;
+    }
+
+    public String getProductoFirebaseKey() {
+        return productoFirebaseKey;
+    }
+
+    public void setProductoFirebaseKey(String productoFirebaseKey) {
+        this.productoFirebaseKey = productoFirebaseKey;
     }
 }

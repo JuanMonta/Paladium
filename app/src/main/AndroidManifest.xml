@@ -3,8 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.paladium">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
-
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -16,11 +14,17 @@
         android:theme="@style/Theme.Paladium"
         tools:targetApi="31">
         <activity
-            android:name=".Vista.Activities.ProductCreation"
+            android:name=".ProductDescription"
             android:exported="false" />
         <activity
+            android:name=".Vista.Activities.ProductCreation"
+            android:exported="false" /> <!-- android:windowSoftInputMode="stateUnchanged|adjustPan" -->
+        <!-- https://developer.android.com/guide/topics/manifest/activity-element.html#wsoft -->
+        <!-- https://stackoverflow.com/questions/25934141/android-keyboard-compresses-my-view -->
+        <activity
             android:name=".Vista.Activities.MainActivity"
-            android:exported="true">
+            android:exported="true"
+            android:windowSoftInputMode="stateUnchanged|adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -32,5 +36,7 @@
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
     </application>
+
+    <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>

@@ -1,10 +1,12 @@
 package com.paladium.Presentador;
 
 import android.content.Context;
-import android.widget.Toast;
+import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 
 import com.etebarian.meowbottomnavigation.MeowBottomNavigation;
@@ -13,17 +15,17 @@ import com.paladium.Vista.Fragmentos.Fragment_Balance;
 import com.paladium.Vista.Fragmentos.Fragment_Home;
 import com.paladium.Vista.Fragmentos.Fragment_Inventario;
 
-public class PresentadorMainActivity {
+public class PresentadorMainActivity implements InterfacePresenter_MainActivity {
 
-    private Context mContext;
-
+    private final Context mContext;
+    private MeowBottomNavigation bottomNavigation;
 
     public PresentadorMainActivity(Context mContext) {
         this.mContext = mContext;
     }
 
-    public void crearBottomNavigation(MeowBottomNavigation bottomNavigation, androidx.fragment.app.FragmentManager supportFragmentManager) {
-
+    public void crearBottomNavigation(MeowBottomNavigation bottomNav, androidx.fragment.app.FragmentManager supportFragmentManager) {
+        this.bottomNavigation = bottomNav;
 
         bottomNavigation.add(new MeowBottomNavigation.Model(1, R.drawable.store_24px));
         bottomNavigation.add(new MeowBottomNavigation.Model(2, R.drawable.account_balance_wallet_24px));
@@ -43,6 +45,7 @@ public class PresentadorMainActivity {
                         break;
                     case 3:
                         fragment = new Fragment_Inventario();
+                        ((Fragment_Inventario) fragment).iniciarListener(PresentadorMainActivity.this);
                         break;
                 }
                 //cargarFragmentos
@@ -70,8 +73,6 @@ public class PresentadorMainActivity {
         });
 
 
-
-
     }
 
     private void cargarFragmentos(Fragment fragment, FragmentManager supportFragmentManager) {
@@ -82,4 +83,8 @@ public class PresentadorMainActivity {
     }
 
 
+    @Override
+    public void ocultarTeclado(boolean ocultar) {
+
+    }
 }

@@ -66,10 +66,18 @@ public class CustomRVAdapter_Products_List extends RecyclerView.Adapter<CustomRV
 
 
         void asignarDatos(Producto producto) {
-            productoNombre.setText(""+producto.getNombre());
-            productoCant.setText(""+producto.getCantidad());
-            productoPrecio.setText(""+producto.getPrecio());
-            Log.d("ADAPTER_PRODUCTOS", ""+producto.getNombre());
+            productoNombre.setText(producto.getNombre() == null ? "Nombre no disponible" : producto.getNombre());
+            productoCant.setText(producto.getCantidad() >0 ? ""+producto.getCantidad(): "Producto no disponible");
+            productoPrecio.setText(producto.getPrecio() >0 ? ""+producto.getPrecio(): "Precio no disponible");
+
+            Log.d("ADAPTER_PRODUCTOS", "Product Key: "+producto.getProductoFirebaseKey());
+            Log.d("ADAPTER_PRODUCTOS", "Nombre: "+producto.getNombre());
+            Log.d("ADAPTER_PRODUCTOS", "Cantidad: "+producto.getCantidad());
+            Log.d("ADAPTER_PRODUCTOS", "Precio: "+producto.getPrecio());
+            Log.d("ADAPTER_PRODUCTOS", "Costo: "+producto.getCosto());
+            Log.d("ADAPTER_PRODUCTOS", "Descrip: "+producto.getDescripcion());
+            Log.d("ADAPTER_PRODUCTOS", "CobBar: "+producto.getCodBarras());
+            Log.d("ADAPTER_PRODUCTOS", "---------------------------------------");
         }
 
         @Override

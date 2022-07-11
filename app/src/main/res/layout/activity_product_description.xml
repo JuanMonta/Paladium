@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".Vista.Activities.ProductCreation">
+    tools:context=".Vista.Activities.ProductDescription"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -22,34 +22,9 @@
             android:padding="5dp">
 
             <ImageView
-                android:id="@+id/imageButton"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:srcCompat="@drawable/baseline_camera_alt_green_black_48dp" />
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <ImageButton
-                    android:id="@+id/imageButton3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginTop="0dp"
-                    android:layout_marginEnd="0dp"
-                    app:srcCompat="@drawable/baseline_photo_library_black_18dp" />
-
-                <ImageButton
-                    android:id="@+id/imageButton4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/imageButton3"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginEnd="0dp"
-                    app:srcCompat="@drawable/baseline_add_a_photo_black_18dp" />
-            </RelativeLayout>
 
         </FrameLayout>
 
@@ -69,21 +44,18 @@
                 android:layout_marginLeft="2dp"
                 android:text="Código de barras" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:endIconDrawable="@drawable/barcode_scanner_24px"
-                app:endIconMode="custom"
-                >
 
-                <com.google.android.material.textfield.TextInputEditText
+
+                <TextView
                     android:layout_width="match_parent"
                     android:layout_height="41dp"
-                    android:inputType="textPersonName"
                     android:text="sdfsd"
-                    android:textSize="14sp" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    app:drawableEndCompat="@drawable/barcode_scanner_24px"
+                    android:textSize="14sp"
+                    android:layout_marginLeft="2dp"
+                    android:gravity="center_vertical"
+                    />
+
 
             <TextView
                 android:id="@+id/textView3"
@@ -92,22 +64,20 @@
                 android:layout_marginLeft="2dp"
                 android:text="Cantidad disponible" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-                android:id="@+id/editTextNumber"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
 
-                <com.google.android.material.textfield.TextInputEditText
+
+                <TextView
                     android:layout_width="match_parent"
                     android:layout_height="41dp"
                     android:inputType="number"
                     android:text="dasda"
+                    android:gravity="center_vertical"
+                    android:layout_marginLeft="2dp"
                     android:textSize="14sp"/>
 
-            </com.google.android.material.textfield.TextInputLayout>
 
         </LinearLayout>
+
     </LinearLayout>
 
     <LinearLayout
@@ -149,24 +119,19 @@
                                 android:layout_height="wrap_content"
                                 android:text="Nombre"
                                 android:textStyle="bold"/>
-                            <com.google.android.material.textfield.TextInputLayout
-                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                app:helperText="Requerido*"
-                                app:helperTextTextColor="@color/red"
-                                app:startIconDrawable="@drawable/baseline_bookmark_black_24dp"
-                                app:counterEnabled="true"
-                                app:counterMaxLength="40">
 
-                                <com.google.android.material.textfield.TextInputEditText
+
+                                <TextView
                                     android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
+                                    android:layout_height="40dp"
+                                    app:drawableStartCompat="@drawable/baseline_bookmark_black_24dp"
+                                    android:drawablePadding="20dp"
                                     android:maxLength="40"
                                     android:text="asjdhjk"
-                                    android:inputType="textPersonName" />
+                                    android:textSize="16sp"
+                                    android:gravity="center_vertical" />
 
-                            </com.google.android.material.textfield.TextInputLayout>
+
 
                         </LinearLayout>
 
@@ -191,24 +156,16 @@
                                 android:text="Precio Unitario"
                                 android:textStyle="bold"/>
 
-                            <com.google.android.material.textfield.TextInputLayout
-                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                app:helperText="Requerido*"
-                                app:helperTextTextColor="@color/red"
-                                app:startIconDrawable="@drawable/baseline_attach_money_black_24dp"
-                                app:counterEnabled="true"
-                                app:counterMaxLength="6">
 
-                                <com.google.android.material.textfield.TextInputEditText
-                                    android:layout_width="120dp"
+                                <TextView
+                                    android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:hint="000.00"
-                                    android:inputType="numberDecimal"
-                                    android:maxLength="6" />
+                                    app:drawableStartCompat="@drawable/baseline_attach_money_black_24dp"
+                                    android:drawablePadding="20dp"
+                                    android:text="000.00"
+                                    android:textSize="16sp"
+                                     />
 
-                            </com.google.android.material.textfield.TextInputLayout>
 
                         </LinearLayout>
 
@@ -230,26 +187,11 @@
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="Costo Unitario"
-                                android:textStyle="bold"/>
-                            <com.google.android.material.textfield.TextInputLayout
-                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                app:helperText="Requerido*"
-                                app:helperTextTextColor="@color/red"
-                                app:startIconDrawable="@drawable/baseline_attach_money_black_24dp"
-                                app:counterEnabled="true"
-                                app:counterMaxLength="6">
-
-                                <com.google.android.material.textfield.TextInputEditText
-                                    android:layout_width="120dp"
-                                    android:layout_height="wrap_content"
-                                    android:hint="000.00"
-                                    android:maxLength="6"
-                                    android:inputType="numberDecimal" />
-
-                            </com.google.android.material.textfield.TextInputLayout>
+                                app:drawableStartCompat="@drawable/baseline_attach_money_black_24dp"
+                                android:drawablePadding="20dp"
+                                android:text="000.00"
+                                android:textSize="16sp"
+                                />
 
                         </LinearLayout>
 
@@ -274,19 +216,16 @@
                                 android:layout_height="wrap_content"
                                 android:text="Categoría"
                                 android:textStyle="bold"/>
-                            <com.google.android.material.textfield.TextInputLayout
-                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                app:helperText="Requerido*"
-                                app:helperTextTextColor="@color/red">
 
-                                <AutoCompleteTextView
-                                    android:id="@+id/spinner"
+
+
+                                <TextView
                                     android:layout_width="match_parent"
-                                    android:layout_height="wrap_content" />
+                                    android:layout_height="wrap_content"
+                                    android:text="asdas"
+                                    android:textSize="16sp"/>
 
-                            </com.google.android.material.textfield.TextInputLayout>
+
 
                         </LinearLayout>
 
@@ -311,12 +250,12 @@
                                 android:text="Descripción"
                                 android:textStyle="bold"/>
 
-                            <EditText
+                            <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:textSize="16sp"
                                 android:lines="5"
                                 android:gravity="start|top"
-                                android:inputType="textMultiLine"
                                 android:maxLines="5" />
 
                         </LinearLayout>
@@ -334,16 +273,26 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:orientation="vertical">
+            android:orientation="horizontal">
 
             <Button
-                android:id="@+id/button"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_weight="1"
                 android:text="GUARDAR" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_weight="1"
+                android:backgroundTint="@color/red_darker"
+                android:text="ELIMINAR" />
+
         </LinearLayout>
     </LinearLayout>
-
-
 
 </LinearLayout>
