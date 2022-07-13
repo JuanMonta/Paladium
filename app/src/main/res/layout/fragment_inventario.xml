@@ -159,7 +159,7 @@
         android:orientation="vertical">
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/fragment_inventario_btnCrearProducto"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:text="CREAR PRODUCTO"

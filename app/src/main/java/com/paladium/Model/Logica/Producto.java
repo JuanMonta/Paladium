@@ -2,8 +2,8 @@ package com.paladium.Model.Logica;
 
 public class Producto {
 
-    private static final String childProducto = "Producto";
-
+    // Variables que darán el nombre a cada uno de los campos de los productos
+    //en firebase, no se deben inicializar
     private String Nombre;
     private String Descripcion;
     private int Cantidad;

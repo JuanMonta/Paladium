@@ -19,15 +19,9 @@ public class BaseDeDatos {
         return fireDatabase;
     }
 
-    public static void setFireDatabase(DatabaseReference fireDatabase) {
-        BaseDeDatos.fireDatabase = fireDatabase;
-    }
-
     public static StorageReference getFireStorageReference() {
         return fireStorageReference;
     }
 
-    public static void setFireStorageReference(StorageReference fireStorageReference) {
-        BaseDeDatos.fireStorageReference = fireStorageReference;
-    }
+
 }

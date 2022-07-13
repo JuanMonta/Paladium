@@ -2,6 +2,9 @@ package com.paladium.Presentador;
 
 public interface InterfacePresenter_MainActivity {
 
-    void ocultarTeclado(boolean ocultar);
+    interface onOcultarTeclado{
+        void ocultarTeclado(boolean ocultar);
+    }
+
 
 }

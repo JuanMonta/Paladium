@@ -1,6 +1,7 @@
 package com.paladium.Presentador;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,10 +16,11 @@ import com.paladium.Vista.Fragmentos.Fragment_Balance;
 import com.paladium.Vista.Fragmentos.Fragment_Home;
 import com.paladium.Vista.Fragmentos.Fragment_Inventario;
 
-public class PresentadorMainActivity implements InterfacePresenter_MainActivity {
+public class PresentadorMainActivity implements InterfacePresenter_MainActivity.onOcultarTeclado {
 
     private final Context mContext;
     private MeowBottomNavigation bottomNavigation;
+    private final String TAG="PresentadorMainActivity";
 
     public PresentadorMainActivity(Context mContext) {
         this.mContext = mContext;
@@ -87,4 +89,6 @@ public class PresentadorMainActivity implements InterfacePresenter_MainActivity 
     public void ocultarTeclado(boolean ocultar) {
 
     }
+
+
 }

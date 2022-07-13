@@ -1,6 +1,7 @@
 package com.paladium.Vista.Fragmentos;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.util.Log;
@@ -8,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -25,6 +27,7 @@ import com.paladium.Model.Logica.Producto;
 import com.paladium.Model.Utils.Utilidades;
 import com.paladium.Presentador.InterfacePresenter_MainActivity;
 import com.paladium.R;
+import com.paladium.Vista.Activities.ProductCreation;
 import com.paladium.Vista.Adapters.CustomRVAdapter_Products_List;
 
 import java.util.ArrayList;
@@ -34,7 +37,7 @@ import java.util.ArrayList;
  * Use the {@link Fragment_Inventario#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class Fragment_Inventario extends Fragment implements CustomRVAdapter_Products_List.ListItemClick {
+public class Fragment_Inventario extends Fragment implements CustomRVAdapter_Products_List.ListItemClick , View.OnClickListener{
     private final String TAG= "Fragment_Inventario";
     private RecyclerView customRecyclerView;
     private Producto producto;
@@ -42,8 +45,9 @@ public class Fragment_Inventario extends Fragment implements CustomRVAdapter_Pro
     private CustomRVAdapter_Products_List adapterProducts;
     private Toast toast;
     private Context mContext;
+    private View mView;
 
-    private InterfacePresenter_MainActivity listener;
+    private InterfacePresenter_MainActivity.onOcultarTeclado listener;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -58,7 +62,7 @@ public class Fragment_Inventario extends Fragment implements CustomRVAdapter_Pro
     public Fragment_Inventario() {
     }
 
-    public void iniciarListener(InterfacePresenter_MainActivity listener) {
+    public void iniciarListener(InterfacePresenter_MainActivity.onOcultarTeclado listener) {
         this.listener = listener;
     }
 
@@ -100,6 +104,7 @@ public class Fragment_Inventario extends Fragment implements CustomRVAdapter_Pro
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mContext = view.getContext();
+        mView = view;
         //------------------------------------------------------------------------------------------
         /*customRecyclerView = view.findViewById(R.id.fragment_inventario_recyclerV_CustomProducts);
         //customRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
@@ -119,10 +124,16 @@ public class Fragment_Inventario extends Fragment implements CustomRVAdapter_Pro
         customRecyclerView.setAdapter(adapterProducts);
 */
         EditText edBuscar = view.findViewById(R.id.fragment_inventario_edBuscar);
+        Button btCrearProducto = view.findViewById(R.id.fragment_inventario_btnCrearProducto);
+        btCrearProducto.setOnClickListener(this);
 
+        cargarDatosProductosRecycler();
+    }
+
+    private void cargarDatosProductosRecycler() {
         //adValueChange Listener escuha cuando un valor se ha cambiado en la base de datos en tiempo real,
         //si cambia en la BD, la Ui se actualiza automáticamente gracias a este método
-        BaseDeDatos.getFireDatabase().child(Utilidades.nodoPadre).addValueEventListener(new ValueEventListener() {
+        BaseDeDatos.getFireDatabase().child(Utilidades.nodoPadre).child(Utilidades.nodoProducto).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 ArrayList<Producto> productosList = new ArrayList<>();
@@ -132,8 +143,8 @@ public class Fragment_Inventario extends Fragment implements CustomRVAdapter_Pro
                     producto.setProductoFirebaseKey(datos.getKey());
                     productosList.add(producto);
                 }
-                RecyclerView customRecycler = view.findViewById(R.id.fragment_inventario_recyclerV_CustomProducts);
-                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(view.getContext());
+                RecyclerView customRecycler = mView.findViewById(R.id.fragment_inventario_recyclerV_CustomProducts);
+                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext);
                 customRecycler.setLayoutManager(linearLayoutManager);
                 CustomRVAdapter_Products_List adapterProducts = new CustomRVAdapter_Products_List(productosList, Fragment_Inventario.this);
                 customRecycler.setAdapter(adapterProducts);
@@ -144,10 +155,8 @@ public class Fragment_Inventario extends Fragment implements CustomRVAdapter_Pro
 
             }
         });
+
     }
-
-
-
 
 
     @Override
@@ -160,13 +169,15 @@ public class Fragment_Inventario extends Fragment implements CustomRVAdapter_Pro
     }
 
 
-
-
-
-
-
-
-
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.fragment_inventario_btnCrearProducto:
+                Intent crearProducto = new Intent(view.getContext(), ProductCreation.class);
+                startActivity(crearProducto);
+                break;
+        }
+    }
 
     public void keyBoardisShowing(View view){
         view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -189,5 +200,6 @@ public class Fragment_Inventario extends Fragment implements CustomRVAdapter_Pro
             }
         });
     }
+
 
 }

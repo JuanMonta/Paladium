@@ -77,6 +77,7 @@ public class CustomRVAdapter_Products_List extends RecyclerView.Adapter<CustomRV
             Log.d("ADAPTER_PRODUCTOS", "Costo: "+producto.getCosto());
             Log.d("ADAPTER_PRODUCTOS", "Descrip: "+producto.getDescripcion());
             Log.d("ADAPTER_PRODUCTOS", "CobBar: "+producto.getCodBarras());
+            Log.d("ADAPTER_PRODUCTOS", "ImagenURL: "+producto.getImagen());
             Log.d("ADAPTER_PRODUCTOS", "---------------------------------------");
         }
 
