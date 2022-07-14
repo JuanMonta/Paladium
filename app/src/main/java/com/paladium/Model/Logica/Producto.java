@@ -11,6 +11,7 @@ public class Producto {
     private float Precio;
     private float Costo;
     private String Imagen;
+    private String Categoria;
     private String productoFirebaseKey;
 
 
@@ -71,6 +72,14 @@ public class Producto {
 
     public void setImagen(String imagen) {
         Imagen = imagen;
+    }
+
+    public String getCategoria() {
+        return Categoria;
+    }
+
+    public void setCategoria(String categoria) {
+        Categoria = categoria;
     }
 
     public String getProductoFirebaseKey() {

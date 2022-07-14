@@ -20,6 +20,7 @@ public class Utilidades {
     public static final String precioProducto = "Precio";
     public static final String costoProducto = "Costo";
     public static final String imagenProducto = "Imagen";
+    public static final String categoriaProducto = "Categoria";
 
 
     //------------NOmbre de directorio para guardar imagenes de la app

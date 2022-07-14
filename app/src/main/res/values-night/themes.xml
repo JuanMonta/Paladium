@@ -6,11 +6,16 @@
         <item name="colorPrimaryVariant">@color/green_700</item>
         <item name="colorOnPrimary">@color/black</item>
         <!-- Secondary brand color. -->
+        <!-- EditTex, ProgressBar, swith background y otros views más,
+         es el color cuando se selecciona o cuando se escribe en el edtitText -->
         <item name="colorSecondary">@color/teal_200</item>
         <item name="colorSecondaryVariant">@color/teal_200</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+        <!-- color para el drawable de producto para cuando se Theme Night -->
+        <item name="drawable_producto_tintColor">@color/white</item>
+
     </style>
 </resources>

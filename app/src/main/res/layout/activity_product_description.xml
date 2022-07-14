@@ -19,7 +19,8 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="4"
-            android:padding="5dp">
+            android:padding="5dp"
+            android:background="@drawable/custom_frame_layout_photo_product">
 
             <ImageView
                 android:layout_width="match_parent"
@@ -41,7 +42,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="2dp"
+                android:layout_marginStart="2dp"
                 android:text="Código de barras" />
 
 
@@ -52,7 +53,7 @@
                     android:paddingStart="10dp"
                     android:paddingEnd="10dp"
                     android:text="sdfsd"
-                    app:drawableEndCompat="@drawable/barcode_scanner_24px"
+                    app:drawableEndCompat="@drawable/barcode_24px"
                     android:textSize="14sp"
                     android:gravity="center_vertical"
                     android:background="@drawable/custom_text_view"
@@ -70,7 +71,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="41dp"
                 android:paddingStart="10dp"
+                android:paddingEnd="10dp"
                 android:background="@drawable/custom_text_view"
+                app:drawableEndCompat="@drawable/quantity_cart_24px"
                 android:gravity="center_vertical"
                 android:text="20"
                 android:textSize="14sp" />
@@ -125,6 +128,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="41dp"
                                 android:drawablePadding="20dp"
+                                android:drawableTint="@color/green_700"
                                 android:gravity="center_vertical"
                                 android:maxLength="40"
                                 android:text="asjdhjk"
@@ -160,6 +164,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="41dp"
                                 android:drawablePadding="20dp"
+                                android:drawableTint="@color/green_700"
                                 android:gravity="center_vertical"
                                 android:text="000.00"
                                 android:textSize="16sp"
@@ -187,6 +192,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="41dp"
                                 android:drawablePadding="20dp"
+                                android:drawableTint="@color/green_700"
                                 android:gravity="center_vertical"
                                 android:text="000.00"
                                 android:textSize="16sp"

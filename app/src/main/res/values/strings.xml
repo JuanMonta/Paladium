@@ -2,4 +2,11 @@
     <string name="app_name">Paladium</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string-array name="array_producto_categoria_de_prueba">
+        <item>Alcohol</item>
+        <item>Bebidas</item>
+        <item>Galletas</item>
+    </string-array>
+
 </resources>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- el atributo se usará para darle un color al drawable cuando
+     sea modo Day o Nigth, se declara en los diferentes Themes.xml-->
+    <declare-styleable name="drawable_producto_colors">
+        <attr name="drawable_producto_tintColor" format="color"></attr>
+    </declare-styleable>
+
+</resources>

@@ -2,9 +2,14 @@
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="48dp"
     android:height="48dp"
-    android:tint="#13491A"
+
+    android:tint="?attr/drawable_producto_tintColor"
     android:viewportWidth="24.0"
     android:viewportHeight="24.0">
+    <!-- color que antes tenia -->
+    <!-- cuando al poner Tint en el imagen view donde está colocado, ya no es
+     necesario poner el tint aquí en el drwable porque da error-->
+    <!-- android:tint="#13491A" -->
 
     <path
         android:fillColor="@android:color/white"

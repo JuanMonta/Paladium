@@ -19,6 +19,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -103,8 +104,8 @@ public class Fragment_Inventario extends Fragment implements CustomRVAdapter_Pro
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mContext = view.getContext();
-        mView = view;
+        /*mContext = view.getContext();
+        mView = view;*/
         //------------------------------------------------------------------------------------------
         /*customRecyclerView = view.findViewById(R.id.fragment_inventario_recyclerV_CustomProducts);
         //customRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
@@ -123,11 +124,11 @@ public class Fragment_Inventario extends Fragment implements CustomRVAdapter_Pro
         adapterProducts = new CustomRVAdapter_Products_List(listaProductos, this);
         customRecyclerView.setAdapter(adapterProducts);
 */
-        EditText edBuscar = view.findViewById(R.id.fragment_inventario_edBuscar);
+       /* TextInputEditText edBuscar = view.findViewById(R.id.fragment_inventario_inputEdBuscar);
         Button btCrearProducto = view.findViewById(R.id.fragment_inventario_btnCrearProducto);
         btCrearProducto.setOnClickListener(this);
 
-        cargarDatosProductosRecycler();
+        cargarDatosProductosRecycler();*/
     }
 
     private void cargarDatosProductosRecycler() {
@@ -179,7 +180,7 @@ public class Fragment_Inventario extends Fragment implements CustomRVAdapter_Pro
         }
     }
 
-    public void keyBoardisShowing(View view){
+    /*public void keyBoardisShowing(View view){
         view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
@@ -199,7 +200,7 @@ public class Fragment_Inventario extends Fragment implements CustomRVAdapter_Pro
                 }
             }
         });
-    }
+    }*/
 
 
 }

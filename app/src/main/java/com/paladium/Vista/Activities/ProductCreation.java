@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
@@ -21,6 +22,11 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
+import com.google.zxing.client.android.Intents;
+import com.journeyapps.barcodescanner.ScanContract;
+import com.journeyapps.barcodescanner.ScanOptions;
 import com.paladium.Model.Logica.ImageCompression;
 import com.paladium.Model.Utils.Utilidades;
 import com.paladium.Presentador.InterfacePresenter_ProductCreation;
@@ -40,10 +46,14 @@ public class ProductCreation extends AppCompatActivity implements View.OnClickLi
     private Button btnRegistrarProducto;
     private ImageButton imgbtnSeleccionarImagenProducto, imgbTomarFoto;
     private ImageView imgv_ImagenProducto;
+    private TextInputLayout inputLayoutScanQRBarCode;
+    private TextInputEditText inputEdScanQRBarCode;
     private Uri filePath;
     private String rutaImagen;
     private ActivityResultLauncher<Intent> activityResultLauncherEscojerFoto;
     private ActivityResultLauncher<Intent> activityResultLauncherTomarFoto;
+    private ActivityResultLauncher<ScanOptions> activityResultLauncherScanQRBarCode;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +64,15 @@ public class ProductCreation extends AppCompatActivity implements View.OnClickLi
         View view = findViewById(android.R.id.content).getRootView();
         productCreation = new PresentadorProductCreation(this, this);
         productCreation.init(view);
+
+        inputEdScanQRBarCode = findViewById(R.id.product_creation_edCodBarras);
+        inputLayoutScanQRBarCode = findViewById(R.id.product_creation_LayoutedCodBarras);
+        inputLayoutScanQRBarCode.setEndIconOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                scanQRBarCode();
+            }
+        });
 
         btnRegistrarProducto = view.findViewById(R.id.product_creation_btnGuardarProducto);
         btnRegistrarProducto.setOnClickListener(this);
@@ -67,6 +86,7 @@ public class ProductCreation extends AppCompatActivity implements View.OnClickLi
 
         ActivityResultLauncherEscojerFoto();
         ActivityResultLauncherTomarFoto();
+        ActivityResultLauncherScanQRBarcode();
     }
 
 
@@ -97,7 +117,6 @@ public class ProductCreation extends AppCompatActivity implements View.OnClickLi
             intent.putExtra(MediaStore.EXTRA_OUTPUT, fotoUri);
             activityResultLauncherTomarFoto.launch(intent);
         }
-
 
     }
 
@@ -212,6 +231,41 @@ public class ProductCreation extends AppCompatActivity implements View.OnClickLi
             cursor.close();
         }
         return realPath;
+    }
+
+    private void scanQRBarCode() {
+        //pagina principal https://github.com/journeyapps/zxing-android-embedded#older-sdk-versions
+        //scan options     https://github-com.translate.goog/journeyapps/zxing-android-embedded/blob/master/zxing-android-embedded/src/com/journeyapps/barcodescanner/ScanOptions.java?_x_tr_sl=en&_x_tr_tl=es&_x_tr_hl=es&_x_tr_pto=op
+        //vista incustada pag principal     https://github-com.translate.goog/journeyapps/zxing-android-embedded/blob/master/EMBEDDING.md?_x_tr_sl=en&_x_tr_tl=es&_x_tr_hl=es
+        //zxing activity main    https://github-com.translate.goog/journeyapps/zxing-android-embedded/blob/master/sample/src/main/java/example/zxing/MainActivity.java?_x_tr_sl=en&_x_tr_tl=es&_x_tr_hl=es
+        // continuos capture activity  https://github-com.translate.goog/journeyapps/zxing-android-embedded/blob/master/sample/src/main/java/example/zxing/ContinuousCaptureActivity.java?_x_tr_sl=en&_x_tr_tl=es&_x_tr_hl=es&_x_tr_pto=op
+        ScanOptions options = new ScanOptions();
+        options.setDesiredBarcodeFormats(ScanOptions.ONE_D_CODE_TYPES);
+        options.setPrompt("Escanea un Código de Barras o QR.\n\n"
+                + "Para utilizar el flash use los botones de control de volumen:\n"
+                + " -Subir Volumen: Encender flash\n"
+                + " -Bajar Volumen: Apagar   flash\n");
+        options.setCameraId(0);  // Use a specific camera of the device
+        options.setBeepEnabled(false);
+        options.setBarcodeImageEnabled(true);
+        options.setBeepEnabled(true);
+        //options.setTorchEnabled(true);
+        options.setOrientationLocked(false);
+        activityResultLauncherScanQRBarCode.launch(options);
+    }
+
+    private void ActivityResultLauncherScanQRBarcode() {
+        // Register the launcher and result handler
+        activityResultLauncherScanQRBarCode = registerForActivityResult(new ScanContract(),
+                result -> {
+                    if (result.getContents() != null) {
+                        inputEdScanQRBarCode.setTextInputLayoutFocusedRectEnabled(false);
+                        inputEdScanQRBarCode.setText(result.getContents());
+                    } else {
+                        Toast.makeText(this, "Scaneo Cancelado", Toast.LENGTH_LONG).show();
+                    }
+                });
+
     }
 
 

@@ -4,9 +4,11 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 
 import androidx.annotation.NonNull;
@@ -32,10 +34,10 @@ import java.util.Map;
 public class PresentadorProductCreation implements View.OnClickListener, InterfacePresenter_ProductCreation.onImagenCargada {
     private final String TAG = "PresenterProdCreation";
     private Context mContext;
-    private TextInputEditText edCodBarras, edCantDisponible, edNombreProducto,
-            edPrecioUnit, edCostoUnit, edDescripcion;
+    private TextInputEditText inputEdCodBarras, inputEdCantDisponible, inputEdNombreProducto,
+            inputEdPrecioUnit, inputEdCostoUnit, inputEdDescripcion;
 
-    private AutoCompleteTextView spCategoria;
+    private AutoCompleteTextView autoCompletTextSpCategoria;
 
     private InterfacePresenter_ProductCreation.onImagenCargada interfaceImagenCargada;
     private InterfacePresenter_ProductCreation.onProductoCargado interfaceProductoCargado;
@@ -48,13 +50,17 @@ public class PresentadorProductCreation implements View.OnClickListener, Interfa
 
     public void init(View view) {
         interfaceImagenCargada = this;
-        edCodBarras = view.findViewById(R.id.product_creation_edCodBarras);
-        edCantDisponible = view.findViewById(R.id.product_creation_edCantidadDisponible);
-        edNombreProducto = view.findViewById(R.id.product_creation_edNombreProducto);
-        edPrecioUnit = view.findViewById(R.id.product_creation_edPrecioUnitario);
-        edCostoUnit = view.findViewById(R.id.product_creation_edCostoUnitario);
-        edDescripcion = view.findViewById(R.id.product_creation_edDescripcionProducto);
-        spCategoria = view.findViewById(R.id.product_creation_spCategoria);
+        inputEdCodBarras = view.findViewById(R.id.product_creation_edCodBarras);
+        inputEdCantDisponible = view.findViewById(R.id.product_creation_edCantidadDisponible);
+        inputEdNombreProducto = view.findViewById(R.id.product_creation_edNombreProducto);
+        inputEdPrecioUnit = view.findViewById(R.id.product_creation_edPrecioUnitario);
+        inputEdCostoUnit = view.findViewById(R.id.product_creation_edCostoUnitario);
+        inputEdDescripcion = view.findViewById(R.id.product_creation_edDescripcionProducto);
+
+        autoCompletTextSpCategoria = view.findViewById(R.id.product_creation_spCategoria);
+        String[] categorias = mContext.getResources().getStringArray(R.array.array_producto_categoria_de_prueba);
+        ArrayAdapter arrayAdapter = new ArrayAdapter(mContext, R.layout.custom_text_view_dropdown_menu_producto_categoria, categorias);
+        autoCompletTextSpCategoria.setAdapter(arrayAdapter);
 
     }
 
@@ -142,12 +148,12 @@ public class PresentadorProductCreation implements View.OnClickListener, Interfa
         int cantidad;
         float precioUnit, costoUnit;
 
-        codBarras = edCodBarras.getText().toString().trim();
-        nombre = edNombreProducto.getText().toString().trim();
-        cantidad = Integer.parseInt(edCantDisponible.getText().toString().trim());
-        precioUnit = Float.parseFloat(edPrecioUnit.getText().toString().trim());
-        costoUnit = Float.parseFloat(edCostoUnit.getText().toString().trim());
-        descrip = edDescripcion.getText().toString().trim();
+        codBarras = inputEdCodBarras.getText().toString().trim();
+        nombre = inputEdNombreProducto.getText().toString().trim();
+        cantidad = inputEdCantDisponible.getText().toString().trim().isEmpty()? 0: Integer.parseInt(inputEdCantDisponible.getText().toString().trim());
+        precioUnit = Float.parseFloat(inputEdPrecioUnit.getText().toString().trim());
+        costoUnit = Float.parseFloat(inputEdCostoUnit.getText().toString().trim());
+        descrip = inputEdDescripcion.getText().toString().trim();
 
         Log.d(TAG, "Guardando datos");
         Map<String, Object> productos = new HashMap<>();
@@ -156,7 +162,9 @@ public class PresentadorProductCreation implements View.OnClickListener, Interfa
         productos.put(Utilidades.cantProducto, cantidad);
         productos.put(Utilidades.precioProducto, precioUnit);
         productos.put(Utilidades.costoProducto, costoUnit);
+        productos.put(Utilidades.categoriaProducto, "bebida alcolica");
         productos.put(Utilidades.descProducto, descrip);
+
         Log.d(TAG, "Guardando datos--->URL: " + downloadLinkImage == null ? "sin Ruta" : downloadLinkImage.toString());
         //si el link de descarga está vacío, significa que no escojió una imagen para subir a firebase,
         //entonces solo guardamos un vació
@@ -189,6 +197,8 @@ public class PresentadorProductCreation implements View.OnClickListener, Interfa
         Log.d(TAG, "Datos Guardados");
     }
 
+
+
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -196,10 +206,10 @@ public class PresentadorProductCreation implements View.OnClickListener, Interfa
         }
     }
 
-
     @Override
     public void imagenCargada(Uri downloadLinkImage, Uri rutaImagen) {
         Log.d(TAG, "Interface imagencargada: " + downloadLinkImage.toString());
         guardarDatosProductosFireBase(downloadLinkImage, rutaImagen);
     }
+
 }
