@@ -1,29 +1,35 @@
 package com.paladium.Presentador;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.util.Log;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.LinearLayout;
+import android.view.MenuItem;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.etebarian.meowbottomnavigation.MeowBottomNavigation;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 import com.paladium.R;
 import com.paladium.Vista.Fragmentos.Fragment_Balance;
 import com.paladium.Vista.Fragmentos.Fragment_Home;
 import com.paladium.Vista.Fragmentos.Fragment_Inventario;
 
-public class PresentadorMainActivity implements InterfacePresenter_MainActivity.onOcultarTeclado {
+public class PresentadorMainActivity {
 
     private final Context mContext;
     private MeowBottomNavigation bottomNavigation;
-    private final String TAG="PresentadorMainActivity";
+    private final String TAG = "PresentadorMainActivity";
+
+    private Fragment_Home fragment_home;
+    private Fragment_Balance fragment_balance;
+    private Fragment_Inventario fragment_inventario;
 
     public PresentadorMainActivity(Context mContext) {
         this.mContext = mContext;
+        fragment_home = new Fragment_Home();
+        fragment_balance = new Fragment_Balance();
+        fragment_inventario = new Fragment_Inventario();
     }
 
     public void crearBottomNavigation(MeowBottomNavigation bottomNav, androidx.fragment.app.FragmentManager supportFragmentManager) {
@@ -47,7 +53,6 @@ public class PresentadorMainActivity implements InterfacePresenter_MainActivity.
                         break;
                     case 3:
                         fragment = new Fragment_Inventario();
-                        ((Fragment_Inventario) fragment).iniciarListener(PresentadorMainActivity.this);
                         break;
                 }
                 //cargarFragmentos
@@ -77,18 +82,32 @@ public class PresentadorMainActivity implements InterfacePresenter_MainActivity.
 
     }
 
+    public void materialBottomNavigation(BottomNavigationView bottomNavigationView, androidx.fragment.app.FragmentManager supportFragmentManager) {
+        cargarFragmentos(fragment_home, supportFragmentManager);
+        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.bottom_nav_item_home:
+                        cargarFragmentos(fragment_home, supportFragmentManager);
+                        break;
+                    case R.id.bottom_nav_item_balance:
+                        cargarFragmentos(fragment_balance, supportFragmentManager);
+                        break;
+                    case R.id.bottom_nav_item_inventario:
+                        cargarFragmentos(fragment_inventario, supportFragmentManager);
+                        break;
+                }
+                return true;
+            }
+        });
+    }
+
     private void cargarFragmentos(Fragment fragment, FragmentManager supportFragmentManager) {
         supportFragmentManager
                 .beginTransaction()
                 .replace(R.id.fragmentContainer, fragment)
                 .commit();
     }
-
-
-    @Override
-    public void ocultarTeclado(boolean ocultar) {
-
-    }
-
 
 }

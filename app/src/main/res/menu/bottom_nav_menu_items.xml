@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/bottom_nav_item_home"
+        android:title="Inicio"
+        android:icon="@drawable/store_24px"
+        />
+
+    <item
+        android:id="@+id/bottom_nav_item_balance"
+        android:title="Balance"
+        android:icon="@drawable/account_balance_wallet_24px"/>
+
+    <item
+        android:id="@+id/bottom_nav_item_inventario"
+        android:title="Inventario"
+        android:icon="@drawable/inventory_24px"/>
+
+</menu>

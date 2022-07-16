@@ -2,8 +2,6 @@ package com.paladium.Vista.Activities;
 
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.DocumentsContract;
@@ -24,14 +22,16 @@ import androidx.core.content.FileProvider;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
-import com.google.zxing.client.android.Intents;
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
-import com.paladium.Model.Logica.ImageCompression;
+import com.paladium.Model.Utils.ImageCompression;
 import com.paladium.Model.Utils.Utilidades;
 import com.paladium.Presentador.InterfacePresenter_ProductCreation;
 import com.paladium.Presentador.PresentadorProductCreation;
 import com.paladium.R;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
+
 
 import java.io.File;
 import java.io.IOException;
@@ -53,14 +53,13 @@ public class ProductCreation extends AppCompatActivity implements View.OnClickLi
     private ActivityResultLauncher<Intent> activityResultLauncherEscojerFoto;
     private ActivityResultLauncher<Intent> activityResultLauncherTomarFoto;
     private ActivityResultLauncher<ScanOptions> activityResultLauncherScanQRBarCode;
-
+    private ActivityResultLauncher<Intent> activityResultLauncherCropImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_creation);
         filePath = null;
-
         View view = findViewById(android.R.id.content).getRootView();
         productCreation = new PresentadorProductCreation(this, this);
         productCreation.init(view);
@@ -87,6 +86,7 @@ public class ProductCreation extends AppCompatActivity implements View.OnClickLi
         ActivityResultLauncherEscojerFoto();
         ActivityResultLauncherTomarFoto();
         ActivityResultLauncherScanQRBarcode();
+        ActivityResultLauncherCropImage();
     }
 
 
@@ -120,7 +120,6 @@ public class ProductCreation extends AppCompatActivity implements View.OnClickLi
 
     }
 
-
     private void ActivityResultLauncherEscojerFoto() {
         activityResultLauncherEscojerFoto = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
             @Override
@@ -153,9 +152,9 @@ public class ProductCreation extends AppCompatActivity implements View.OnClickLi
                     Log.d(TAG, "imagen escojida -> filePath UriFromFile: " + filePath);
                     Log.d(TAG, "imagen escojida -> compressImagePath:   " + compressImagePath);
                     Log.d(TAG, "imagen escojida -> compressImageUri:" + Uri.parse(compressImagePath));
-                    //colocamos la imagen al imgView
-                    Bitmap imagen = BitmapFactory.decodeFile(compressImagePath);
-                    imgv_ImagenProducto.setImageBitmap(imagen);
+                    cropImage(filePath);
+                    /*Bitmap imagen = BitmapFactory.decodeFile(compressImagePath);
+                    imgv_ImagenProducto.setImageBitmap(imagen);*/
                 }
             }
         });
@@ -178,16 +177,37 @@ public class ProductCreation extends AppCompatActivity implements View.OnClickLi
                     String compressImagePath = new ImageCompression(getApplicationContext()).compressImage(filePath.getPath());
                     //borramos la imagen anteriormente guardada en el path y guardamos la direccion de la nueva imagen,
                     //la cual es la imagen comprimida
-                    if (filePath != null) {
-                        new File(filePath.getPath()).delete();
-                    }
+                    borrarAchivoDelFilePath(filePath);
                     //transformamos la ruta de la imagen comprimida a un path Uri con la cual la subimos a firebase
                     filePath = Uri.fromFile(new File(compressImagePath));
                     Log.d(TAG, "imagen tomada foto -> nuevo filePath: " + filePath.toString());
                     Log.d(TAG, "imagen tomada foto -> compressImagePath:        " + compressImagePath);
                     Log.d(TAG, "imagen tomada foto -> compressImageUri:" + Uri.parse(compressImagePath));
-                    Bitmap imagen = BitmapFactory.decodeFile(compressImagePath);
-                    imgv_ImagenProducto.setImageBitmap(imagen);
+                    Log.d(TAG, "imagen tomada foto -> EnviandoUri a CropImage()");
+                    //llamamos al inten con la Activity de la librería que permitirá recortar la imagen
+                    cropImage(filePath);
+                    /*Bitmap imagen = BitmapFactory.decodeFile(compressImagePath);
+                    imgv_ImagenProducto.setImageBitmap(imagen);*/
+                }
+            }
+        });
+    }
+
+    private void ActivityResultLauncherCropImage(){
+        activityResultLauncherCropImage = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+            @Override
+            public void onActivityResult(ActivityResult result) {
+                Log.d(TAG, "imagen Crop Launcher -> Entrando en Result Launcher");
+                if (result.getResultCode() == RESULT_OK){
+                    Log.d(TAG, "imagen Crop Launcher -> ResultLauncher Ok");
+                    CropImage.ActivityResult resultImage = CropImage.getActivityResult(result.getData());
+                    //borramos el archivo que tenga guardado anteriormente el filePath
+                        borrarAchivoDelFilePath(filePath);
+                    //devuel la direccion de la imagen recortada, la cual ha sido guardada en caché del dispostivo
+                    filePath = resultImage.getUri();
+                    Log.d(TAG, "imagen Crop Launcher -> Colocando a Image View el Uri: "+resultImage.getUri());
+                    imgv_ImagenProducto.setImageURI(resultImage.getUri());
+                    Toast.makeText(ProductCreation.this, "Image Update Successfully!!!", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -233,6 +253,22 @@ public class ProductCreation extends AppCompatActivity implements View.OnClickLi
         return realPath;
     }
 
+    private void cropImage (Uri imagenARecortar){
+        // https://github.com/ArthurHub/Android-Image-Cropper
+
+        Log.d(TAG, "imagen tomada foto -> Creando Intent");
+        Intent intent = CropImage.activity(imagenARecortar)
+                .setGuidelines(CropImageView.Guidelines.ON)
+                .setMultiTouchEnabled(true)
+                .getIntent(this);
+        Log.d(TAG, "imagen tomada foto -> Colocando y lanzando inten Intent");
+        activityResultLauncherCropImage.launch(intent);
+    }
+
+    private void borrarAchivoDelFilePath(Uri filePath){
+        new File(filePath.getPath()).delete();
+    }
+
     private void scanQRBarCode() {
         //pagina principal https://github.com/journeyapps/zxing-android-embedded#older-sdk-versions
         //scan options     https://github-com.translate.goog/journeyapps/zxing-android-embedded/blob/master/zxing-android-embedded/src/com/journeyapps/barcodescanner/ScanOptions.java?_x_tr_sl=en&_x_tr_tl=es&_x_tr_hl=es&_x_tr_pto=op
@@ -268,6 +304,9 @@ public class ProductCreation extends AppCompatActivity implements View.OnClickLi
 
     }
 
+    private void borrarTodasLasImagenEnCarpeTasCompressedYCache(){
+
+    }
 
     @Override
     public void onClick(View view) {
@@ -286,13 +325,44 @@ public class ProductCreation extends AppCompatActivity implements View.OnClickLi
         }
     }
 
-
     @Override
     public void productoCargado(boolean subido) {
         //cuando se haya subido los datos del producto a firebase, borramos el Uri filePath
         //que contenía la dirección de la imagen en el dispositivo
         if (subido) {
+            //una vez subido el producto borramos la imagen que está guardad en el
+            //dispositivo
+                Log.d(TAG, "Borrando Imagen, producto guardado: " + filePath);
+                borrarAchivoDelFilePath(filePath);
             this.filePath = null;
         }
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Toast.makeText(this, "onResume() ProductCreation", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Toast.makeText(this, "onPause() ProductCreation", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Toast.makeText(this, "onStop() ProductCreation", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Toast.makeText(this, "onDestroy() ProductCreation", Toast.LENGTH_SHORT).show();
+    }
+
+
+
+
 }

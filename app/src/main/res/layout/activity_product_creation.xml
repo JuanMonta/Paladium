@@ -20,37 +20,52 @@
             android:layout_height="match_parent"
             android:layout_weight="4"
             android:background="@drawable/custom_frame_layout_photo_product"
-            android:padding="5dp">
+            android:padding="2dp">
 
-            <ImageView
-                android:id="@+id/product_creation_Imgv_Producto"
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:srcCompat="@drawable/baseline_camera_alt_green_black_48dp" />
+                app:cardCornerRadius="20dp">
 
-            /<RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                <ImageView
+                    android:id="@+id/product_creation_Imgv_Producto"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:srcCompat="@drawable/baseline_camera_alt_green_black_48dp" />
 
-                <ImageButton
-                    android:id="@+id/product_creation_imgbtnSeleccionarImagenProducto"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginTop="0dp"
-                    android:layout_marginEnd="0dp"
-                    app:srcCompat="@drawable/baseline_photo_library_black_18dp" />
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
 
-                <ImageButton
-                    android:id="@+id/product_creation_imgbTomarFotoProducto"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/product_creation_imgbtnSeleccionarImagenProducto"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginEnd="0dp"
-                    app:srcCompat="@drawable/baseline_add_a_photo_black_18dp" />
-            </RelativeLayout>
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <ImageButton
+                            android:id="@+id/product_creation_imgbtnSeleccionarImagenProducto"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentTop="true"
+                            android:layout_alignParentEnd="true"
+                            android:layout_marginTop="0dp"
+                            android:layout_marginEnd="0dp"
+                            app:srcCompat="@drawable/baseline_photo_library_black_18dp" />
+
+                        <ImageButton
+                            android:id="@+id/product_creation_imgbTomarFotoProducto"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/product_creation_imgbtnSeleccionarImagenProducto"
+                            android:layout_alignParentEnd="true"
+                            android:layout_marginEnd="0dp"
+                            app:srcCompat="@drawable/ic_baseline_add_a_photo_18px" />
+                    </RelativeLayout>
+
+                </FrameLayout>
+
+            </androidx.cardview.widget.CardView>
+
+
 
         </FrameLayout>
 
@@ -287,12 +302,11 @@
                                 android:layout_height="wrap_content"
                                 android:text="Categoría"
                                 android:textStyle="bold"/>
+
                             <com.google.android.material.textfield.TextInputLayout
                                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:hint="Categoria"
-                                app:startIconDrawable="@drawable/category_24px"
                                 app:helperText="Requerido*"
                                 app:helperTextTextColor="@color/red">
 

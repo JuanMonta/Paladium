@@ -15,7 +15,8 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         //----navigation bottom bar 3rth part Library---------------------------
-        vectorDrawables.useSupportLibrary = true
+        //vectorDrawables.useSupportLibrary = true
+
     }
 
     buildTypes {
@@ -46,7 +47,7 @@ dependencies {
 
     //----navigation bottom bar 3rth part Library---------------------------
     implementation 'com.etebarian:meow-bottom-navigation-java:1.2.0'
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    //implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     //implementation 'com.etebarian:meow-bottom-navigation:1.3.1'
 
     //------glide 3rth part Library-------------------------------------------
@@ -55,9 +56,13 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.13.2'
 
     //-------zxing scanner de codigo de barras y qr----------------------------
+    //  https://github.com/journeyapps/zxing-android-embedded
     implementation 'com.journeyapps:zxing-android-embedded:4.3.0'
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.2.0'
 
+    //--- image cropper 3rth party library-------------------------------------
+    // https://github.com/ArthurHub/Android-Image-Cropper
+    implementation 'com.theartofdev.edmodo:android-image-cropper:2.8.+'
 
     /*testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'

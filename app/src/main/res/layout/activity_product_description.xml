@@ -20,9 +20,10 @@
             android:layout_height="match_parent"
             android:layout_weight="4"
             android:padding="5dp"
-            android:background="@drawable/custom_frame_layout_photo_product">
+            android:background="@drawable/custom_text_view">
 
             <ImageView
+                android:id="@+id/activity_product_descrip_ImagenProducto"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:srcCompat="@drawable/baseline_camera_alt_green_black_48dp" />
@@ -48,6 +49,7 @@
 
 
                 <TextView
+                    android:id="@+id/activity_product_descrip_tvCodBarras"
                     android:layout_width="match_parent"
                     android:layout_height="41dp"
                     android:paddingStart="10dp"
@@ -68,6 +70,7 @@
 
 
             <TextView
+                android:id="@+id/activity_product_descrip_tvCantidad"
                 android:layout_width="match_parent"
                 android:layout_height="41dp"
                 android:paddingStart="10dp"
@@ -125,6 +128,7 @@
 
 
                             <TextView
+                                android:id="@+id/activity_product_descrip_tvNombre"
                                 android:layout_width="match_parent"
                                 android:layout_height="41dp"
                                 android:drawablePadding="20dp"
@@ -161,6 +165,7 @@
 
 
                             <TextView
+                                android:id="@+id/activity_product_descrip_tvPrecio"
                                 android:layout_width="match_parent"
                                 android:layout_height="41dp"
                                 android:drawablePadding="20dp"
@@ -190,13 +195,20 @@
 
                             <TextView
                                 android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Costo Unitario"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/activity_product_descrip_tvCosto"
+                                android:layout_width="match_parent"
                                 android:layout_height="41dp"
                                 android:drawablePadding="20dp"
-                                android:drawableTint="@color/green_700"
                                 android:gravity="center_vertical"
                                 android:text="000.00"
                                 android:textSize="16sp"
-                                app:drawableStartCompat="@drawable/baseline_attach_money_black_24dp" />
+                                app:drawableStartCompat="@drawable/baseline_attach_money_black_24dp"
+                                android:drawableTint="@color/green_700"/>
 
                         </LinearLayout>
 
@@ -223,6 +235,7 @@
 
 
                             <TextView
+                                android:id="@+id/activity_product_descrip_tvCategoria"
                                 android:layout_width="match_parent"
                                 android:layout_height="41dp"
                                 android:gravity="center_vertical"
@@ -254,6 +267,7 @@
                                 android:textStyle="bold" />
 
                             <TextView
+                                android:id="@+id/activity_product_descrip_tvDescripcion"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:gravity="start|top"
@@ -279,6 +293,7 @@
             android:orientation="horizontal">
 
             <Button
+                android:id="@+id/activity_product_descrip_btnEditar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
@@ -288,6 +303,7 @@
                 app:cornerRadius="20dp" />
 
             <Button
+                android:id="@+id/activity_product_descrip_btnEliminar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"

@@ -8,16 +8,14 @@
     tools:context=".Vista.Activities.MainActivity" >
 
 
-    <FrameLayout
+    <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragmentContainer"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="10">
+        android:layout_weight="1"/>
 
-    </FrameLayout>
-
-    <com.etebarian.meowbottomnavigation.MeowBottomNavigation
-        android:id="@+id/activity_main_BottomNavigation"
+    <!--<com.etebarian.meowbottomnavigation.MeowBottomNavigation
+         android:id="@+id/activity_main_BottomNavigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:mbn_backgroundBottomColor="#375530"
@@ -27,8 +25,13 @@
         app:mbn_defaultIconColor="#FFFFFF"
         app:mbn_rippleColor="#0509FD"
         app:mbn_selectedIconColor="#FFFFFF"
-        app:mbn_shadowColor="#3F8133"
+        app:mbn_shadowColor="#3F8133" />-->
 
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+       android:id="@+id/activity_main_bottomMaterialNavigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:menu="@menu/bottom_nav_menu_items"
         />
 
 </LinearLayout>

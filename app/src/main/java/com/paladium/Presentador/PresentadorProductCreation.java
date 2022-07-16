@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.net.Uri;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -174,12 +175,6 @@ public class PresentadorProductCreation implements View.OnClickListener, Interfa
                 .updateChildren(productos).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        //una vez subido el producto borramos la imagen que está guardad en el
-                        //dispositivo
-                        if (rutaImagen != null) {
-                            Log.d(TAG, "Borrando Imagen, producto guardado: " + rutaImagen);
-                            new File(rutaImagen.getPath()).delete();
-                        }
                         //notificamos con la interfaz de que debe borrarse el Uri filePath que contiene
                         //la ruta de la imagen en el dispositivo una vez la hayamos subido a firebase
                         interfaceProductoCargado.productoCargado(true);
@@ -211,5 +206,7 @@ public class PresentadorProductCreation implements View.OnClickListener, Interfa
         Log.d(TAG, "Interface imagencargada: " + downloadLinkImage.toString());
         guardarDatosProductosFireBase(downloadLinkImage, rutaImagen);
     }
+
+
 
 }

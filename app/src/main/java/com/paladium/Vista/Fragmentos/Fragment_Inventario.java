@@ -2,15 +2,13 @@ package com.paladium.Vista.Fragmentos;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Rect;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -19,16 +17,15 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.paladium.Model.Firebase.BaseDeDatos;
 import com.paladium.Model.Logica.Producto;
 import com.paladium.Model.Utils.Utilidades;
-import com.paladium.Presentador.InterfacePresenter_MainActivity;
-import com.paladium.R;
 import com.paladium.Vista.Activities.ProductCreation;
+import com.paladium.R;
+import com.paladium.Vista.Activities.ProductDescription;
 import com.paladium.Vista.Adapters.CustomRVAdapter_Products_List;
 
 import java.util.ArrayList;
@@ -40,48 +37,24 @@ import java.util.ArrayList;
  */
 public class Fragment_Inventario extends Fragment implements CustomRVAdapter_Products_List.ListItemClick , View.OnClickListener{
     private final String TAG= "Fragment_Inventario";
-    private RecyclerView customRecyclerView;
-    private Producto producto;
     private ArrayList<Producto> listaProductos;
     private CustomRVAdapter_Products_List adapterProducts;
     private Toast toast;
     private Context mContext;
     private View mView;
-
-    private InterfacePresenter_MainActivity.onOcultarTeclado listener;
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
+    private RecyclerView customRecycler;
+    private Parcelable recyclerViewState;
+    private int findFirtsVisiblePositionRecyclerView;
+    private int findFirstCompletelyVisibleItemPositionRecyclerView;
+    private int findLastVisibleItemPositionRecyclerView;
+    private int findLastCompletelyVisibleItemPositionRecyclerView;
 
     public Fragment_Inventario() {
     }
 
-    public void iniciarListener(InterfacePresenter_MainActivity.onOcultarTeclado listener) {
-        this.listener = listener;
-    }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment Fragment_Inventario.
-     */
-    // TODO: Rename and change types and number of parameters
     public static Fragment_Inventario newInstance(String param1, String param2) {
-        Bundle args = new Bundle();
         Fragment_Inventario fragment = new Fragment_Inventario();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
         return fragment;
     }
 
@@ -89,8 +62,7 @@ public class Fragment_Inventario extends Fragment implements CustomRVAdapter_Pro
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+
         }
     }
 
@@ -104,31 +76,20 @@ public class Fragment_Inventario extends Fragment implements CustomRVAdapter_Pro
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        /*mContext = view.getContext();
-        mView = view;*/
+        mContext = view.getContext();
+        mView = view.getRootView();
         //------------------------------------------------------------------------------------------
-        /*customRecyclerView = view.findViewById(R.id.fragment_inventario_recyclerV_CustomProducts);
-        //customRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(view.getContext());
-        customRecyclerView.setLayoutManager(linearLayoutManager);
+        customRecycler = mView.findViewById(R.id.fragment_inventario_recyclerV_CustomProducts);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext);
+        customRecycler.setLayoutManager(linearLayoutManager);
+        //------------------------------------------------------------------------------------------
+        adapterProducts = new CustomRVAdapter_Products_List( Fragment_Inventario.this, mContext);
 
-        listaProductos = new ArrayList<>();
-        for (int i = 0; i < 20; i++) {
-            producto = new Producto();
-            producto.setNombre("Nombre: " + i);
-            producto.setCantidad(i);
-            producto.setPrecio(2.5 + i);
-            listaProductos.add(producto);
-        }
-
-        adapterProducts = new CustomRVAdapter_Products_List(listaProductos, this);
-        customRecyclerView.setAdapter(adapterProducts);
-*/
-       /* TextInputEditText edBuscar = view.findViewById(R.id.fragment_inventario_inputEdBuscar);
         Button btCrearProducto = view.findViewById(R.id.fragment_inventario_btnCrearProducto);
+
         btCrearProducto.setOnClickListener(this);
 
-        cargarDatosProductosRecycler();*/
+        cargarDatosProductosRecycler();
     }
 
     private void cargarDatosProductosRecycler() {
@@ -137,6 +98,24 @@ public class Fragment_Inventario extends Fragment implements CustomRVAdapter_Pro
         BaseDeDatos.getFireDatabase().child(Utilidades.nodoPadre).child(Utilidades.nodoProducto).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                /*LinearLayoutManager linearLayout = (LinearLayoutManager) (customRecycler.getLayoutManager());
+                findFirtsVisiblePositionRecyclerView = linearLayout.findFirstVisibleItemPosition();
+                findFirstCompletelyVisibleItemPositionRecyclerView = linearLayout.findFirstCompletelyVisibleItemPosition();
+                findLastVisibleItemPositionRecyclerView = linearLayout.findLastVisibleItemPosition();
+                findLastCompletelyVisibleItemPositionRecyclerView = linearLayout.findLastCompletelyVisibleItemPosition();*/
+
+                // https://stackoverflow.com/questions/28658579/refreshing-data-in-recyclerview-and-keeping-its-scroll-position
+                // https://stackoverflow.com/questions/24989218/get-visible-items-in-recyclerview
+                //para mantener el scrool o pisicion de los itemes que actualmente se ve en pantalla,
+                //de esta manera cuando se inserte datos o se actuelicen, el reciclerview no vuelva al inicio.
+                //Esto se utiliza más abajo, pero primero guardo la intancia antes de que los datos cambien.
+                recyclerViewState = customRecycler.getLayoutManager().onSaveInstanceState();
+
+                Log.d(TAG, "findFirtsVisiblePositionRecyclerView: "+findFirtsVisiblePositionRecyclerView);
+                Log.d(TAG, "findFirstCompletelyVisibleItemPositionRecyclerView: "+findFirstCompletelyVisibleItemPositionRecyclerView);
+                Log.d(TAG, "findLastVisibleItemPositionRecyclerView: "+findLastVisibleItemPositionRecyclerView);
+                Log.d(TAG, "findLastCompletelyVisibleItemPositionRecyclerView: "+findLastCompletelyVisibleItemPositionRecyclerView);
+
                 ArrayList<Producto> productosList = new ArrayList<>();
                 for (DataSnapshot datos: dataSnapshot.getChildren()  ) {
                    // Log.d(TAG, "dataSnashot: "+datos.getKey());
@@ -144,11 +123,16 @@ public class Fragment_Inventario extends Fragment implements CustomRVAdapter_Pro
                     producto.setProductoFirebaseKey(datos.getKey());
                     productosList.add(producto);
                 }
-                RecyclerView customRecycler = mView.findViewById(R.id.fragment_inventario_recyclerV_CustomProducts);
-                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext);
-                customRecycler.setLayoutManager(linearLayoutManager);
-                CustomRVAdapter_Products_List adapterProducts = new CustomRVAdapter_Products_List(productosList, Fragment_Inventario.this);
+
+
+                /*adapterProducts.notifyItemRangeChanged(findFirstCompletelyVisibleItemPositionRecyclerView, adapterProducts.getItemCount());*/
+                adapterProducts.dataProductosChangeDiffCallUtil(productosList);
                 customRecycler.setAdapter(adapterProducts);
+                //notifico que los datos del adaptador han cambiado
+                //luego colocaremos la insatncia guardada para recuperar el estado que tenía el
+                //recyclerview antes de los nuevos datos
+                //adapterProducts.notifyDataSetChanged();
+                customRecycler.getLayoutManager().onRestoreInstanceState(recyclerViewState);
             }
 
             @Override
@@ -161,13 +145,18 @@ public class Fragment_Inventario extends Fragment implements CustomRVAdapter_Pro
 
 
     @Override
-    public void onListenItemClick(int itemClicado) {
+    public void onListenItemClick(int itemClicado, Producto producto) {
         String mensajeToast = "item # " + itemClicado + " clicado.";
+        Intent intent = new Intent(mView.getContext(), ProductDescription.class);
+        intent.putExtra(Utilidades.productoFirebaseKey, producto.getProductoFirebaseKey());
+        startActivity(intent);
+
         if (toast != null) {
             toast.cancel();
         }
-        toast.makeText(mContext, mensajeToast, Toast.LENGTH_SHORT).show();
+        toast.makeText(mView.getContext(), mensajeToast, Toast.LENGTH_SHORT).show();
     }
+
 
 
     @Override
@@ -179,6 +168,8 @@ public class Fragment_Inventario extends Fragment implements CustomRVAdapter_Pro
                 break;
         }
     }
+
+
 
     /*public void keyBoardisShowing(View view){
         view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {

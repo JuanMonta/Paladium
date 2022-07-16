@@ -1,4 +1,4 @@
-package com.paladium.Model.Logica;
+package com.paladium.Model.Utils;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;

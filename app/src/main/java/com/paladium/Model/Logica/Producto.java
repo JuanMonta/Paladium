@@ -4,16 +4,17 @@ public class Producto {
 
     // Variables que darán el nombre a cada uno de los campos de los productos
     //en firebase, no se deben inicializar
+
+    private String CodBarras;
     private String Nombre;
     private String Descripcion;
-    private int Cantidad;
-    private String CodBarras;
-    private float Precio;
-    private float Costo;
     private String Imagen;
     private String Categoria;
+    private int Cantidad;
+    private float Precio;
+    private float Costo;
+    //la key solo se recupera de firebase, no se la guarda en un campo del la Bd
     private String productoFirebaseKey;
-
 
     public Producto() {
     }
