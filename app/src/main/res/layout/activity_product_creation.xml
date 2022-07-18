@@ -59,6 +59,15 @@
                             android:layout_alignParentEnd="true"
                             android:layout_marginEnd="0dp"
                             app:srcCompat="@drawable/ic_baseline_add_a_photo_18px" />
+
+                        <ImageButton
+                            android:id="@+id/product_creation_imgbQuitarImagen"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/product_creation_imgbTomarFotoProducto"
+                            android:layout_alignParentEnd="true"
+                            android:visibility="gone"
+                            app:srcCompat="@drawable/baseline_delete_forever_black_18dp" />
                     </RelativeLayout>
 
                 </FrameLayout>
@@ -90,6 +99,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:endIconDrawable="@drawable/barcode_scanner_24px"
+                app:endIconTint="?attr/colorPrimaryVariant"
                 app:endIconMode="custom">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -115,10 +125,10 @@
                 app:errorIconDrawable="@android:drawable/ic_dialog_info"
                 app:errorIconTint="@color/red"
                 app:endIconDrawable="@drawable/quantity_24px"
+                app:endIconTint="?attr/colorPrimaryVariant"
                 app:endIconMode="custom"
                 app:helperText="Requerido*"
-                app:helperTextTextColor="@color/red"
-                >
+                app:helperTextTextColor="@color/red">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/product_creation_edCantidadDisponible"
@@ -179,6 +189,7 @@
                                 app:helperText="Requerido*"
                                 app:helperTextTextColor="@color/red"
                                 app:startIconDrawable="@drawable/baseline_bookmark_black_24dp"
+                                app:startIconTint="?attr/colorPrimaryVariant"
                                 app:counterEnabled="true"
                                 app:counterMaxLength="40">
 
@@ -222,6 +233,7 @@
                                 app:helperText="Requerido*"
                                 app:helperTextTextColor="@color/red"
                                 app:startIconDrawable="@drawable/baseline_attach_money_black_24dp"
+                                app:startIconTint="?attr/colorPrimaryVariant"
                                 app:counterEnabled="true"
                                 app:counterMaxLength="6">
 
@@ -265,6 +277,7 @@
                                 app:helperText="Requerido*"
                                 app:helperTextTextColor="@color/red"
                                 app:startIconDrawable="@drawable/baseline_attach_money_black_24dp"
+                                app:startIconTint="?attr/colorPrimaryVariant"
                                 app:counterEnabled="true"
                                 app:counterMaxLength="6">
 
@@ -294,30 +307,58 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:orientation="vertical">
+                            android:orientation="horizontal">
 
-                            <TextView
-                                android:id="@+id/textView6"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Categoría"
-                                android:textStyle="bold"/>
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="5"
+                                android:orientation="vertical">
 
-                            <com.google.android.material.textfield.TextInputLayout
-                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                app:helperText="Requerido*"
-                                app:helperTextTextColor="@color/red">
+                                <TextView
+                                    android:id="@+id/textView6"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Categoría"
+                                    android:textStyle="bold"/>
 
-                                <AutoCompleteTextView
-                                    android:id="@+id/product_creation_spCategoria"
+                                <com.google.android.material.textfield.TextInputLayout
+                                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:inputType="none"
-                                    android:text="Seleccione..."/>
+                                    app:helperText="Requerido*"
+                                    app:helperTextTextColor="@color/red"
+                                    app:startIconDrawable="@drawable/baseline_category_24dp"
+                                    app:startIconTint="?attr/colorPrimaryVariant">
 
-                            </com.google.android.material.textfield.TextInputLayout>
+                                    <AutoCompleteTextView
+                                        android:id="@+id/product_creation_spCategoria"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:inputType="none"
+                                        android:text="Seleccione..." />
+
+                                </com.google.android.material.textfield.TextInputLayout>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:paddingTop="19dp"
+                                android:paddingBottom="17dp"
+                                android:paddingLeft="5dp"
+                                android:paddingRight="5dp"
+                                android:orientation="vertical">
+
+                                <ImageButton
+                                    android:id="@+id/product_creation_imgbCrearCategoria"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    app:srcCompat="@drawable/baseline_add_circle_outline_black_24dp"/>
+
+                            </LinearLayout>
 
                         </LinearLayout>
 

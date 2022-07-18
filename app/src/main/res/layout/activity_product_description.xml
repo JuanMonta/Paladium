@@ -28,6 +28,11 @@
                 android:layout_height="match_parent"
                 app:srcCompat="@drawable/baseline_camera_alt_green_black_48dp" />
 
+            <ProgressBar
+                android:id="@+id/activity_product_descrip_ProgressBarFoto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
         </FrameLayout>
 
         <LinearLayout
@@ -132,7 +137,6 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="41dp"
                                 android:drawablePadding="20dp"
-                                android:drawableTint="@color/green_700"
                                 android:gravity="center_vertical"
                                 android:maxLength="40"
                                 android:text="asjdhjk"
@@ -169,7 +173,6 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="41dp"
                                 android:drawablePadding="20dp"
-                                android:drawableTint="@color/green_700"
                                 android:gravity="center_vertical"
                                 android:text="000.00"
                                 android:textSize="16sp"
@@ -207,8 +210,7 @@
                                 android:gravity="center_vertical"
                                 android:text="000.00"
                                 android:textSize="16sp"
-                                app:drawableStartCompat="@drawable/baseline_attach_money_black_24dp"
-                                android:drawableTint="@color/green_700"/>
+                                app:drawableStartCompat="@drawable/baseline_attach_money_black_24dp" />
 
                         </LinearLayout>
 
@@ -238,9 +240,11 @@
                                 android:id="@+id/activity_product_descrip_tvCategoria"
                                 android:layout_width="match_parent"
                                 android:layout_height="41dp"
+                                android:drawablePadding="20dp"
                                 android:gravity="center_vertical"
                                 android:text="asdas"
-                                android:textSize="16sp" />
+                                android:textSize="16sp"
+                                app:drawableStartCompat="@drawable/baseline_category_24dp"/>
 
 
                         </LinearLayout>

@@ -12,10 +12,12 @@
         <entry key="..\:/AndroidProyectsInteliJIdea/Paladium/app/src/main/res/drawable/balance_24px.xml" value="0.24" />
         <entry key="..\:/AndroidProyectsInteliJIdea/Paladium/app/src/main/res/drawable/barcode_24px.xml" value="0.2305" />
         <entry key="..\:/AndroidProyectsInteliJIdea/Paladium/app/src/main/res/drawable/barcode_scanner_24px.xml" value="0.2715" />
+        <entry key="..\:/AndroidProyectsInteliJIdea/Paladium/app/src/main/res/drawable/baseline_add_circle_outline_black_24dp.xml" value="0.2735" />
         <entry key="..\:/AndroidProyectsInteliJIdea/Paladium/app/src/main/res/drawable/baseline_attach_money_black_24dp.xml" value="0.24" />
         <entry key="..\:/AndroidProyectsInteliJIdea/Paladium/app/src/main/res/drawable/baseline_bookmark_black_24dp.xml" value="0.2305" />
         <entry key="..\:/AndroidProyectsInteliJIdea/Paladium/app/src/main/res/drawable/baseline_camera_alt_black_48dp.xml" value="0.1" />
         <entry key="..\:/AndroidProyectsInteliJIdea/Paladium/app/src/main/res/drawable/baseline_camera_alt_green_black_48dp.xml" value="0.2305" />
+        <entry key="..\:/AndroidProyectsInteliJIdea/Paladium/app/src/main/res/drawable/baseline_category_24dp.xml" value="0.2735" />
         <entry key="..\:/AndroidProyectsInteliJIdea/Paladium/app/src/main/res/drawable/baseline_error_black_48dp.xml" value="0.2735" />
         <entry key="..\:/AndroidProyectsInteliJIdea/Paladium/app/src/main/res/drawable/baseline_photo_library_black_18dp.xml" value="0.3125" />
         <entry key="..\:/AndroidProyectsInteliJIdea/Paladium/app/src/main/res/drawable/custom_frame_layout_photo_product.xml" value="0.195" />
@@ -37,7 +39,8 @@
         <entry key="..\:/AndroidProyectsInteliJIdea/Paladium/app/src/main/res/layout/activity_product_creation.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidProyectsInteliJIdea/Paladium/app/src/main/res/layout/activity_product_creation2.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidProyectsInteliJIdea/Paladium/app/src/main/res/layout/activity_product_description.xml" value="0.33" />
-        <entry key="..\:/AndroidProyectsInteliJIdea/Paladium/app/src/main/res/layout/custom_list_productos.xml" value="0.5" />
+        <entry key="..\:/AndroidProyectsInteliJIdea/Paladium/app/src/main/res/layout/custom_dialog_crear_categoria.xml" value="0.36666666666666664" />
+        <entry key="..\:/AndroidProyectsInteliJIdea/Paladium/app/src/main/res/layout/custom_list_productos.xml" value="0.67" />
         <entry key="..\:/AndroidProyectsInteliJIdea/Paladium/app/src/main/res/layout/custom_text_view_dropdown_menu_producto_categoria.xml" value="0.365625" />
         <entry key="..\:/AndroidProyectsInteliJIdea/Paladium/app/src/main/res/layout/fragment__home.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidProyectsInteliJIdea/Paladium/app/src/main/res/layout/fragment_balance.xml" value="0.36666666666666664" />

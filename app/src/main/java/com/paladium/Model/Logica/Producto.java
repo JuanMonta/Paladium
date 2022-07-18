@@ -1,6 +1,8 @@
 package com.paladium.Model.Logica;
 
-public class Producto {
+import java.io.Serializable;
+
+public class Producto implements Serializable {
 
     // Variables que darán el nombre a cada uno de los campos de los productos
     //en firebase, no se deben inicializar

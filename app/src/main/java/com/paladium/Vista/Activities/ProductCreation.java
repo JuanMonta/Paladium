@@ -8,6 +8,8 @@ import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -43,6 +45,7 @@ public class ProductCreation extends AppCompatActivity implements View.OnClickLi
     private final int TOMAR_FOTO = 2;
 
     PresentadorProductCreation productCreation;
+    Bundle bundleProducto;
     private Button btnRegistrarProducto;
     private ImageButton imgbtnSeleccionarImagenProducto, imgbTomarFoto;
     private ImageView imgv_ImagenProducto;
@@ -61,9 +64,9 @@ public class ProductCreation extends AppCompatActivity implements View.OnClickLi
         setContentView(R.layout.activity_product_creation);
         filePath = null;
         View view = findViewById(android.R.id.content).getRootView();
-        productCreation = new PresentadorProductCreation(this, this);
+        bundleProducto = getIntent().getExtras();
+        productCreation = new PresentadorProductCreation(this, this, bundleProducto);
         productCreation.init(view);
-
         inputEdScanQRBarCode = findViewById(R.id.product_creation_edCodBarras);
         inputLayoutScanQRBarCode = findViewById(R.id.product_creation_LayoutedCodBarras);
         inputLayoutScanQRBarCode.setEndIconOnClickListener(new View.OnClickListener() {
@@ -75,6 +78,9 @@ public class ProductCreation extends AppCompatActivity implements View.OnClickLi
 
         btnRegistrarProducto = view.findViewById(R.id.product_creation_btnGuardarProducto);
         btnRegistrarProducto.setOnClickListener(this);
+        if (bundleProducto !=null){
+            btnRegistrarProducto.setText("GUARDAR EDICIÓN");
+        }
 
         imgbtnSeleccionarImagenProducto = view.findViewById(R.id.product_creation_imgbtnSeleccionarImagenProducto);
         imgbtnSeleccionarImagenProducto.setOnClickListener(this);
@@ -207,7 +213,7 @@ public class ProductCreation extends AppCompatActivity implements View.OnClickLi
                     filePath = resultImage.getUri();
                     Log.d(TAG, "imagen Crop Launcher -> Colocando a Image View el Uri: "+resultImage.getUri());
                     imgv_ImagenProducto.setImageURI(resultImage.getUri());
-                    Toast.makeText(ProductCreation.this, "Image Update Successfully!!!", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(ProductCreation.this, "Image Update Successfully!!!", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -266,7 +272,9 @@ public class ProductCreation extends AppCompatActivity implements View.OnClickLi
     }
 
     private void borrarAchivoDelFilePath(Uri filePath){
-        new File(filePath.getPath()).delete();
+        if (filePath !=null){
+            new File(filePath.getPath()).delete();
+        }
     }
 
     private void scanQRBarCode() {
@@ -336,30 +344,37 @@ public class ProductCreation extends AppCompatActivity implements View.OnClickLi
                 borrarAchivoDelFilePath(filePath);
             this.filePath = null;
         }
+        if (bundleProducto !=null){
+            onBackPressed();
+        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        Toast.makeText(this, "onResume() ProductCreation", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "onResume() ProductCreation", Toast.LENGTH_SHORT).show();
+/*        AutoCompleteTextView autoCompletTextSpCategoria = findViewById(R.id.product_creation_spCategoria);
+        String[] categorias = getResources().getStringArray(R.array.array_producto_categoria_de_prueba);
+        ArrayAdapter arrayAdapter = new ArrayAdapter(this, R.layout.custom_text_view_dropdown_menu_producto_categoria, categorias);
+        autoCompletTextSpCategoria.setAdapter(arrayAdapter);*/
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        Toast.makeText(this, "onPause() ProductCreation", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "onPause() ProductCreation", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        Toast.makeText(this, "onStop() ProductCreation", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "onStop() ProductCreation", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Toast.makeText(this, "onDestroy() ProductCreation", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "onDestroy() ProductCreation", Toast.LENGTH_SHORT).show();
     }
 
 

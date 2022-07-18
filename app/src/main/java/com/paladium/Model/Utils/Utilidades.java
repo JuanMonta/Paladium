@@ -24,9 +24,14 @@ public class Utilidades {
     //la key no se guarda en firebase, solo se recupera
     public static final String productoFirebaseKey = "productoFirebaseKey";
 
+    //key para recuperar la clase producto enviado mediante un bundle
+    public static final String bundleProduto = "bundleProduto";
 
     //------------NOmbre de directorio para guardar imagenes de la app
     public static final String directorioName = "ImagenesCompressed";
+
+    public static final String alertDialog_EXITO = "alertDialog_EXITO";
+    public static final String alertDialog_ERROR = "alertDialog_ERROR";
 
     //----------para saber si la imagen de firebase ha sido descargada------------------------------
     public static final String imagenDescargada = "imagenDescargada";

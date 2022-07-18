@@ -7,20 +7,20 @@ import com.google.firebase.storage.StorageReference;
 
 public class BaseDeDatos {
 
-    private static DatabaseReference fireDatabase;
-    private static StorageReference fireStorageReference;
+    private static DatabaseReference fireDatabaseIntanceReference;
+    private static StorageReference fireStorageInstanceReference;
 
     public BaseDeDatos() {
-        fireDatabase = FirebaseDatabase.getInstance().getReference();
-        fireStorageReference = FirebaseStorage.getInstance().getReference();
+        fireDatabaseIntanceReference = FirebaseDatabase.getInstance().getReference();
+        fireStorageInstanceReference = FirebaseStorage.getInstance().getReference();
     }
 
-    public static DatabaseReference getFireDatabase() {
-        return fireDatabase;
+    public static DatabaseReference getFireDatabaseIntanceReference() {
+        return fireDatabaseIntanceReference;
     }
 
-    public static StorageReference getFireStorageReference() {
-        return fireStorageReference;
+    public static StorageReference getFireStorageInstanceReference() {
+        return fireStorageInstanceReference;
     }
 
 

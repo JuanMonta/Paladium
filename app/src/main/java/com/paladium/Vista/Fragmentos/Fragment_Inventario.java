@@ -95,7 +95,7 @@ public class Fragment_Inventario extends Fragment implements CustomRVAdapter_Pro
     private void cargarDatosProductosRecycler() {
         //adValueChange Listener escuha cuando un valor se ha cambiado en la base de datos en tiempo real,
         //si cambia en la BD, la Ui se actualiza automáticamente gracias a este método
-        BaseDeDatos.getFireDatabase().child(Utilidades.nodoPadre).child(Utilidades.nodoProducto).addValueEventListener(new ValueEventListener() {
+        BaseDeDatos.getFireDatabaseIntanceReference().child(Utilidades.nodoPadre).child(Utilidades.nodoProducto).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 /*LinearLayoutManager linearLayout = (LinearLayoutManager) (customRecycler.getLayoutManager());
@@ -148,7 +148,9 @@ public class Fragment_Inventario extends Fragment implements CustomRVAdapter_Pro
     public void onListenItemClick(int itemClicado, Producto producto) {
         String mensajeToast = "item # " + itemClicado + " clicado.";
         Intent intent = new Intent(mView.getContext(), ProductDescription.class);
-        intent.putExtra(Utilidades.productoFirebaseKey, producto.getProductoFirebaseKey());
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(Utilidades.bundleProduto, producto);
+        intent.putExtras(bundle);
         startActivity(intent);
 
         if (toast != null) {
