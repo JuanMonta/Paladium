@@ -111,10 +111,10 @@ public class Fragment_Inventario extends Fragment implements CustomRVAdapter_Pro
                 //Esto se utiliza más abajo, pero primero guardo la intancia antes de que los datos cambien.
                 recyclerViewState = customRecycler.getLayoutManager().onSaveInstanceState();
 
-                Log.d(TAG, "findFirtsVisiblePositionRecyclerView: "+findFirtsVisiblePositionRecyclerView);
+                /*Log.d(TAG, "findFirtsVisiblePositionRecyclerView: "+findFirtsVisiblePositionRecyclerView);
                 Log.d(TAG, "findFirstCompletelyVisibleItemPositionRecyclerView: "+findFirstCompletelyVisibleItemPositionRecyclerView);
                 Log.d(TAG, "findLastVisibleItemPositionRecyclerView: "+findLastVisibleItemPositionRecyclerView);
-                Log.d(TAG, "findLastCompletelyVisibleItemPositionRecyclerView: "+findLastCompletelyVisibleItemPositionRecyclerView);
+                Log.d(TAG, "findLastCompletelyVisibleItemPositionRecyclerView: "+findLastCompletelyVisibleItemPositionRecyclerView);*/
 
                 ArrayList<Producto> productosList = new ArrayList<>();
                 for (DataSnapshot datos: dataSnapshot.getChildren()  ) {

@@ -104,9 +104,9 @@ public class CustomRVAdapter_Products_List extends RecyclerView.Adapter<CustomRV
         //se envian las respectivas listas, las cuales tambien nos servirán en el ViewHolderListaProducts
         //para obtener cuales fueron los datos que cambiaron
         diffCallBack = new ProductoDiffCallBack(listaProducto, newProductList);
-        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallBack);
         //actualizamos la lista existente por la nueva
         listaProducto = newProductList;
+        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallBack);
         //notificamos al recyclerView Adapter que debe actualizarse
         diffResult.dispatchUpdatesTo(this);
 
