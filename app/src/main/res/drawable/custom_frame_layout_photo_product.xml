@@ -2,6 +2,9 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
 
     <corners android:radius="20dp"/>
-    <stroke android:width="2dp" android:color="@color/green_700"/>
+
+    <stroke
+        android:width="2dp"
+        android:color="?attr/drawable_producto_tintColor"/>
 
 </shape>

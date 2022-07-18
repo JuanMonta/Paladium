@@ -10,4 +10,18 @@
     <color name="white">#FFFFFFFF</color>
     <color name="red">#FF0000</color>
     <color name="red_darker">#FDB30808</color>
+
+    <color name="drawable_color_day">@color/green_700</color>
+    <color name="drawable_color_nigth">#FDE6E6E6</color>
+
+    <color name="color_texto_titulo_day">@color/green_700</color>
+    <color name="color_texto_subtitulo_day">#0C0C0C</color>
+    <color name="color_texto_normal_day">#FD272727</color>
+    <color name="color_texto_normal_lite_day">#FD3C3B3B</color>
+
+    <color name="color_texto_titulo_nigth">#FDFFFFFF</color>
+    <color name="color_texto_subtitulo_nigth">#FDE1DFDF</color>
+    <color name="color_texto_normal_nigth">#FDDCDBDB</color>
+    <color name="color_texto_normal_lite_nigth">#FDB5B3B3</color>
+
 </resources>

@@ -116,13 +116,17 @@ public class PresentadorProductCreation implements View.OnClickListener, Interfa
      * Mensaje ha mostrar cuando subidos un producto a firebase, informandonos si
      * se ha subido o no el producto.
      *
-     * @param tiutloDialog título que tendrá la alerta
+     * @param tipoAlert título que tendrá la alerta
      * @param mensaje      mensaje de la alerta
      */
-    private void productAlertDialog(String tiutloDialog, String mensaje) {
+    private void productAlertDialog(String tipoAlert, String mensaje) {
 
         AlertDialog.Builder ok_or_error_dialog = new AlertDialog.Builder(mContext);
-        ok_or_error_dialog.setTitle(tiutloDialog);
+        if (tipoAlert.equals(Utilidades.alertDialog_EXITO)){
+            ok_or_error_dialog.setTitle("ÉXITO");
+        }else {
+            ok_or_error_dialog.setTitle("ERROR");
+        }
         ok_or_error_dialog.setMessage(mensaje);
         ok_or_error_dialog.setCancelable(false);
         ok_or_error_dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -131,34 +135,13 @@ public class PresentadorProductCreation implements View.OnClickListener, Interfa
                 dialogInterface.dismiss();
                 //notificamos con la interfaz de que debe borrarse el Uri filePath que contiene
                 //la ruta de la imagen en el dispositivo una vez la hayamos subido a firebase
-                if (tiutloDialog.equals(Utilidades.alertDialog_EXITO)){
+                if (tipoAlert.equals(Utilidades.alertDialog_EXITO)){
+                    limpiarCampos();
                     interfaceProductoCargado.productoCargado(true);
                 }
             }
         });
         ok_or_error_dialog.show();
-    }
-
-    private void cargarDatosProductosParaEdicion() {
-
-        Log.d(TAG, "PresentadorProductCreation --------------------------------- ");
-        Log.d(TAG, "Nombre: " + producto.getNombre());
-        Log.d(TAG, "Cantidad: " + producto.getCantidad());
-        Log.d(TAG, "Precio: " + producto.getPrecio());
-        Log.d(TAG, "Costo: " + producto.getCosto());
-        Log.d(TAG, "Descrip: " + producto.getDescripcion());
-        Log.d(TAG, "CobBar: " + producto.getCodBarras());
-        Log.d(TAG, "ImagenURL: " + producto.getImagen());
-        Log.d(TAG, "-----------------------------------------------------------");
-        inputEdCodBarras.setText(producto.getCodBarras());
-        inputEdCantDisponible.setText(String.valueOf(producto.getCantidad()));
-        inputEdNombreProducto.setText(producto.getNombre());
-        inputEdPrecioUnit.setText(String.valueOf(producto.getPrecio()));
-        inputEdCostoUnit.setText(String.valueOf(producto.getCosto()));
-        //categoria.setText(producto.getCategoria());
-        inputEdDescripcion.setText(producto.getDescripcion());
-        cargarImagenFirebase(producto.getImagen());
-
     }
 
     /**
@@ -178,14 +161,6 @@ public class PresentadorProductCreation implements View.OnClickListener, Interfa
             registrarProductoConOSinImagenFirebase();
         }
 
-    }
-
-    private void actualizarDatos() {
-        if (this.filePath != null) {
-            actualizarDatosProductoConImagen();
-        } else {
-            actualizarDatosProducto(null);
-        }
     }
 
     private void registrarProductoConOSinImagenFirebase() {
@@ -303,6 +278,36 @@ public class PresentadorProductCreation implements View.OnClickListener, Interfa
         Log.d(TAG, "Datos Guardados");
     }
 
+    private void cargarDatosProductosParaEdicion() {
+
+        Log.d(TAG, "PresentadorProductCreation --------------------------------- ");
+        Log.d(TAG, "Nombre: " + producto.getNombre());
+        Log.d(TAG, "Cantidad: " + producto.getCantidad());
+        Log.d(TAG, "Precio: " + producto.getPrecio());
+        Log.d(TAG, "Costo: " + producto.getCosto());
+        Log.d(TAG, "Descrip: " + producto.getDescripcion());
+        Log.d(TAG, "CobBar: " + producto.getCodBarras());
+        Log.d(TAG, "ImagenURL: " + producto.getImagen());
+        Log.d(TAG, "-----------------------------------------------------------");
+        inputEdCodBarras.setText(producto.getCodBarras());
+        inputEdCantDisponible.setText(String.valueOf(producto.getCantidad()));
+        inputEdNombreProducto.setText(producto.getNombre());
+        inputEdPrecioUnit.setText(String.valueOf(producto.getPrecio()));
+        inputEdCostoUnit.setText(String.valueOf(producto.getCosto()));
+        //categoria.setText(producto.getCategoria());
+        inputEdDescripcion.setText(producto.getDescripcion());
+        cargarImagenFirebase(producto.getImagen());
+
+    }
+
+    private void actualizarDatos() {
+        if (this.filePath != null) {
+            actualizarDatosProductoConImagen();
+        } else {
+            actualizarDatosProducto(null);
+        }
+    }
+
     private void actualizarDatosProductoConImagen() {
         Log.d(TAG, "Borrando imagen: " + Uri.parse(this.producto.getImagen()));
 
@@ -417,7 +422,7 @@ public class PresentadorProductCreation implements View.OnClickListener, Interfa
         if (!URLImagen.isEmpty()) {
             //Log.d("ADAPTER_PRODUCTOS", "Imagen no es vacia");
             Glide
-                    .with(mContext)
+                    .with(mContext.getApplicationContext())
                     .load(URLImagen)
                     .centerInside()
                     .fitCenter()
@@ -503,7 +508,6 @@ public class PresentadorProductCreation implements View.OnClickListener, Interfa
     }
 
     private void limpiarCampos() {
-
         inputEdCodBarras.setText("");
         inputEdCantDisponible.setText("0");
         inputEdNombreProducto.setText("");
@@ -511,6 +515,7 @@ public class PresentadorProductCreation implements View.OnClickListener, Interfa
         inputEdCostoUnit.setText("");
         inputEdDescripcion.setText("");
         imgv_ImagenProducto.setImageResource(R.drawable.baseline_camera_alt_green_black_48dp);
+        autoCompletTextSpCategoria.setText("Seleccione...");
 
     }
 

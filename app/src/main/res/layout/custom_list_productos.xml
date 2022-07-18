@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<!--<?xml version="1.0" encoding="utf-8"?>-->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -64,27 +64,29 @@
 
                 <TextView
                     android:id="@+id/custom_list_productos_tvNobre"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/roboto"
                     android:text="Nombre Producto"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    android:textColor="?attr/color_texto_titulo"/>
 
                 <TextView
                     android:id="@+id/custom_list_productos_tvCantidad"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/roboto"
                     android:text="Cantidad"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    android:textColor="?attr/color_texto_normal_lite"/>
 
                 <TextView
                     android:id="@+id/custom_list_productos_tvPrecio"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/roboto"
                     android:text="Precio"
-                    android:textColor="#121111"
+                    android:textColor="?attr/color_texto_normal"
                     android:textSize="16sp" />
             </LinearLayout>
         </LinearLayout>

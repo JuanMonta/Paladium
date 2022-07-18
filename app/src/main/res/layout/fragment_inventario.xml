@@ -140,7 +140,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:src="@drawable/edit_note_24px" />
+            android:src="@drawable/baseline_category_24dp" />
 
         <Spinner
             android:layout_width="0dp"

@@ -14,8 +14,15 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
-        <!-- color para el drawable de producto para cuando se Theme Night -->
-        <item name="drawable_producto_tintColor">@color/white</item>
+        <!-- color para el drawable de producto para cuando sea Theme Night -->
+        <item name="drawable_producto_tintColor">@color/drawable_color_nigth</item>
+
+        <item name="color_texto_titulo">@color/color_texto_titulo_nigth</item>
+        <item name="color_texto_subtitulo">@color/color_texto_subtitulo_nigth</item>
+        <item name="color_texto_normal">@color/color_texto_normal_nigth</item>
+        <item name="color_texto_normal_lite">@color/color_texto_normal_lite_nigth</item>
 
     </style>
+
+
 </resources>

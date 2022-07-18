@@ -165,6 +165,14 @@ public class CustomRVAdapter_Products_List extends RecyclerView.Adapter<CustomRV
                         Log.d("ADAPTER_PRODUCTOS", "Nombre a cambiado");
                         blinkEffect(productoNombre);
                     }
+                    if (bundleKey.equals(Utilidades.cantProducto)) {
+                        Log.d("ADAPTER_PRODUCTOS", "Nombre a cambiado");
+                        blinkEffect(productoCant);
+                    }
+                    if (bundleKey.equals(Utilidades.precioProducto)) {
+                        Log.d("ADAPTER_PRODUCTOS", "Nombre a cambiado");
+                        blinkEffect(productoPrecio);
+                    }
 
                 }
             }
@@ -184,7 +192,7 @@ public class CustomRVAdapter_Products_List extends RecyclerView.Adapter<CustomRV
             if (!URLImagen.isEmpty()) {
                 //Log.d("ADAPTER_PRODUCTOS", "Imagen no es vacia");
                 Glide
-                        .with(mContext)
+                        .with(mContext.getApplicationContext())
                         .load(URLImagen)
                         .centerInside()
                         .fitCenter()
@@ -222,7 +230,7 @@ public class CustomRVAdapter_Products_List extends RecyclerView.Adapter<CustomRV
         }
 
         private void blinkEffect(View view) {
-            ObjectAnimator animation = ObjectAnimator.ofInt(view, "backgroundColor", Color.WHITE, Color.RED, Color.WHITE);
+            ObjectAnimator animation = ObjectAnimator.ofInt(view, "backgroundColor", Color.TRANSPARENT, Color.RED, Color.TRANSPARENT);
             animation.setDuration(3000);
             animation.setEvaluator(new ArgbEvaluator());
             animation.setRepeatMode(ValueAnimator.REVERSE);

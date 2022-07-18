@@ -19,19 +19,26 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="4"
-            android:padding="5dp"
-            android:background="@drawable/custom_text_view">
+            android:padding="2dp"
+            android:background="@drawable/custom_frame_layout_photo_product">
 
-            <ImageView
-                android:id="@+id/activity_product_descrip_ImagenProducto"
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:srcCompat="@drawable/baseline_camera_alt_green_black_48dp" />
+                app:cardCornerRadius="20dp">
 
-            <ProgressBar
-                android:id="@+id/activity_product_descrip_ProgressBarFoto"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                <ImageView
+                    android:id="@+id/activity_product_descrip_ImagenProducto"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:srcCompat="@drawable/baseline_camera_alt_green_black_48dp"/>
+
+                <ProgressBar
+                    android:id="@+id/activity_product_descrip_ProgressBarFoto"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+
+            </androidx.cardview.widget.CardView>
 
         </FrameLayout>
 
@@ -49,7 +56,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="2dp"
-                android:text="Código de barras" />
+                android:text="Código de barras"
+                android:textColor="?attr/color_texto_normal"/>
 
 
 
@@ -71,7 +79,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="2dp"
-                android:text="Cantidad disponible" />
+                android:text="Cantidad disponible"
+                android:textColor="?attr/color_texto_normal"/>
 
 
             <TextView
@@ -129,6 +138,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text="Nombre"
+                                android:textColor="?attr/color_texto_titulo"
                                 android:textStyle="bold" />
 
 
@@ -141,7 +151,8 @@
                                 android:maxLength="40"
                                 android:text="asjdhjk"
                                 android:textSize="16sp"
-                                app:drawableStartCompat="@drawable/baseline_bookmark_black_24dp" />
+                                app:drawableStartCompat="@drawable/baseline_bookmark_black_24dp"
+                                android:drawableTint="?attr/drawable_producto_tintColor"/>
 
 
                         </LinearLayout>
@@ -165,7 +176,8 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text="Precio Unitario"
-                                android:textStyle="bold" />
+                                android:textStyle="bold"
+                                android:textColor="?attr/color_texto_titulo"/>
 
 
                             <TextView
@@ -176,7 +188,8 @@
                                 android:gravity="center_vertical"
                                 android:text="000.00"
                                 android:textSize="16sp"
-                                app:drawableStartCompat="@drawable/baseline_attach_money_black_24dp" />
+                                app:drawableStartCompat="@drawable/baseline_attach_money_black_24dp"
+                                android:drawableTint="?attr/drawable_producto_tintColor"/>
 
 
                         </LinearLayout>
@@ -200,7 +213,8 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text="Costo Unitario"
-                                android:textStyle="bold" />
+                                android:textStyle="bold"
+                                android:textColor="?attr/color_texto_titulo"/>
 
                             <TextView
                                 android:id="@+id/activity_product_descrip_tvCosto"
@@ -210,7 +224,8 @@
                                 android:gravity="center_vertical"
                                 android:text="000.00"
                                 android:textSize="16sp"
-                                app:drawableStartCompat="@drawable/baseline_attach_money_black_24dp" />
+                                app:drawableStartCompat="@drawable/baseline_attach_money_black_24dp"
+                                android:drawableTint="?attr/drawable_producto_tintColor"/>
 
                         </LinearLayout>
 
@@ -233,6 +248,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Categoría"
+                                android:textColor="?attr/color_texto_titulo"
                                 android:textStyle="bold" />
 
 
@@ -244,7 +260,8 @@
                                 android:gravity="center_vertical"
                                 android:text="asdas"
                                 android:textSize="16sp"
-                                app:drawableStartCompat="@drawable/baseline_category_24dp"/>
+                                app:drawableStartCompat="@drawable/baseline_category_24dp"
+                                android:drawableTint="?attr/drawable_producto_tintColor"/>
 
 
                         </LinearLayout>
@@ -268,6 +285,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text="Descripción"
+                                android:textColor="?attr/color_texto_titulo"
                                 android:textStyle="bold" />
 
                             <TextView
@@ -293,6 +311,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
             android:layout_weight="1"
             android:orientation="horizontal">
 

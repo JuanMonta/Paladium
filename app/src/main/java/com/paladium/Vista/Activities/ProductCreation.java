@@ -345,7 +345,8 @@ public class ProductCreation extends AppCompatActivity implements View.OnClickLi
             this.filePath = null;
         }
         if (bundleProducto !=null){
-            onBackPressed();
+            //onBackPressed();
+            finish();
         }
     }
 

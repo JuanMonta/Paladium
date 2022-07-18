@@ -121,7 +121,7 @@ public class PresentadorProductDescription implements View.OnClickListener {
         if (!URLImagen.isEmpty()) {
             //Log.d("ADAPTER_PRODUCTOS", "Imagen no es vacia");
             Glide
-                    .with(mContext)
+                    .with(mContext.getApplicationContext())
                     .load(URLImagen)
                     .centerInside()
                     .fitCenter()

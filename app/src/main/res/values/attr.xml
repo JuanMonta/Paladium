@@ -4,6 +4,12 @@
      sea modo Day o Nigth, se declara en los diferentes Themes.xml-->
     <declare-styleable name="drawable_producto_colors">
         <attr name="drawable_producto_tintColor" format="color"></attr>
+
+        <attr name="color_texto_titulo" format="color"></attr>
+        <attr name="color_texto_subtitulo" format="color"></attr>
+        <attr name="color_texto_normal" format="color"></attr>
+        <attr name="color_texto_normal_lite" format="color"></attr>
+
     </declare-styleable>
 
 </resources>
