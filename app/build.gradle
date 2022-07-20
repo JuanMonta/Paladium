@@ -57,8 +57,10 @@ dependencies {
 
     //-------zxing scanner de codigo de barras y qr----------------------------
     //  https://github.com/journeyapps/zxing-android-embedded
-    implementation 'com.journeyapps:zxing-android-embedded:4.3.0'
+    implementation('com.journeyapps:zxing-android-embedded:4.3.0') { transitive = false }
+    implementation 'com.google.zxing:core:3.3.0'
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.2.0'
+    implementation "androidx.multidex:multidex:2.0.1"
 
     //--- image cropper 3rth party library-------------------------------------
     // https://github.com/ArthurHub/Android-Image-Cropper

@@ -35,12 +35,12 @@ import com.paladium.R;
 import java.util.ArrayList;
 
 public class CustomRVAdapter_Products_List extends RecyclerView.Adapter<CustomRVAdapter_Products_List.ViewHolderListaProducts> {
-    final String TAG = "ADAPTER_PRODUCTOS";
-    ArrayList<Producto> listaProducto;
+    private final String TAG = "ADAPTER_PRODUCTOS";
+    private ArrayList<Producto> listaProducto;
     //para calcular y actualizar los datos del recycler view
     //servirá para saber que datos han cambiado
-    ProductoDiffCallBack diffCallBack;
-    Context mContext;
+    private ProductoDiffCallBack diffCallBack;
+    private Context mContext;
 
     public interface ListItemClick {
         void onListenItemClick(int itemClicado, Producto producto);
@@ -86,8 +86,8 @@ public class CustomRVAdapter_Products_List extends RecyclerView.Adapter<CustomRV
      * @param newProductList la nueva lista de productos que será puesta en el recycler view
      */
     public void dataProductosChangeDiffCallUtil(ArrayList<Producto> newProductList) {
-        // Log.d("ADAPTER_PRODUCTOS", "--LISTA ANTIGUA ------------");
-        /*if (listaProducto != null) {
+       /* Log.d("ADAPTER_PRODUCTOS", "--LISTA ANTIGUA ------------");
+        if (listaProducto != null) {
             for (int i = 0; i < listaProducto.size(); i++) {
                 Log.d("ADAPTER_PRODUCTOS", "Product Key: " + listaProducto.get(i).getProductoFirebaseKey());
                 Log.d("ADAPTER_PRODUCTOS", "Nombre: " + listaProducto.get(i).getNombre());
@@ -103,15 +103,17 @@ public class CustomRVAdapter_Products_List extends RecyclerView.Adapter<CustomRV
         //calcula las diferencias entre la lista existente (old) y la nueva que recibimos (new),
         //se envian las respectivas listas, las cuales tambien nos servirán en el ViewHolderListaProducts
         //para obtener cuales fueron los datos que cambiaron
-        diffCallBack = new ProductoDiffCallBack(listaProducto, newProductList);
-        //actualizamos la lista existente por la nueva
-        listaProducto = newProductList;
-        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallBack);
+        this.diffCallBack = new ProductoDiffCallBack();
+        this.diffCallBack.setmOldList(this.listaProducto);
+        this.diffCallBack.setmNewList(newProductList);
+        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(this.diffCallBack);
         //notificamos al recyclerView Adapter que debe actualizarse
         diffResult.dispatchUpdatesTo(this);
+        //actualizamos la lista existente por la nueva
+        this.listaProducto = newProductList;
 
 
-        /*Log.d("ADAPTER_PRODUCTOS", "--LISTA NUEVA   ------------");
+       /* Log.d("ADAPTER_PRODUCTOS", "--LISTA NUEVA   ------------");
         for (int i = 0; i < newProductList.size(); i++) {
             Log.d("ADAPTER_PRODUCTOS", "Product Key: " + newProductList.get(i).getProductoFirebaseKey());
             Log.d("ADAPTER_PRODUCTOS", "Nombre: " + newProductList.get(i).getNombre());
@@ -134,47 +136,54 @@ public class CustomRVAdapter_Products_List extends RecyclerView.Adapter<CustomRV
         private ProgressBar progressBarFoto;
         private Producto producto;
 
-
         public ViewHolderListaProducts(@NonNull View itemView) {
             super(itemView);
             itemView.setOnClickListener(this);
-            productoNombre = itemView.findViewById(R.id.custom_list_productos_tvNobre);
-            productoPrecio = itemView.findViewById(R.id.custom_list_productos_tvPrecio);
-            productoCant = itemView.findViewById(R.id.custom_list_productos_tvCantidad);
-            productoFoto = itemView.findViewById(R.id.custom_list_productos_igvFoto);
-            progressBarFoto = itemView.findViewById(R.id.custom_list_productos_ProgressBarImage);
+            this.productoNombre = itemView.findViewById(R.id.custom_list_productos_tvNobre);
+            this.productoPrecio = itemView.findViewById(R.id.custom_list_productos_tvPrecio);
+            this.productoCant = itemView.findViewById(R.id.custom_list_productos_tvCantidad);
+            this.productoFoto = itemView.findViewById(R.id.custom_list_productos_igvFoto);
+            this.progressBarFoto = itemView.findViewById(R.id.custom_list_productos_ProgressBarImage);
         }
 
 
         void asignarDatos(Producto producto) {
             this.producto = producto;
-            productoNombre.setText(producto.getNombre() == null ? "Nombre no disponible" : producto.getNombre());
-            productoCant.setText(producto.getCantidad() > 0 ? "" + producto.getCantidad() : "Producto no disponible");
-            productoPrecio.setText(producto.getPrecio() > 0 ? "" + producto.getPrecio() : "Precio no disponible");
+            this.productoNombre.setText(producto.getNombre() == null ? "Nombre no disponible" : producto.getNombre());
+            this.productoCant.setText(producto.getCantidad() > 0 ? "" + producto.getCantidad() : "Producto no disponible");
+            this.productoPrecio.setText(producto.getPrecio() > 0 ? "" + producto.getPrecio() : "Precio no disponible");
             cargarImagenFirebase(producto.getImagen());
             //muestra las diferencias que hay entre la lista anterior y la nueva que se ha cargado.
             //los datos de las difrencias se mostraran cuando el sistema propio de recyclerview cargue
             //los items respectivos del producto, es decir, si en el momento que se actualiza, el item que ha sido
             //actualizado no esta algo visible en pantalla, entonces no caragará este item, pues así funciona
             //el recycler view, optimiza las lista, solo muestra los items cuando en verdad se verán en pantalla
-            Bundle diferencias = (Bundle) diffCallBack.getChangePayload(getAdapterPosition(), getAdapterPosition());
-            if (diferencias != null) {
-                for (String bundleKey : diferencias.keySet()) {
+                Bundle diferencias = (Bundle) diffCallBack.getChangePayload(getAdapterPosition(), getAdapterPosition());
+                if (diferencias != null) {
+                    for (String bundleKey : diferencias.keySet()) {
 
-                    if (bundleKey.equals(Utilidades.nombreProducto)) {
-                        Log.d("ADAPTER_PRODUCTOS", "Nombre a cambiado");
-                        blinkEffect(productoNombre);
-                    }
-                    if (bundleKey.equals(Utilidades.cantProducto)) {
-                        Log.d("ADAPTER_PRODUCTOS", "Nombre a cambiado");
-                        blinkEffect(productoCant);
-                    }
-                    if (bundleKey.equals(Utilidades.precioProducto)) {
-                        Log.d("ADAPTER_PRODUCTOS", "Nombre a cambiado");
-                        blinkEffect(productoPrecio);
-                    }
+                        if (bundleKey.equals(Utilidades.nombreProducto)) {
+                            Log.d("ADAPTER_PRODUCTOS", "Nombre a cambiado");
+                            blinkEffect(this.productoNombre);
+                            //actualizamos el campo de la lista old para evitar que el efecto blink
+                            //que se ha creado para las vistas cuando cambian o actulizen de valores
+                            //no se lance continuamente cada vez que se se ponga en pantalla el item
+                            //de la lista con dicho view que contiene el cambio, por ello actualizamos
+                            //el datos que hemos visto que cambió
+                            diffCallBack.getmOldList().get(getAdapterPosition()).setNombre(producto.getNombre());
+                        }
+                        if (bundleKey.equals(Utilidades.cantProducto)) {
+                            Log.d("ADAPTER_PRODUCTOS", "Cantidad a cambiado");
+                            blinkEffect(this.productoCant);
+                            diffCallBack.getmOldList().get(getAdapterPosition()).setCantidad(producto.getCantidad());
+                        }
+                        if (bundleKey.equals(Utilidades.precioProducto)) {
+                            Log.d("ADAPTER_PRODUCTOS", "Precio a cambiado");
+                            blinkEffect(this.productoPrecio);
+                            diffCallBack.getmOldList().get(getAdapterPosition()).setPrecio(producto.getPrecio());
+                        }
 
-                }
+                    }
             }
             /*Log.d("ADAPTER_PRODUCTOS", "Product Key: "+producto.getProductoFirebaseKey());
             Log.d("ADAPTER_PRODUCTOS", "Nombre: "+producto.getNombre());
@@ -189,7 +198,7 @@ public class CustomRVAdapter_Products_List extends RecyclerView.Adapter<CustomRV
 
         public void cargarImagenFirebase(String URLImagen) {
             //Log.d("ADAPTER_PRODUCTOS", "Cargando Imagen: " + URLImagen);
-            if (!URLImagen.isEmpty()) {
+            if (URLImagen !=null && !URLImagen.isEmpty()) {
                 //Log.d("ADAPTER_PRODUCTOS", "Imagen no es vacia");
                 Glide
                         .with(mContext.getApplicationContext())
@@ -209,7 +218,7 @@ public class CustomRVAdapter_Products_List extends RecyclerView.Adapter<CustomRV
                             public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
                                 //Log.d("ADAPTER_PRODUCTOS", "Imagen error al cargar");
                                 progressBarFoto.setVisibility(View.GONE);
-                                productoFoto.setImageResource(R.drawable.baseline_error_red_48dp);
+                                productoFoto.setImageResource(R.drawable.baseline_error_red_24dp);
                                 return false;
                             }
 
@@ -252,12 +261,6 @@ public class CustomRVAdapter_Products_List extends RecyclerView.Adapter<CustomRV
 
         }
 
-
-
-
-
-
-
-        }
+    }
     }
 

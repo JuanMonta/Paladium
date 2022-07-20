@@ -19,9 +19,14 @@ import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.StorageReference;
 import com.paladium.Model.Firebase.BaseDeDatos;
 import com.paladium.Model.Logica.Producto;
 import com.paladium.Model.Utils.Utilidades;
@@ -71,7 +76,6 @@ public class PresentadorProductDescription implements View.OnClickListener {
     private void cargarDatosProductos() {
         //adValueChange Listener escuha cuando un valor se ha cambiado en la base de datos en tiempo real,
         //si cambia en la BD, la Ui se actualiza automáticamente gracias a este método
-
         if (producto != null) {
             BaseDeDatos.getFireDatabaseIntanceReference()
                     .child(Utilidades.nodoPadre)
@@ -118,7 +122,7 @@ public class PresentadorProductDescription implements View.OnClickListener {
 
     private void cargarImagenFirebase(String URLImagen) {
         //Log.d(TAG, "Cargando Imagen: " + URLImagen);
-        if (!URLImagen.isEmpty()) {
+        if (URLImagen !=null && !URLImagen.isEmpty()) {
             //Log.d("ADAPTER_PRODUCTOS", "Imagen no es vacia");
             Glide
                     .with(mContext.getApplicationContext())
@@ -138,7 +142,7 @@ public class PresentadorProductDescription implements View.OnClickListener {
                         public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
                             //Log.d(TAG, "Imagen error al cargar");
                             progressBarFoto.setVisibility(View.GONE);
-                            imgFotoProducto.setImageResource(R.drawable.baseline_error_red_48dp);
+                            imgFotoProducto.setImageResource(R.drawable.baseline_error_red_24dp);
                             return false;
                         }
 
@@ -152,6 +156,39 @@ public class PresentadorProductDescription implements View.OnClickListener {
         }
     }
 
+    private void borrarProducto(){
+        StorageReference storageReference = BaseDeDatos.getFireStorageInstanceReference();
+        StorageReference desertRef = storageReference.getStorage().getReferenceFromUrl(producto.getImagen());
+        desertRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                Log.d(TAG, "Imagen borrada, comenzando borrado de datos");
+
+               DatabaseReference firebaseDatabase = BaseDeDatos.getFireDatabaseIntanceReference()
+                        .child(Utilidades.nodoPadre)
+                        .child(Utilidades.nodoProducto)
+                        .child(producto.getProductoFirebaseKey());
+
+               firebaseDatabase.setValue(null).addOnSuccessListener(new OnSuccessListener<Void>() {
+                   @Override
+                   public void onSuccess(Void unused) {
+                       Log.d(TAG, "datos borrados");
+                   }
+               }).addOnFailureListener(new OnFailureListener() {
+                   @Override
+                   public void onFailure(@NonNull Exception e) {
+                       Log.d(TAG, "No se borraron los datos");
+                   }
+               });
+
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d(TAG, "no se borró la imagen");
+            }
+        });
+    }
 
     @Override
     public void onClick(View view) {
@@ -164,7 +201,7 @@ public class PresentadorProductDescription implements View.OnClickListener {
                 mContext.startActivity(intent);
                 break;
             case R.id.activity_product_descrip_btnEliminar:
-
+                borrarProducto();
                 break;
         }
     }

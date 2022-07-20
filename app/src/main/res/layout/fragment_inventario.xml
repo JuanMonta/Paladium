@@ -169,7 +169,8 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:text="CREAR PRODUCTO"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            app:cornerRadius="@dimen/corner_radius"/>
     </LinearLayout>
 
 </LinearLayout>

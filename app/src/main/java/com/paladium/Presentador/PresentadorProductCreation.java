@@ -1,17 +1,17 @@
 package com.paladium.Presentador;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageButton;
@@ -31,6 +31,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -40,6 +41,7 @@ import com.google.firebase.storage.UploadTask;
 import com.paladium.Model.Firebase.BaseDeDatos;
 import com.paladium.Model.Logica.Producto;
 import com.paladium.Model.Utils.Utilidades;
+import com.paladium.Presentador.Customs.PresenterCustomDialog;
 import com.paladium.Presentador.Customs.PresenterCustomDialogCrearCategoria;
 import com.paladium.R;
 
@@ -48,7 +50,6 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 public class PresentadorProductCreation implements View.OnClickListener, InterfacePresenter_ProductCreation.onImagenCargada {
     private final String TAG = "PresenterProdCreation";
@@ -56,6 +57,9 @@ public class PresentadorProductCreation implements View.OnClickListener, Interfa
     private Uri filePath;
     private TextInputEditText inputEdCodBarras, inputEdCantDisponible, inputEdNombreProducto,
             inputEdPrecioUnit, inputEdCostoUnit, inputEdDescripcion;
+    private TextInputLayout inputLayoutCantDisponible, inputLayoutNombreProducto,
+            inputLayoutPrecioUnit, inputLayoutCostoUnit;
+
     private ImageButton imgBtnQuitarImagen, imgBtnCrearCategoria;
     private ImageView imgv_ImagenProducto;
     private AutoCompleteTextView autoCompletTextSpCategoria;
@@ -77,11 +81,22 @@ public class PresentadorProductCreation implements View.OnClickListener, Interfa
     public void init(View view) {
         interfaceImagenCargada = this;
         inputEdCodBarras = view.findViewById(R.id.product_creation_edCodBarras);
+
+        inputLayoutCantDisponible = view.findViewById(R.id.product_creation_textInputLayout_CantidadDisponible);
         inputEdCantDisponible = view.findViewById(R.id.product_creation_edCantidadDisponible);
+
+        inputLayoutNombreProducto = view.findViewById(R.id.product_creation_textInputLayout_NombreProducto);
         inputEdNombreProducto = view.findViewById(R.id.product_creation_edNombreProducto);
+
+        inputLayoutPrecioUnit = view.findViewById(R.id.product_creation_textInputLayout_PrecioUnitario);
         inputEdPrecioUnit = view.findViewById(R.id.product_creation_edPrecioUnitario);
+
+        inputLayoutCostoUnit = view.findViewById(R.id.product_creation_textInputLayout_CostoUnitario);
         inputEdCostoUnit = view.findViewById(R.id.product_creation_edCostoUnitario);
+
         inputEdDescripcion = view.findViewById(R.id.product_creation_edDescripcionProducto);
+
+        autoCompletTextSpCategoria = view.findViewById(R.id.product_creation_spCategoria);
 
         imgv_ImagenProducto = view.findViewById(R.id.product_creation_Imgv_Producto);
 
@@ -90,19 +105,18 @@ public class PresentadorProductCreation implements View.OnClickListener, Interfa
         imgBtnCrearCategoria = view.findViewById(R.id.product_creation_imgbCrearCategoria);
         imgBtnCrearCategoria.setOnClickListener(this);
 
-        autoCompletTextSpCategoria = view.findViewById(R.id.product_creation_spCategoria);
 
         //String[] categorias = mContext.getResources().getStringArray(R.array.array_producto_categoria_de_prueba);
         //ArrayAdapter arrayAdapter = new ArrayAdapter(mContext, R.layout.custom_text_view_dropdown_menu_producto_categoria, categorias);
         //autoCompletTextSpCategoria.setAdapter(arrayAdapter);
 
         cargarCategoriasProductos();
+        textWatcherInputEditText();
 
         //recibiré un bundle con la clase producto cuando se necesite editar los datos del producto
         if (bundleProducto != null) {
             producto = (Producto) bundleProducto.getSerializable(Utilidades.bundleProduto);
             cargarDatosProductosParaEdicion();
-
         }
 
     }
@@ -117,31 +131,34 @@ public class PresentadorProductCreation implements View.OnClickListener, Interfa
      * se ha subido o no el producto.
      *
      * @param tipoAlert título que tendrá la alerta
-     * @param mensaje      mensaje de la alerta
+     * @param mensaje   mensaje de la alerta
      */
     private void productAlertDialog(String tipoAlert, String mensaje) {
 
-        AlertDialog.Builder ok_or_error_dialog = new AlertDialog.Builder(mContext);
-        if (tipoAlert.equals(Utilidades.alertDialog_EXITO)){
-            ok_or_error_dialog.setTitle("ÉXITO");
-        }else {
-            ok_or_error_dialog.setTitle("ERROR");
+        /*AlertDialog.Builder ok_or_error_dialog = new AlertDialog.Builder(mContext);
+        if (tipoAlert.equals(Utilidades.alertDialog_EXITO)) {
+            ok_or_error_dialog.setTitle(mContext.getString(R.string.alertdialog_titulo_EXITO));
+        } else {
+            ok_or_error_dialog.setTitle(mContext.getString(R.string.alertdialog_titulo_ERROR));
         }
         ok_or_error_dialog.setMessage(mensaje);
         ok_or_error_dialog.setCancelable(false);
-        ok_or_error_dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        ok_or_error_dialog.setPositiveButton(mContext.getString(R.string.alertdialog_producto_btn_OK), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 dialogInterface.dismiss();
                 //notificamos con la interfaz de que debe borrarse el Uri filePath que contiene
                 //la ruta de la imagen en el dispositivo una vez la hayamos subido a firebase
-                if (tipoAlert.equals(Utilidades.alertDialog_EXITO)){
+                if (tipoAlert.equals(Utilidades.alertDialog_EXITO)) {
                     limpiarCampos();
                     interfaceProductoCargado.productoCargado(true);
                 }
             }
         });
-        ok_or_error_dialog.show();
+        ok_or_error_dialog.show();*/
+
+        PresenterCustomDialog dialog = new PresenterCustomDialog(this.mContext);
+        dialog.dialogSuccess();
     }
 
     /**
@@ -151,23 +168,24 @@ public class PresentadorProductCreation implements View.OnClickListener, Interfa
      * @param rutaImagen Uri de la imagen en el dispositivo que será usada para subirse a firebase
      */
     public void registrarProducto(Uri rutaImagen) {
-        this.filePath = rutaImagen;
-        //es una edicion
-        if (bundleProducto != null) {
-            actualizarDatos();
-        } else {//es registro
+        if (verificarCampos() == 0) {
+            this.filePath = rutaImagen;
+            //es una edicion
+            if (bundleProducto != null) {
+                actualizarDatos();
+            } else {//es registro
 
-            //nombre de como se guardará la imagen en firebase
-            registrarProductoConOSinImagenFirebase();
+                //nombre de como se guardará la imagen en firebase
+                registrarProductoConOSinImagenFirebase();
+            }
         }
-
     }
 
     private void registrarProductoConOSinImagenFirebase() {
         if (productProgressDialog().isShowing()) {
             productProgressDialog().dismiss();
         } else {
-            productProgressDialog().setMessage("Añadiendo producto...");
+            productProgressDialog().setMessage(mContext.getString(R.string.progressdialog_crear_producto_mensaje));
             productProgressDialog().show();
         }
 
@@ -223,7 +241,7 @@ public class PresentadorProductCreation implements View.OnClickListener, Interfa
         if (productProgressDialog().isShowing()) {
             productProgressDialog().dismiss();
         } else {
-            productProgressDialog().setMessage("Añadiendo producto...");
+            productProgressDialog().setMessage(mContext.getString(R.string.progressdialog_crear_producto_mensaje));
             productProgressDialog().show();
         }
 
@@ -250,9 +268,11 @@ public class PresentadorProductCreation implements View.OnClickListener, Interfa
         productos.put(Utilidades.descProducto, descrip);
 
         if (!Uri.EMPTY.equals(downloadLinkImage)) {
-            fotoProducto = "";
-        } else {
+            Log.d(TAG, "Guardando datos Uri no es Vacio");
             fotoProducto = downloadLinkImage.toString();
+        } else {
+            Log.d(TAG, "Guardando datos Uri está vacío");
+            fotoProducto = "";
         }
         //si el link de descarga está vacío, significa que no escojió una imagen para subir a firebase,
         //entonces solo guardamos un vació
@@ -265,14 +285,13 @@ public class PresentadorProductCreation implements View.OnClickListener, Interfa
                         productProgressDialog().dismiss();
                         //notificamos dentro del alert dialog que el producto se registró,
                         //mediante la interfaz que se ha creado para dicho propósito
-                        productAlertDialog("EXITO", "Se añadió el producto al registro.");
+                        productAlertDialog(Utilidades.alertDialog_EXITO, mContext.getString(R.string.alertdialog_crear_producto_mensaje_EXITO));
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         productProgressDialog().dismiss();
-                        productAlertDialog("ERROR", "Ocurrió un error al registrar el producto." +
-                                "Intentelo nuevamente.");
+                        productAlertDialog(Utilidades.alertDialog_ERROR, mContext.getString(R.string.alertdialog_crear_producto_mensaje_EXITO));
                     }
                 });
         Log.d(TAG, "Datos Guardados");
@@ -314,7 +333,7 @@ public class PresentadorProductCreation implements View.OnClickListener, Interfa
         if (productProgressDialog().isShowing()) {
             productProgressDialog().dismiss();
         } else {
-            productProgressDialog().setMessage("Actualizando producto...");
+            productProgressDialog().setMessage(mContext.getString(R.string.progressdialog_actualizar_producto_mensaje));
             productProgressDialog().show();
         }
 
@@ -326,7 +345,7 @@ public class PresentadorProductCreation implements View.OnClickListener, Interfa
             imagenNonbre = this.filePath.getLastPathSegment() + fecha.getTimeInMillis();
         } else {
             //obtiene el nombre de la imagen guardada en el storage de firebase
-            //si existe la imagen, entonces la actualizará
+            //si existe la imagen, entonces la actualizará, caso contrario la crea
             imagenNonbre = FirebaseStorage.getInstance().getReferenceFromUrl(this.producto.getImagen()).getName();
         }
 
@@ -363,7 +382,7 @@ public class PresentadorProductCreation implements View.OnClickListener, Interfa
         if (productProgressDialog().isShowing()) {
             productProgressDialog().dismiss();
         } else {
-            productProgressDialog().setMessage("Actualizando producto...");
+            productProgressDialog().setMessage(mContext.getString(R.string.progressdialog_actualizar_producto_mensaje));
             productProgressDialog().show();
         }
 
@@ -404,14 +423,13 @@ public class PresentadorProductCreation implements View.OnClickListener, Interfa
                         productProgressDialog().dismiss();
                         //dentro del alert llamo la interfaz que ayuda a verificar si el regsitro se logró
                         //mediante una interfaz
-                        productAlertDialog(Utilidades.alertDialog_EXITO, "Se actualizó el registro.");
+                        productAlertDialog(Utilidades.alertDialog_EXITO, mContext.getString(R.string.alertdialog_actualizar_producto_mensaje_EXITO));
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         productProgressDialog().dismiss();
-                        productAlertDialog(Utilidades.alertDialog_ERROR, "Ocurrió un error al actualizar el producto." +
-                                "Intentelo nuevamente.");
+                        productAlertDialog(Utilidades.alertDialog_ERROR, mContext.getString(R.string.alertdialog_actualizar_producto_mensaje_ERROR));
                     }
                 });
         Log.d(TAG, "Datos Actualizados");
@@ -419,7 +437,7 @@ public class PresentadorProductCreation implements View.OnClickListener, Interfa
 
     private void cargarImagenFirebase(String URLImagen) {
         //Log.d(TAG, "Cargando Imagen: " + URLImagen);
-        if (!URLImagen.isEmpty()) {
+        if (URLImagen !=null && !URLImagen.isEmpty()) {
             //Log.d("ADAPTER_PRODUCTOS", "Imagen no es vacia");
             Glide
                     .with(mContext.getApplicationContext())
@@ -439,7 +457,7 @@ public class PresentadorProductCreation implements View.OnClickListener, Interfa
                         public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
                             //Log.d(TAG, "Imagen error al cargar");
                             //progressBarFoto.setVisibility(View.GONE);
-                            imgv_ImagenProducto.setImageResource(R.drawable.baseline_error_red_48dp);
+                            imgv_ImagenProducto.setImageResource(R.drawable.baseline_error_red_24dp);
                             return false;
                         }
 
@@ -453,7 +471,7 @@ public class PresentadorProductCreation implements View.OnClickListener, Interfa
         }
     }
 
-    private void cargarCategoriasProductos(){
+    private void cargarCategoriasProductos() {
         BaseDeDatos.getFireDatabaseIntanceReference().child(Utilidades.nodoPadre).child(Utilidades.nodoCategoria).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -462,10 +480,10 @@ public class PresentadorProductCreation implements View.OnClickListener, Interfa
                 for (DataSnapshot datos : dataSnapshot.getChildren()) {
                     // Log.d(TAG, "dataSnashot: "+datos.getKey());
                     Producto p = datos.getValue(Producto.class);
-                        listaCateg.add(p.getCategoria());
-                        Log.d(TAG, "PresentadorProductDescription --------------------------------- ");
-                        Log.d(TAG, "Categoria: " + p.getCategoria());
-                        Log.d(TAG, "-----------------------------------------------------------");
+                    listaCateg.add(p.getCategoria());
+                    Log.d(TAG, "PresentadorProductDescription --------------------------------- ");
+                    Log.d(TAG, "Categoria: " + p.getCategoria());
+                    Log.d(TAG, "-----------------------------------------------------------");
                 }
                 ArrayAdapter arrayAdapter = new ArrayAdapter(mContext, R.layout.custom_text_view_dropdown_menu_producto_categoria, listaCateg);
                 autoCompletTextSpCategoria.setAdapter(arrayAdapter);
@@ -508,15 +526,180 @@ public class PresentadorProductCreation implements View.OnClickListener, Interfa
     }
 
     private void limpiarCampos() {
+        //Log.d(TAG,"Limpiando campos");
         inputEdCodBarras.setText("");
-        inputEdCantDisponible.setText("0");
+        inputEdCantDisponible.setText("");
         inputEdNombreProducto.setText("");
         inputEdPrecioUnit.setText("");
         inputEdCostoUnit.setText("");
         inputEdDescripcion.setText("");
         imgv_ImagenProducto.setImageResource(R.drawable.baseline_camera_alt_green_black_48dp);
-        autoCompletTextSpCategoria.setText("Seleccione...");
+        //añadiendo false se evita que borre la lista de categorias cargadas anteriormente
+        autoCompletTextSpCategoria.setText(mContext.getApplicationContext().getString(R.string.seleccione), false);
 
+        inputEdCodBarras.setError(null);
+
+        inputEdCantDisponible.setError(null);
+        inputLayoutCantDisponible.setEndIconVisible(true);
+
+        inputEdNombreProducto.setError(null);
+        inputEdPrecioUnit.setError(null);
+        inputEdCostoUnit.setError(null);
+        inputEdDescripcion.setError(null);
+
+        autoCompletTextSpCategoria.setText(mContext.getApplicationContext().getString(R.string.seleccione), false);
+        autoCompletTextSpCategoria.setError(null);
     }
 
+    private int verificarCampos() {
+
+        int validar = 0;
+
+        if (inputEdCantDisponible.getText().toString().length() == 0) {
+            inputLayoutCantDisponible.setEndIconVisible(false);
+            inputEdCantDisponible.setError(mContext.getString(R.string.producto_input_error_cantidad));
+            validar++;
+        }
+        if (inputEdNombreProducto.getText().toString().length() == 0) {
+            inputEdNombreProducto.setError(mContext.getString(R.string.producto_input_error_nombre));
+            validar++;
+        }
+        if (inputEdPrecioUnit.getText().toString().length() == 0) {
+            inputEdPrecioUnit.setError(mContext.getString(R.string.producto_input_error_precio));
+            validar++;
+        }
+        if (inputEdCostoUnit.getText().toString().length() == 0) {
+            inputEdCostoUnit.setError(mContext.getString(R.string.producto_input_error_costo));
+            validar++;
+        }
+
+        if (autoCompletTextSpCategoria.getText().toString().trim().equals(mContext.getString(R.string.seleccione))) {
+            autoCompletTextSpCategoria.setError(mContext.getString(R.string.producto_input_error_categoria));
+            validar++;
+        }
+
+        return validar;
+    }
+
+    private void textWatcherInputEditText() {
+
+        inputEdCantDisponible.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int start, int count, int after) {
+                if (charSequence.length() == 0) {
+                    inputLayoutCantDisponible.setEndIconVisible(false);
+                    inputEdCantDisponible.setError((mContext.getString(R.string.producto_input_error_cantidad)));
+                } else {
+                    inputLayoutCantDisponible.setEndIconVisible(true);
+                    inputEdCantDisponible.setError(null);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+        inputEdNombreProducto.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (charSequence.length() == 0) {
+                    inputLayoutNombreProducto.setEndIconVisible(false);
+                    inputEdNombreProducto.setError((mContext.getString(R.string.producto_input_error_nombre)));
+                } else {
+                    inputLayoutNombreProducto.setEndIconVisible(true);
+                    inputEdNombreProducto.setError(null);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+        inputEdPrecioUnit.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (charSequence.length() == 0) {
+                    inputLayoutPrecioUnit.setEndIconVisible(false);
+                    inputEdPrecioUnit.setError((mContext.getString(R.string.producto_input_error_precio)));
+                } else {
+                    inputLayoutPrecioUnit.setEndIconVisible(true);
+                    inputEdPrecioUnit.setError(null);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+        inputEdCostoUnit.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (charSequence.length() == 0) {
+                    inputLayoutCostoUnit.setEndIconVisible(false);
+                    inputEdCostoUnit.setError((mContext.getString(R.string.producto_input_error_costo)));
+                } else {
+                    inputLayoutCostoUnit.setEndIconVisible(true);
+                    inputEdCostoUnit.setError(null);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+        autoCompletTextSpCategoria.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (charSequence.length() == 0) {
+                    autoCompletTextSpCategoria.setError((mContext.getString(R.string.producto_input_error_categoria)));
+                } else {
+                    autoCompletTextSpCategoria.setError(null);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+        autoCompletTextSpCategoria.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterViewParent, View view, int pos, long l) {
+                Log.d(TAG, "selection: pos " + pos);
+            }
+        });
+    }
 }

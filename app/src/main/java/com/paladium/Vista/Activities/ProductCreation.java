@@ -2,14 +2,14 @@ package com.paladium.Vista.Activities;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -24,6 +24,12 @@ import androidx.core.content.FileProvider;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.zxing.BinaryBitmap;
+import com.google.zxing.MultiFormatReader;
+import com.google.zxing.NotFoundException;
+import com.google.zxing.RGBLuminanceSource;
+import com.google.zxing.Result;
+import com.google.zxing.common.HybridBinarizer;
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
 import com.paladium.Model.Utils.ImageCompression;
@@ -34,9 +40,10 @@ import com.paladium.R;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
-
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 
 public class ProductCreation extends AppCompatActivity implements View.OnClickListener, InterfacePresenter_ProductCreation.onProductoCargado {
 
@@ -44,8 +51,8 @@ public class ProductCreation extends AppCompatActivity implements View.OnClickLi
     private final int ESCOJER_FOTO = 1;
     private final int TOMAR_FOTO = 2;
 
-    PresentadorProductCreation productCreation;
-    Bundle bundleProducto;
+    private PresentadorProductCreation productCreation;
+    private Bundle bundleProducto;
     private Button btnRegistrarProducto;
     private ImageButton imgbtnSeleccionarImagenProducto, imgbTomarFoto;
     private ImageView imgv_ImagenProducto;
@@ -68,7 +75,7 @@ public class ProductCreation extends AppCompatActivity implements View.OnClickLi
         productCreation = new PresentadorProductCreation(this, this, bundleProducto);
         productCreation.init(view);
         inputEdScanQRBarCode = findViewById(R.id.product_creation_edCodBarras);
-        inputLayoutScanQRBarCode = findViewById(R.id.product_creation_LayoutedCodBarras);
+        inputLayoutScanQRBarCode = findViewById(R.id.product_creation_textInputLayout_CodBarras);
         inputLayoutScanQRBarCode.setEndIconOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -78,8 +85,8 @@ public class ProductCreation extends AppCompatActivity implements View.OnClickLi
 
         btnRegistrarProducto = view.findViewById(R.id.product_creation_btnGuardarProducto);
         btnRegistrarProducto.setOnClickListener(this);
-        if (bundleProducto !=null){
-            btnRegistrarProducto.setText("GUARDAR EDICIÓN");
+        if (bundleProducto != null) {
+            btnRegistrarProducto.setText(getString(R.string.btn_actualizar));
         }
 
         imgbtnSeleccionarImagenProducto = view.findViewById(R.id.product_creation_imgbtnSeleccionarImagenProducto);
@@ -139,9 +146,10 @@ public class ProductCreation extends AppCompatActivity implements View.OnClickLi
                     }
                     //obtenemos el resultado que contiene la imagen escojida de la galería
                     filePath = result.getData().getData();
-                     /*try {
+                    scanQRBarCodeFromImage(filePath);
+                    /*try {
                         Bitmap imagen = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
-                        imgv_ImagenProducto.setImageBitmap(imagen);
+                        //imgv_ImagenProducto.setImageBitmap(imagen);
                     } catch (IOException e) {
 
                     }*/
@@ -159,8 +167,7 @@ public class ProductCreation extends AppCompatActivity implements View.OnClickLi
                     Log.d(TAG, "imagen escojida -> compressImagePath:   " + compressImagePath);
                     Log.d(TAG, "imagen escojida -> compressImageUri:" + Uri.parse(compressImagePath));
                     cropImage(filePath);
-                    /*Bitmap imagen = BitmapFactory.decodeFile(compressImagePath);
-                    imgv_ImagenProducto.setImageBitmap(imagen);*/
+
                 }
             }
         });
@@ -199,19 +206,19 @@ public class ProductCreation extends AppCompatActivity implements View.OnClickLi
         });
     }
 
-    private void ActivityResultLauncherCropImage(){
+    private void ActivityResultLauncherCropImage() {
         activityResultLauncherCropImage = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
             @Override
             public void onActivityResult(ActivityResult result) {
                 Log.d(TAG, "imagen Crop Launcher -> Entrando en Result Launcher");
-                if (result.getResultCode() == RESULT_OK){
+                if (result.getResultCode() == RESULT_OK) {
                     Log.d(TAG, "imagen Crop Launcher -> ResultLauncher Ok");
                     CropImage.ActivityResult resultImage = CropImage.getActivityResult(result.getData());
                     //borramos el archivo que tenga guardado anteriormente el filePath
-                        borrarAchivoDelFilePath(filePath);
+                    borrarAchivoDelFilePath(filePath);
                     //devuel la direccion de la imagen recortada, la cual ha sido guardada en caché del dispostivo
                     filePath = resultImage.getUri();
-                    Log.d(TAG, "imagen Crop Launcher -> Colocando a Image View el Uri: "+resultImage.getUri());
+                    Log.d(TAG, "imagen Crop Launcher -> Colocando a Image View el Uri: " + resultImage.getUri());
                     imgv_ImagenProducto.setImageURI(resultImage.getUri());
                     //Toast.makeText(ProductCreation.this, "Image Update Successfully!!!", Toast.LENGTH_SHORT).show();
                 }
@@ -259,7 +266,7 @@ public class ProductCreation extends AppCompatActivity implements View.OnClickLi
         return realPath;
     }
 
-    private void cropImage (Uri imagenARecortar){
+    private void cropImage(Uri imagenARecortar) {
         // https://github.com/ArthurHub/Android-Image-Cropper
 
         Log.d(TAG, "imagen tomada foto -> Creando Intent");
@@ -271,8 +278,8 @@ public class ProductCreation extends AppCompatActivity implements View.OnClickLi
         activityResultLauncherCropImage.launch(intent);
     }
 
-    private void borrarAchivoDelFilePath(Uri filePath){
-        if (filePath !=null){
+    private void borrarAchivoDelFilePath(Uri filePath) {
+        if (filePath != null) {
             new File(filePath.getPath()).delete();
         }
     }
@@ -284,7 +291,7 @@ public class ProductCreation extends AppCompatActivity implements View.OnClickLi
         //zxing activity main    https://github-com.translate.goog/journeyapps/zxing-android-embedded/blob/master/sample/src/main/java/example/zxing/MainActivity.java?_x_tr_sl=en&_x_tr_tl=es&_x_tr_hl=es
         // continuos capture activity  https://github-com.translate.goog/journeyapps/zxing-android-embedded/blob/master/sample/src/main/java/example/zxing/ContinuousCaptureActivity.java?_x_tr_sl=en&_x_tr_tl=es&_x_tr_hl=es&_x_tr_pto=op
         ScanOptions options = new ScanOptions();
-        options.setDesiredBarcodeFormats(ScanOptions.ONE_D_CODE_TYPES);
+        options.setDesiredBarcodeFormats(ScanOptions.ALL_CODE_TYPES);
         options.setPrompt("Escanea un Código de Barras o QR.\n\n"
                 + "Para utilizar el flash use los botones de control de volumen:\n"
                 + " -Subir Volumen: Encender flash\n"
@@ -298,6 +305,41 @@ public class ProductCreation extends AppCompatActivity implements View.OnClickLi
         activityResultLauncherScanQRBarCode.launch(options);
     }
 
+    private void scanQRBarCodeFromImage(Uri uri) {
+        try
+        {
+            InputStream inputStream = getContentResolver().openInputStream(uri);
+            Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+            if (bitmap == null)
+            {
+                Log.e("TAG", "uri is not a bitmap," + uri.toString());
+                return;
+            }
+            int width = bitmap.getWidth(), height = bitmap.getHeight();
+            int[] pixels = new int[width * height];
+            bitmap.getPixels(pixels, 0, width, 0, 0, width, height);
+            bitmap.recycle();
+            bitmap = null;
+            RGBLuminanceSource source = new RGBLuminanceSource(width, height, pixels);
+            BinaryBitmap bBitmap = new BinaryBitmap(new HybridBinarizer(source));
+            MultiFormatReader reader = new MultiFormatReader();
+
+            try
+            {
+                Result result = reader.decode(bBitmap);
+                Toast.makeText(this, "The content of the QR image is: " + result.getText(), Toast.LENGTH_SHORT).show();
+            }
+            catch (NotFoundException e)
+            {
+                Log.e("TAG", "decode exception", e);
+            }
+        }
+        catch (FileNotFoundException e)
+        {
+            Log.e("TAG", "can not open file" + uri.toString(), e);
+        }
+    }
+
     private void ActivityResultLauncherScanQRBarcode() {
         // Register the launcher and result handler
         activityResultLauncherScanQRBarCode = registerForActivityResult(new ScanContract(),
@@ -309,10 +351,10 @@ public class ProductCreation extends AppCompatActivity implements View.OnClickLi
                         Toast.makeText(this, "Scaneo Cancelado", Toast.LENGTH_LONG).show();
                     }
                 });
-
     }
 
-    private void borrarTodasLasImagenEnCarpeTasCompressedYCache(){
+
+    private void borrarTodasLasImagenEnCarpeTasCompressedYCache() {
 
     }
 
@@ -333,6 +375,7 @@ public class ProductCreation extends AppCompatActivity implements View.OnClickLi
         }
     }
 
+
     @Override
     public void productoCargado(boolean subido) {
         //cuando se haya subido los datos del producto a firebase, borramos el Uri filePath
@@ -340,15 +383,16 @@ public class ProductCreation extends AppCompatActivity implements View.OnClickLi
         if (subido) {
             //una vez subido el producto borramos la imagen que está guardad en el
             //dispositivo
-                Log.d(TAG, "Borrando Imagen, producto guardado: " + filePath);
-                borrarAchivoDelFilePath(filePath);
+            Log.d(TAG, "Borrando Imagen, producto guardado: " + filePath);
+            borrarAchivoDelFilePath(filePath);
             this.filePath = null;
         }
-        if (bundleProducto !=null){
+        if (bundleProducto != null) {
             //onBackPressed();
             finish();
         }
     }
+
 
     @Override
     protected void onResume() {
@@ -377,8 +421,6 @@ public class ProductCreation extends AppCompatActivity implements View.OnClickLi
         super.onDestroy();
         //Toast.makeText(this, "onDestroy() ProductCreation", Toast.LENGTH_SHORT).show();
     }
-
-
 
 
 }

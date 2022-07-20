@@ -21,9 +21,19 @@ public class ProductoDiffCallBack extends DiffUtil.Callback {
     private ArrayList<Producto> mOldList;
     private ArrayList<Producto> mNewList;
 
-    public ProductoDiffCallBack(ArrayList<Producto> mOldList, ArrayList<Producto> mNewList) {
+    public ProductoDiffCallBack() {
+    }
+
+    public void setmOldList(ArrayList<Producto> mOldList) {
         this.mOldList = mOldList;
+    }
+
+    public void setmNewList(ArrayList<Producto> mNewList) {
         this.mNewList = mNewList;
+    }
+
+    public ArrayList<Producto> getmOldList() {
+        return mOldList;
     }
 
     @Override

@@ -9,4 +9,44 @@
         <item>Galletas</item>
     </string-array>
 
+
+    <string name="btn_Editar">EDITAR</string>
+    <string name="btn_Eliminar">ELIMINAR</string>
+    <string name="btn_Guardar">GUARDAR</string>
+    <string name="btn_actualizar">ACTUALIZAR DATOS</string>
+
+    <string name="seleccione">Seleccione…</string>
+
+    <string name="producto_input_error_cantidad">Ingrese una cantidad</string>
+    <string name="producto_input_error_nombre">Ingrese nombre del producto</string>
+    <string name="producto_input_error_precio">Ingrese precio del producto</string>
+    <string name="producto_input_error_costo">Ingrese el costo del producto</string>
+    <string name="producto_input_error_categoria">Escoja categoría para el producto</string>
+
+    <string name="progressdialog_crear_producto_mensaje">Añadiendo producto…</string>
+    <string name="progressdialog_actualizar_producto_mensaje">ÉXITO</string>
+
+    <string name="alertdialog_titulo_EXITO">ÉXITO</string>
+    <string name="alertdialog_titulo_ERROR">ERROR</string>
+    <string name="alertdialog_producto_btn_OK">OK</string>
+
+    <string name="alertdialog_crear_producto_mensaje_EXITO">Se añadió el producto al registro.</string>
+    <string name="alertdialog_crear_producto_mensaje_ERROR">Ocurrió un error al registrar el producto. Inténteno nuevamente.</string>
+
+    <string name="alertdialog_actualizar_producto_mensaje_EXITO">Se actualizó el registro.</string>
+    <string name="alertdialog_actualizar_producto_mensaje_ERROR">Ocurrió un error al actualizar el producto. Inténtelo nuevamente.</string>
+
+    <string name="producto_Cod_barras">Código de barras</string>
+    <string name="producto_Cantidad">Cantidad disponible</string>
+    <string name="producto_Nombre">Nombre</string>
+    <string name="producto_Precio">Precio Unitario</string>
+    <string name="producto_Costo">Costo Unitario</string>
+    <string name="producto_Categoria">Categoría</string>
+    <string name="producto_Descripcion">Descripción</string>
+
+    <string name="input_text_helper_text_requrido">Requerido*</string>
+    <integer name="input_producto_nombre_counterMaxLenthg">40</integer>
+    <integer name="input_producto_precios_counterMaxLenthg">6</integer>
+    <integer name="input_producto_descripcion_counterMaxLenthg">255</integer>
+
 </resources>

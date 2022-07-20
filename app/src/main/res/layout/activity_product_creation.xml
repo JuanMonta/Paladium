@@ -91,12 +91,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="2dp"
-                android:text="Código de barras"
+                android:text="@string/producto_Cod_barras"
                 android:textColor="?attr/color_texto_normal"/>
 
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-                android:id="@+id/product_creation_LayoutedCodBarras"
+                android:id="@+id/product_creation_textInputLayout_CodBarras"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:endIconDrawable="@drawable/barcode_scanner_24px"
@@ -107,7 +107,6 @@
                     android:id="@+id/product_creation_edCodBarras"
                     android:layout_width="match_parent"
                     android:layout_height="41dp"
-                    android:text="1321asd"
                     android:textSize="14sp" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -116,11 +115,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="2dp"
-                android:text="Cantidad disponible"
+                android:text="@string/producto_Cantidad"
                 android:textColor="?attr/color_texto_normal"/>
 
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                android:id="@+id/product_creation_textInputLayout_CantidadDisponible"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:errorEnabled="true"
@@ -129,7 +129,7 @@
                 app:endIconDrawable="@drawable/quantity_24px"
                 app:endIconTint="?attr/drawable_producto_tintColor"
                 app:endIconMode="custom"
-                app:helperText="Requerido*"
+                app:helperText="@string/input_text_helper_text_requrido"
                 app:helperTextTextColor="@color/red">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -137,7 +137,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="41dp"
                     android:inputType="number"
-                    android:text="30"
                     android:textSize="14sp" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -182,15 +181,19 @@
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="Nombre"
+                                android:text="@string/producto_Nombre"
                                 android:textStyle="bold"
                                 android:textColor="?attr/color_texto_titulo"/>
 
                             <com.google.android.material.textfield.TextInputLayout
                                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                                android:id="@+id/product_creation_textInputLayout_NombreProducto"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                app:helperText="Requerido*"
+                                app:errorEnabled="true"
+                                app:errorIconDrawable="@android:drawable/ic_dialog_info"
+                                app:errorIconTint="@color/red"
+                                app:helperText="@string/input_text_helper_text_requrido"
                                 app:helperTextTextColor="@color/red"
                                 app:startIconDrawable="@drawable/baseline_bookmark_black_24dp"
                                 app:startIconTint="?attr/drawable_producto_tintColor"
@@ -201,9 +204,8 @@
                                     android:id="@+id/product_creation_edNombreProducto"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:maxLength="40"
-                                    android:text="asjdhjk"
-                                    android:inputType="textPersonName" />
+                                    android:inputType="textPersonName|textCapCharacters"
+                                    android:maxLength="40" />
 
                             </com.google.android.material.textfield.TextInputLayout>
 
@@ -227,15 +229,19 @@
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="Precio Unitario"
+                                android:text="@string/producto_Precio"
                                 android:textStyle="bold"
                                 android:textColor="?attr/color_texto_titulo"/>
 
                             <com.google.android.material.textfield.TextInputLayout
                                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                                android:id="@+id/product_creation_textInputLayout_PrecioUnitario"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                app:helperText="Requerido*"
+                                app:errorEnabled="true"
+                                app:errorIconDrawable="@android:drawable/ic_dialog_info"
+                                app:errorIconTint="@color/red"
+                                app:helperText="@string/input_text_helper_text_requrido"
                                 app:helperTextTextColor="@color/red"
                                 app:startIconDrawable="@drawable/baseline_attach_money_black_24dp"
                                 app:startIconTint="?attr/drawable_producto_tintColor"
@@ -246,8 +252,7 @@
                                     android:id="@+id/product_creation_edPrecioUnitario"
                                     android:layout_width="120dp"
                                     android:layout_height="wrap_content"
-                                    android:hint="000.00"
-                                    android:text="1.75"
+                                    android:hint="$00.00"
                                     android:inputType="numberDecimal"
                                     android:maxLength="6" />
 
@@ -273,15 +278,19 @@
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="Costo Unitario"
+                                android:text="@string/producto_Costo"
                                 android:textStyle="bold"
                                 android:textColor="?attr/color_texto_titulo"/>
 
                             <com.google.android.material.textfield.TextInputLayout
                                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                                android:id="@+id/product_creation_textInputLayout_CostoUnitario"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                app:helperText="Requerido*"
+                                app:errorEnabled="true"
+                                app:errorIconDrawable="@android:drawable/ic_dialog_info"
+                                app:errorIconTint="@color/red"
+                                app:helperText="@string/input_text_helper_text_requrido"
                                 app:helperTextTextColor="@color/red"
                                 app:startIconDrawable="@drawable/baseline_attach_money_black_24dp"
                                 app:startIconTint="?attr/drawable_producto_tintColor"
@@ -292,8 +301,7 @@
                                     android:id="@+id/product_creation_edCostoUnitario"
                                     android:layout_width="120dp"
                                     android:layout_height="wrap_content"
-                                    android:hint="000.00"
-                                    android:text="1.50"
+                                    android:hint="$00.00"
                                     android:maxLength="6"
                                     android:inputType="numberDecimal" />
 
@@ -326,15 +334,19 @@
                                     android:id="@+id/textView6"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="Categoría"
+                                    android:text="@string/producto_Categoria"
                                     android:textStyle="bold"
                                     android:textColor="?attr/color_texto_titulo"/>
 
                                 <com.google.android.material.textfield.TextInputLayout
                                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+                                    android:id="@+id/product_creation_textInputLayout_spCategoria"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    app:helperText="Requerido*"
+                                    app:errorEnabled="true"
+                                    app:errorIconDrawable="@android:drawable/ic_dialog_info"
+                                    app:errorIconTint="@color/red"
+                                    app:helperText="@string/input_text_helper_text_requrido"
                                     app:helperTextTextColor="@color/red"
                                     app:startIconDrawable="@drawable/baseline_category_24dp"
                                     app:startIconTint="?attr/drawable_producto_tintColor">
@@ -344,7 +356,7 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:inputType="none"
-                                        android:text="Seleccione..." />
+                                        android:text="@string/seleccione" />
 
                                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -389,21 +401,22 @@
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="Descripción"
+                                android:text="@string/producto_Descripcion"
                                 android:textStyle="bold"
                                 android:textColor="?attr/color_texto_titulo"/>
 
                             <com.google.android.material.textfield.TextInputLayout
                                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content">
+                                android:layout_height="wrap_content"
+                                app:counterEnabled="true"
+                                app:counterMaxLength="@integer/input_producto_descripcion_counterMaxLenthg">
 
                                 <com.google.android.material.textfield.TextInputEditText
                                     android:id="@+id/product_creation_edDescripcionProducto"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:lines="5"
-                                    android:text="kslj"
                                     android:gravity="start|top"
                                     android:inputType="textMultiLine"
                                     android:maxLines="5" />
@@ -432,7 +445,8 @@
                 android:id="@+id/product_creation_btnGuardarProducto"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="GUARDAR" />
+                android:text="@string/btn_Guardar"
+                app:cornerRadius="@dimen/corner_radius" />
 
         </LinearLayout>
     </LinearLayout>

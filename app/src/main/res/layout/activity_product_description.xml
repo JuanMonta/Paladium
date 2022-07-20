@@ -56,7 +56,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="2dp"
-                android:text="Código de barras"
+                android:text="@string/producto_Cod_barras"
                 android:textColor="?attr/color_texto_normal"/>
 
 
@@ -79,7 +79,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="2dp"
-                android:text="Cantidad disponible"
+                android:text="@string/producto_Cantidad"
                 android:textColor="?attr/color_texto_normal"/>
 
 
@@ -137,7 +137,7 @@
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="Nombre"
+                                android:text="@string/producto_Nombre"
                                 android:textColor="?attr/color_texto_titulo"
                                 android:textStyle="bold" />
 
@@ -175,7 +175,7 @@
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="Precio Unitario"
+                                android:text="@string/producto_Precio"
                                 android:textStyle="bold"
                                 android:textColor="?attr/color_texto_titulo"/>
 
@@ -212,7 +212,7 @@
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="Costo Unitario"
+                                android:text="@string/producto_Costo"
                                 android:textStyle="bold"
                                 android:textColor="?attr/color_texto_titulo"/>
 
@@ -247,7 +247,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Categoría"
+                                android:text="@string/producto_Categoria"
                                 android:textColor="?attr/color_texto_titulo"
                                 android:textStyle="bold" />
 
@@ -284,7 +284,7 @@
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="Descripción"
+                                android:text="@string/producto_Descripcion"
                                 android:textColor="?attr/color_texto_titulo"
                                 android:textStyle="bold" />
 
@@ -324,8 +324,8 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_weight="1"
-                android:text="EDITAR"
-                app:cornerRadius="20dp" />
+                android:text="@string/btn_Editar"
+                app:cornerRadius="@dimen/corner_radius" />
 
             <Button
                 android:id="@+id/activity_product_descrip_btnEliminar"
@@ -335,8 +335,8 @@
                 android:layout_marginRight="10dp"
                 android:layout_weight="1"
                 android:backgroundTint="@color/red_darker"
-                android:text="ELIMINAR"
-                app:cornerRadius="20dp" />
+                android:text="@string/btn_Eliminar"
+                app:cornerRadius="@dimen/corner_radius" />
 
         </LinearLayout>
     </LinearLayout>

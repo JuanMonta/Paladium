@@ -16,6 +16,7 @@ import androidx.annotation.NonNull;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.color.MaterialColors;
 import com.google.android.material.textfield.TextInputEditText;
 import com.paladium.Model.Firebase.BaseDeDatos;
 import com.paladium.Model.Utils.Utilidades;
@@ -28,6 +29,8 @@ public class PresenterCustomDialogCrearCategoria {
 
     private Context mContext;
     private TextView mensaje;
+    private TextInputEditText inputEdNombreCategoria;
+
     public PresenterCustomDialogCrearCategoria(Context mContext) {
         this.mContext = mContext;
         final Dialog dialogCategoria = new Dialog(mContext);
@@ -36,8 +39,8 @@ public class PresenterCustomDialogCrearCategoria {
         dialogCategoria.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialogCategoria.setContentView(R.layout.custom_dialog_crear_categoria);
 
-         mensaje = dialogCategoria.findViewById(R.id.custom_dialog_crear_categoria_tvMensaje);
-        TextInputEditText inputEdNombreCategoria = dialogCategoria.findViewById(R.id.custom_dialog_crear_categoria_inputEdNombreCategoria);
+        mensaje = dialogCategoria.findViewById(R.id.custom_dialog_crear_categoria_tvMensaje);
+        inputEdNombreCategoria = dialogCategoria.findViewById(R.id.custom_dialog_crear_categoria_inputEdNombreCategoria);
         inputEdNombreCategoria.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -71,7 +74,7 @@ public class PresenterCustomDialogCrearCategoria {
                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
-                            mensajeError(false);
+                                mensajeError(false);
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
@@ -87,17 +90,28 @@ public class PresenterCustomDialogCrearCategoria {
         dialogCategoria.show();
     }
 
-    private void ocultarTextView(){
+    private void ocultarTextView() {
         mensaje.setVisibility(View.INVISIBLE);
     }
-    private void mensajeError(boolean error){
-        if (error){
+
+    private void mensajeError(boolean error) {
+        if (error) {
             mensaje.setVisibility(View.VISIBLE);
             mensaje.setTextColor(mContext.getResources().getColor(R.color.red));
             mensaje.setText("Error al crear, intente nuevamente");
-        }else {
+        } else {
+            inputEdNombreCategoria.setText("");
             mensaje.setVisibility(View.VISIBLE);
-            mensaje.setTextColor(mContext.getResources().getColor(R.color.green_700));
+            mensaje.setTextColor
+                    (
+                            MaterialColors.getColor
+                                    (
+                                            mContext.getApplicationContext(),
+                                            R.attr.color_texto_normal,
+                                            mContext.getResources().getColor(R.color.green_700
+                                            )
+                                    )
+                    );
             mensaje.setText("Categoria registrada");
         }
     }
