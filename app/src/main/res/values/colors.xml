@@ -11,17 +11,37 @@
     <color name="red">#FF0000</color>
     <color name="red_darker">#FDB30808</color>
 
+
+    <!-- COLORES PARA LOS CUSTOMS DIALOGS: SUCCES, ERROR, WARNING, ALERT, INFORMATION -->
+
+    <!-- SUCCESS DIALOG -->
+    <color name="alert_success_color_background">@color/green_700</color>
+
+    <!-- WARNING DIALOG -->
     <color name="alert_warning_color_background">#A1750A</color>
     <color name="alert_warning_color_button">#FEB300</color>
 
+    <!-- ERROR DIALOG -->
     <color name="alert_error_color_background">#BAFD5959</color>
     <color name="alert_error_color_button">#F40000</color>
 
+    <!-- INFORMATION DIALOG -->
+    <color name="alert_info_color_background">#088FCA</color>
+    <color name="alert_info_color_button">#25C9FC</color>
+
+    <!-- ////////////////////////////////////////////////////////////////////////////// -->
+
+    <!-- COLORES PARA EL DIALOGO BOTTOM SHEET QRBARCODE SCAN-->
+    <color name="bottom_sheet_background_day">#FDFFFFFF</color>
+    <color name="bottom_sheet_background_nigth">#151414</color>
+
+
+    <!-- COLORES PARA EL DRAWABLE DE LA IMAGEN DE CAMARA EN CREAR PRODUCTO Y DESCRIPCION -->
     <color name="drawable_color_day">@color/green_700</color>
     <color name="drawable_color_nigth">#FDE6E6E6</color>
 
 
-
+    <!-- COLORES CUSTOMS PARA LOS TEXTOS DE LA APP -->
     <color name="color_texto_titulo_day">@color/green_700</color>
     <color name="color_texto_subtitulo_day">#0C0C0C</color>
     <color name="color_texto_normal_day">#FD272727</color>
@@ -31,5 +51,7 @@
     <color name="color_texto_subtitulo_nigth">#FDE1DFDF</color>
     <color name="color_texto_normal_nigth">#FDDCDBDB</color>
     <color name="color_texto_normal_lite_nigth">#FDB5B3B3</color>
+
+
 
 </resources>

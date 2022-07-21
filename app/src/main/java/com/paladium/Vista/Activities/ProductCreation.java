@@ -1,15 +1,21 @@
 package com.paladium.Vista.Activities;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -34,12 +40,11 @@ import com.google.zxing.common.HybridBinarizer;
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
 import com.paladium.Model.Utils.ImageCompression;
-import com.paladium.Model.Utils.ProgressDialogGeneral;
 import com.paladium.Model.Utils.Utilidades;
-import com.paladium.Presentador.InterfacePresenter_ProductCreation;
+import com.paladium.Presentador.Customs.PresenterCustomDialog;
+import com.paladium.Presentador.Interfaces.InterfacePresenter_ProductCreation;
 import com.paladium.Presentador.PresentadorProductCreation;
 import com.paladium.R;
-import com.paladium.Vista.Fragmentos.Fragment_Inventario;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
@@ -48,7 +53,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class ProductCreation extends AppCompatActivity implements View.OnClickListener, InterfacePresenter_ProductCreation.onProductoCargado {
+public class ProductCreation extends AppCompatActivity implements View.OnClickListener, InterfacePresenter_ProductCreation.onProductoCargado,
+        InterfacePresenter_ProductCreation.onSeleccionarMetodoScanSQBarCode {
 
     private String TAG = "ProductCreation";
 
@@ -60,10 +66,13 @@ public class ProductCreation extends AppCompatActivity implements View.OnClickLi
     private TextInputLayout inputLayoutScanQRBarCode;
     private TextInputEditText inputEdScanQRBarCode;
     private Uri filePath;
+    private Uri filePathQRBarCodeScan;
     private String rutaImagen;
+    private InterfacePresenter_ProductCreation.onSeleccionarMetodoScanSQBarCode onSeleccionarMetodoScanSQBarCode;
     private ActivityResultLauncher<Intent> activityResultLauncherEscojerFoto;
     private ActivityResultLauncher<Intent> activityResultLauncherTomarFoto;
     private ActivityResultLauncher<ScanOptions> activityResultLauncherScanQRBarCode;
+    private ActivityResultLauncher<Intent> activityResultLauncherScanQRBarCodeFromImage;
     private ActivityResultLauncher<Intent> activityResultLauncherCropImage;
 
     @Override
@@ -75,14 +84,12 @@ public class ProductCreation extends AppCompatActivity implements View.OnClickLi
         bundleProducto = getIntent().getExtras();
         productCreation = new PresentadorProductCreation(this, this, bundleProducto);
         productCreation.init(view);
+
+        onSeleccionarMetodoScanSQBarCode = this;
+
         inputEdScanQRBarCode = findViewById(R.id.product_creation_edCodBarras);
         inputLayoutScanQRBarCode = findViewById(R.id.product_creation_textInputLayout_CodBarras);
-        inputLayoutScanQRBarCode.setEndIconOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                scanQRBarCode();
-            }
-        });
+        inputLayoutScanQRBarCode.setEndIconOnClickListener(view1 -> bottomSheetseleccionarMetodoScaneoQRBarCode());
 
         btnRegistrarProducto = view.findViewById(R.id.product_creation_btnGuardarProducto);
         btnRegistrarProducto.setOnClickListener(this);
@@ -100,6 +107,7 @@ public class ProductCreation extends AppCompatActivity implements View.OnClickLi
         ActivityResultLauncherEscojerFoto();
         ActivityResultLauncherTomarFoto();
         ActivityResultLauncherScanQRBarcode();
+        ActivityResultLauncherScanQRBarcodeFromImage();
         ActivityResultLauncherCropImage();
     }
 
@@ -147,7 +155,6 @@ public class ProductCreation extends AppCompatActivity implements View.OnClickLi
                     }
                     //obtenemos el resultado que contiene la imagen escojida de la galería
                     filePath = result.getData().getData();
-                    scanQRBarCodeFromImage(filePath);
                     /*try {
                         Bitmap imagen = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
                         //imgv_ImagenProducto.setImageBitmap(imagen);
@@ -306,7 +313,29 @@ public class ProductCreation extends AppCompatActivity implements View.OnClickLi
         activityResultLauncherScanQRBarCode.launch(options);
     }
 
+    private void ActivityResultLauncherScanQRBarcode() {
+        // Register the launcher and result handler
+        activityResultLauncherScanQRBarCode = registerForActivityResult(new ScanContract(),
+                result -> {
+                    if (result.getContents() != null) {
+                        inputEdScanQRBarCode.setTextInputLayoutFocusedRectEnabled(false);
+                        inputEdScanQRBarCode.setText(result.getContents());
+                    } else {
+                        Toast.makeText(this, "Scaneo Cancelado", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    private void escojerImagenConQRBarCode(){
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        Intent chooser = Intent.createChooser(intent, "Seleccione una imagen que contenga un código de barras:");
+        activityResultLauncherScanQRBarCodeFromImage.launch(chooser);
+    }
+
     private void scanQRBarCodeFromImage(Uri uri) {
+        PresenterCustomDialog dialog = new PresenterCustomDialog(ProductCreation.this);
         try {
             InputStream inputStream = getContentResolver().openInputStream(uri);
             Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
@@ -325,26 +354,53 @@ public class ProductCreation extends AppCompatActivity implements View.OnClickLi
 
             try {
                 Result result = reader.decode(bBitmap);
-                Toast.makeText(this, "The content of the QR image is: " + result.getText(), Toast.LENGTH_SHORT).show();
+                if( result !=null && !result.getText().trim().isEmpty()){
+                    this.inputEdScanQRBarCode.setText(result.getText());
+                }
             } catch (NotFoundException e) {
-                Log.e("TAG", "decode exception", e);
+                Log.e("TAG", "decode exception No se identificó un codigo de barras en la imagen", e);
+
+                dialog.dialogInformation(getResources().getString(R.string.alertdialog_crear_producto_mensaje_INFORMACION_QRImageCodeNotFound));
             }
         } catch (FileNotFoundException e) {
             Log.e("TAG", "can not open file" + uri.toString(), e);
+            dialog.dialogError(getResources().getString(R.string.alertdialog_crear_producto_mensaje_INFORMACION_FileNotFound));
         }
     }
 
-    private void ActivityResultLauncherScanQRBarcode() {
-        // Register the launcher and result handler
-        activityResultLauncherScanQRBarCode = registerForActivityResult(new ScanContract(),
-                result -> {
-                    if (result.getContents() != null) {
-                        inputEdScanQRBarCode.setTextInputLayoutFocusedRectEnabled(false);
-                        inputEdScanQRBarCode.setText(result.getContents());
-                    } else {
-                        Toast.makeText(this, "Scaneo Cancelado", Toast.LENGTH_LONG).show();
+    private void ActivityResultLauncherScanQRBarcodeFromImage() {
+        activityResultLauncherScanQRBarCodeFromImage = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+            @Override
+            public void onActivityResult(ActivityResult result) {
+
+                if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                    //si el path no es nulo, entonces que borre cualquier archivo creado anteriormente,
+                    //puesto que está seleccionando una nueva imagen
+                    if (filePathQRBarCodeScan != null) {
+                        new File(filePathQRBarCodeScan.getPath()).delete();
                     }
-                });
+                    //obtenemos el resultado que contiene la imagen escojida de la galería
+                    filePathQRBarCodeScan = result.getData().getData();
+
+                    Log.d(TAG, "imagen escojida -> filePathQR: " + filePathQRBarCodeScan.toString());
+                    //obtenemos la dirección real de la imagen dentro del dispositivo
+                    String imageRealPath = realImagePath(filePathQRBarCodeScan);
+                    Log.d(TAG, "imagen escojida -> realImagePathQR: " + imageRealPath);
+                    //enviamos la dirección de la imagen, la cual será tomada, comprimida y guardada
+                    //su compresión dentro del dispositivo.
+                    //Nos devuelve la ruta de la imagen comprimida
+                    String compressImagePath = new ImageCompression(getApplicationContext()).compressImage(imageRealPath);
+                    //transformamos la ruta de la imagen comprimida a un path Uri con la cual la subimos a firebase
+                    filePathQRBarCodeScan = Uri.fromFile(new File(compressImagePath));
+                    scanQRBarCodeFromImage(filePathQRBarCodeScan);
+                    Log.d(TAG, "imagen escojida -> filePath UriFromFileQR: " + filePathQRBarCodeScan);
+                    Log.d(TAG, "imagen escojida -> compressImagePathQR:   " + compressImagePath);
+                    Log.d(TAG, "imagen escojida -> compressImageUriQR:" + Uri.parse(compressImagePath));
+
+
+                }
+            }
+        });
     }
 
 
@@ -369,6 +425,39 @@ public class ProductCreation extends AppCompatActivity implements View.OnClickLi
         }
     }
 
+    private void bottomSheetseleccionarMetodoScaneoQRBarCode(){
+
+        final Dialog bottomSheetDialog = new Dialog(ProductCreation.this);
+        bottomSheetDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        bottomSheetDialog.setContentView(R.layout.custom_bottom_sheet_dialog_qrbarcode_scan);
+
+        ImageButton galeria = bottomSheetDialog.findViewById(R.id.custom_bottom_sheet_dialog_qrbarcode_scan_imgbtnGaleria);
+        galeria.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onSeleccionarMetodoScanSQBarCode.seleccionMetodoScanQRBarcode(Utilidades.metodoScanQRBarCode_Galeria);
+                bottomSheetDialog.dismiss();
+            }
+        });
+
+
+        ImageButton camara = bottomSheetDialog.findViewById(R.id.custom_bottom_sheet_dialog_qrbarcode_scan_imgbtnCamara);
+        camara.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onSeleccionarMetodoScanSQBarCode.seleccionMetodoScanQRBarcode(Utilidades.metodoScanQRBarCode_Camara);
+                bottomSheetDialog.dismiss();
+            }
+        });
+
+        bottomSheetDialog.show();
+        bottomSheetDialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        bottomSheetDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        bottomSheetDialog.getWindow().getAttributes().windowAnimations = R.style.custom_bottom_sheet_qrbar_scar_animation;
+        bottomSheetDialog.getWindow().setGravity(Gravity.BOTTOM);
+
+    }
+
 
     @Override
     public void productoCargado(boolean subido) {
@@ -387,10 +476,19 @@ public class ProductCreation extends AppCompatActivity implements View.OnClickLi
         }
     }
 
+    @Override
+    public void seleccionMetodoScanQRBarcode(String metodoScan) {
+        if (metodoScan.equals(Utilidades.metodoScanQRBarCode_Galeria)){
+            escojerImagenConQRBarCode();
+        }else if (metodoScan.equals(Utilidades.metodoScanQRBarCode_Camara)){
+            scanQRBarCode();
+        }
+    }
 
     @Override
     protected void onResume() {
         super.onResume();
+
     }
 
     @Override

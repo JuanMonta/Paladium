@@ -1,6 +1,5 @@
 package com.paladium.Vista.Activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -8,7 +7,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.etebarian.meowbottomnavigation.MeowBottomNavigation;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.paladium.Model.Firebase.BaseDeDatos;
-import com.paladium.Presentador.InterfacePresenter_MainActivity;
 import com.paladium.Presentador.PresentadorMainActivity;
 import com.paladium.R;
 

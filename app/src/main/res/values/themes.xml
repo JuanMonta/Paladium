@@ -22,7 +22,13 @@
         <item name="color_texto_normal">@color/color_texto_normal_day</item>
         <item name="color_texto_normal_lite">@color/color_texto_normal_lite_day</item>
 
+        <item name="bottom_sheet_background">@color/bottom_sheet_background_day</item>
+
     </style>
 
+    <style name="custom_bottom_sheet_qrbar_scar_animation" >
+        <item name="android:windowEnterAnimation">@anim/custom_bottom_sheet_slide_in_bottom</item>
+        <item name="android:windowExitAnimation">@anim/custom_bottom_sheet_slide_out_bottom</item>
+    </style>
 
 </resources>

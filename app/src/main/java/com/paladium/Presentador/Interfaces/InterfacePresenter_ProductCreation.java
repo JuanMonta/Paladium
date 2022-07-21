@@ -1,4 +1,4 @@
-package com.paladium.Presentador;
+package com.paladium.Presentador.Interfaces;
 
 import android.net.Uri;
 
@@ -20,6 +20,10 @@ public interface InterfacePresenter_ProductCreation {
          * dejar la variable limpia.
          */
         void productoCargado(boolean subido);
+    }
+
+    interface onSeleccionarMetodoScanSQBarCode {
+        void seleccionMetodoScanQRBarcode(String metodoScan);
     }
 
 }

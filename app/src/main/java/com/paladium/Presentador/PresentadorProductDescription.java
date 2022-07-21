@@ -242,7 +242,8 @@ public class PresentadorProductDescription implements View.OnClickListener, Pres
                 mContext.startActivity(intent);
                 break;
             case R.id.activity_product_descrip_btnEliminar:
-                productAlertDialog(Utilidades.alertDialog_ADVERTENCIA, mContext.getApplicationContext().getString(R.string.alertdialog_borrar_producto_mensaje_ADVENTENCIA));
+                productAlertDialog(Utilidades.alertDialog_ADVERTENCIA,
+                        mContext.getApplicationContext().getString(R.string.alertdialog_borrar_producto_mensaje_ADVENTENCIA));
                 break;
         }
     }

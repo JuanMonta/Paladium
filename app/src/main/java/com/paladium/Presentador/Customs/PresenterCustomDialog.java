@@ -9,7 +9,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.paladium.Model.Utils.Utilidades;
-import com.paladium.Presentador.InterfacePresenter_ProductCreation;
+import com.paladium.Presentador.Interfaces.InterfacePresenter_ProductCreation;
 import com.paladium.R;
 
 public class PresenterCustomDialog {
@@ -132,6 +132,16 @@ public class PresenterCustomDialog {
 
         this.customDialog.show();
 
+    }
+
+    public void dialogInformation(String mensajeInformation) {
+        this.customDialog.setContentView(R.layout.custom_dialog_information);
+        TextView mensaje = this.customDialog.findViewById(R.id.custom_dialog_information_tvMensaje);
+        mensaje.setText(mensajeInformation);
+
+        Button ok = this.customDialog.findViewById(R.id.custom_dialog_information_btnOk);
+        ok.setOnClickListener(view -> customDialog.dismiss());
+        this.customDialog.show();
     }
 
 

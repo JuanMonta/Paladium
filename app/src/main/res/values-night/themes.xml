@@ -22,6 +22,8 @@
         <item name="color_texto_normal">@color/color_texto_normal_nigth</item>
         <item name="color_texto_normal_lite">@color/color_texto_normal_lite_nigth</item>
 
+        <item name="bottom_sheet_background">@color/bottom_sheet_background_nigth</item>
+
     </style>
 
 

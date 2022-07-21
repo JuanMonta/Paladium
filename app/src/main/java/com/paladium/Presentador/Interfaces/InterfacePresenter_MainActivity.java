@@ -1,4 +1,4 @@
-package com.paladium.Presentador;
+package com.paladium.Presentador.Interfaces;
 
 public interface InterfacePresenter_MainActivity {
 

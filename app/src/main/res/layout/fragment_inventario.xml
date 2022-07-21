@@ -39,14 +39,12 @@
                         android:layout_height="8dp" />
 
                     <TextView
-                        android:id="@+id/textView4"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:text="N° de Registros" />
 
                     <TextView
-                        android:id="@+id/textView5"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
@@ -79,14 +77,12 @@
                         android:layout_height="8dp" />
 
                     <TextView
-                        android:id="@+id/textView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:text="Costo Total" />
 
                     <TextView
-                        android:id="@+id/textView2"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
@@ -114,7 +110,6 @@
             app:startIconDrawable="@drawable/search_24px">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/fragment_inventario_inputEdBuscar"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:focusable="true"/>

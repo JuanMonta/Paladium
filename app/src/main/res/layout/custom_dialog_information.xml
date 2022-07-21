@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:paddingBottom="10dp"
-            android:background="@color/alert_success_color_background"
+            android:background="@color/alert_info_color_background"
             android:orientation="vertical">
 
 
@@ -27,7 +27,7 @@
                 android:layout_marginTop="4dp"
                 android:layout_marginBottom="4dp"
                 android:gravity="center"
-                android:text="@string/alertdialog_titulo_EXITO"
+                android:text="@string/alertdialog_titulo_INFORMACION"
                 android:textColor="@color/white"
                 android:textSize="28sp"
                 android:textStyle="bold" />
@@ -35,26 +35,28 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="90dp"
-                app:srcCompat="@drawable/baseline_check_icon"/>
+                app:srcCompat="@drawable/baseline_informacion2_icon"/>
 
             <TextView
-                android:id="@+id/custom_dialog_success_tvMensaje"
+                android:id="@+id/custom_dialog_information_tvMensaje"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:gravity="center"
-                android:lines="2"
+                android:layout_marginStart="6dp"
+                android:layout_marginEnd="4dp"
+                android:gravity="center|left"
                 android:textColor="@color/white"
                 android:textSize="16sp" />
 
             <Button
-                android:id="@+id/custom_dialog_success_btnOk"
+                android:id="@+id/custom_dialog_information_btnOk"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="50dp"
                 android:layout_marginEnd="50dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="10dp"
+                android:backgroundTint="@color/alert_info_color_button"
                 android:text="@string/alertdialog_producto_btn_OK"
                 android:textSize="16sp"
                 app:cornerRadius="@dimen/corner_radius"/>

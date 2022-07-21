@@ -1,4 +1,4 @@
-package com.paladium.Vista.Adapters;
+package com.paladium.Presentador.Adapters;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;

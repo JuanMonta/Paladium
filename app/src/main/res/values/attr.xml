@@ -9,6 +9,7 @@
         <attr name="color_texto_subtitulo" format="color"></attr>
         <attr name="color_texto_normal" format="color"></attr>
         <attr name="color_texto_normal_lite" format="color"></attr>
+        <attr name="bottom_sheet_background" format="color"></attr>
 
     </declare-styleable>
 

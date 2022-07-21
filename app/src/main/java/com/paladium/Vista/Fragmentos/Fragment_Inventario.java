@@ -1,12 +1,9 @@
 package com.paladium.Vista.Fragmentos;
 
-import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,10 +25,9 @@ import com.paladium.Model.Firebase.BaseDeDatos;
 import com.paladium.Model.Logica.Producto;
 import com.paladium.Model.Utils.Utilidades;
 import com.paladium.R;
-import com.paladium.Vista.Activities.MainActivity;
 import com.paladium.Vista.Activities.ProductCreation;
 import com.paladium.Vista.Activities.ProductDescription;
-import com.paladium.Vista.Adapters.CustomRVAdapter_Products_List;
+import com.paladium.Presentador.Adapters.CustomRVAdapter_Products_List;
 
 import java.util.ArrayList;
 
