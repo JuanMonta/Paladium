@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:paddingBottom="10dp"
-            android:background="@color/green_700"
+            android:background="@color/alert_warning_color_background"
             android:orientation="vertical">
 
 
@@ -27,7 +27,7 @@
                 android:layout_marginTop="4dp"
                 android:layout_marginBottom="4dp"
                 android:gravity="center"
-                android:text="@string/alertdialog_titulo_EXITO"
+                android:text="@string/alertdialog_titulo_ADVERTENCIA"
                 android:textColor="@color/white"
                 android:textSize="28sp"
                 android:textStyle="bold" />
@@ -35,10 +35,10 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="90dp"
-                app:srcCompat="@drawable/baseline_check_icon"/>
+                app:srcCompat="@drawable/baseline_caution_icon"/>
 
             <TextView
-                android:id="@+id/custom_dialog_success_tvMensaje"
+                android:id="@+id/custom_dialog_warning_tvMensaje"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
@@ -47,17 +47,43 @@
                 android:textColor="@color/white"
                 android:textSize="16sp" />
 
-            <Button
-                android:id="@+id/custom_dialog_success_btnOk"
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="50dp"
-                android:layout_marginEnd="50dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="10dp"
-                android:text="@string/alertdialog_producto_btn_OK"
-                android:textSize="16sp"
-                app:cornerRadius="@dimen/corner_radius"/>
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/custom_dialog_warning_btnCancel"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="5dp"
+                    android:text="@string/alertdialog_producto_btn_CANCEL"
+                    android:textSize="16sp"
+                    android:backgroundTint="@color/red_darker"
+                    app:cornerRadius="@dimen/corner_radius"/>
+
+                <Button
+                    android:id="@+id/custom_dialog_warning_btnOk"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginEnd="10dp"
+                    android:text="@string/alertdialog_producto_btn_OK"
+                    android:textSize="16sp"
+                    app:cornerRadius="@dimen/corner_radius"/>
+
+            </LinearLayout>
+
+
+
 
 
         </LinearLayout>

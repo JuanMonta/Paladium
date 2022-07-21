@@ -41,12 +41,13 @@ public class CustomRVAdapter_Products_List extends RecyclerView.Adapter<CustomRV
     //servirá para saber que datos han cambiado
     private ProductoDiffCallBack diffCallBack;
     private Context mContext;
+    //para validar si debo o nó verificar diferencias en la old y new list
+    private boolean validarCalculoDiferenciasListasProductos;
 
     public interface ListItemClick {
         void onListenItemClick(int itemClicado, Producto producto);
     }
-
-
+    //llamado en Fragmen_Inventario, y enviado desde aquí en el holder hacia el Fragment_Inventario
     final private ListItemClick onclickListener;
 
     //necesito conservar la lista anterior, por lo que no lo llamo en el constructor
@@ -60,14 +61,11 @@ public class CustomRVAdapter_Products_List extends RecyclerView.Adapter<CustomRV
     @Override
     public ViewHolderListaProducts onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.custom_list_productos, parent, false);
-
-
         return new ViewHolderListaProducts(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolderListaProducts holder, int position) {
-        //Log.d("ADAPTER_PRODUCTOS","OnBidViewHolder lanzado");
         holder.asignarDatos(listaProducto.get(position));
     }
 
@@ -77,7 +75,6 @@ public class CustomRVAdapter_Products_List extends RecyclerView.Adapter<CustomRV
         return this.listaProducto.size();
     }
 
-    //tambien notifica que se han agregados datos, lo cual rellena el recycler con los datos de nuevo
 
     /**
      * Para calclular la diferencias entre lista de datos del producto antigua creada y actual enviada.
@@ -128,8 +125,15 @@ public class CustomRVAdapter_Products_List extends RecyclerView.Adapter<CustomRV
 
     }
 
+    public void setValidarCalculoDiferenciasListasProductos(boolean validacion) {
+        this.validarCalculoDiferenciasListasProductos = validacion;
+    }
 
-    public class ViewHolderListaProducts extends RecyclerView.ViewHolder implements View.OnClickListener{
+    private boolean getValidarCalculoDiferenciasListasProductos() {
+        return this.validarCalculoDiferenciasListasProductos;
+    }
+
+    public class ViewHolderListaProducts extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private TextView productoNombre, productoPrecio, productoDesc, productoCant;
         private ImageView productoFoto;
@@ -153,11 +157,15 @@ public class CustomRVAdapter_Products_List extends RecyclerView.Adapter<CustomRV
             this.productoCant.setText(producto.getCantidad() > 0 ? "" + producto.getCantidad() : "Producto no disponible");
             this.productoPrecio.setText(producto.getPrecio() > 0 ? "" + producto.getPrecio() : "Precio no disponible");
             cargarImagenFirebase(producto.getImagen());
-            //muestra las diferencias que hay entre la lista anterior y la nueva que se ha cargado.
-            //los datos de las difrencias se mostraran cuando el sistema propio de recyclerview cargue
-            //los items respectivos del producto, es decir, si en el momento que se actualiza, el item que ha sido
-            //actualizado no esta algo visible en pantalla, entonces no caragará este item, pues así funciona
-            //el recycler view, optimiza las lista, solo muestra los items cuando en verdad se verán en pantalla
+            //con esto valido si debe empezaar a buscar diferencias, cuando es false he validado
+            //que es cuadno un producto ha sido eliminado un producto
+            //(verificar Fragment_Inventario.cargarDatosProductosRecycler)
+            if (getValidarCalculoDiferenciasListasProductos()) {
+                //muestra las diferencias que hay entre la lista anterior y la nueva que se ha cargado.
+                //los datos de las difrencias se mostraran cuando el sistema propio de recyclerview cargue
+                //los items respectivos del producto, es decir, si en el momento que se actualiza, el item que ha sido
+                //actualizado no esta algo visible en pantalla, entonces no caragará este item, pues así funciona
+                //el recycler view, optimiza las lista, solo muestra los items cuando en verdad se verán en pantalla.
                 Bundle diferencias = (Bundle) diffCallBack.getChangePayload(getAdapterPosition(), getAdapterPosition());
                 if (diferencias != null) {
                     for (String bundleKey : diferencias.keySet()) {
@@ -184,6 +192,7 @@ public class CustomRVAdapter_Products_List extends RecyclerView.Adapter<CustomRV
                         }
 
                     }
+                }
             }
             /*Log.d("ADAPTER_PRODUCTOS", "Product Key: "+producto.getProductoFirebaseKey());
             Log.d("ADAPTER_PRODUCTOS", "Nombre: "+producto.getNombre());
@@ -198,7 +207,7 @@ public class CustomRVAdapter_Products_List extends RecyclerView.Adapter<CustomRV
 
         public void cargarImagenFirebase(String URLImagen) {
             //Log.d("ADAPTER_PRODUCTOS", "Cargando Imagen: " + URLImagen);
-            if (URLImagen !=null && !URLImagen.isEmpty()) {
+            if (URLImagen != null && !URLImagen.isEmpty()) {
                 //Log.d("ADAPTER_PRODUCTOS", "Imagen no es vacia");
                 Glide
                         .with(mContext.getApplicationContext())
@@ -262,5 +271,5 @@ public class CustomRVAdapter_Products_List extends RecyclerView.Adapter<CustomRV
         }
 
     }
-    }
+}
 

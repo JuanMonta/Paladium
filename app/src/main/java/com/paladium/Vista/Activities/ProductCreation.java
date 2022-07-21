@@ -19,6 +19,7 @@ import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
@@ -33,10 +34,12 @@ import com.google.zxing.common.HybridBinarizer;
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
 import com.paladium.Model.Utils.ImageCompression;
+import com.paladium.Model.Utils.ProgressDialogGeneral;
 import com.paladium.Model.Utils.Utilidades;
 import com.paladium.Presentador.InterfacePresenter_ProductCreation;
 import com.paladium.Presentador.PresentadorProductCreation;
 import com.paladium.R;
+import com.paladium.Vista.Fragmentos.Fragment_Inventario;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
@@ -48,8 +51,6 @@ import java.io.InputStream;
 public class ProductCreation extends AppCompatActivity implements View.OnClickListener, InterfacePresenter_ProductCreation.onProductoCargado {
 
     private String TAG = "ProductCreation";
-    private final int ESCOJER_FOTO = 1;
-    private final int TOMAR_FOTO = 2;
 
     private PresentadorProductCreation productCreation;
     private Bundle bundleProducto;
@@ -306,12 +307,10 @@ public class ProductCreation extends AppCompatActivity implements View.OnClickLi
     }
 
     private void scanQRBarCodeFromImage(Uri uri) {
-        try
-        {
+        try {
             InputStream inputStream = getContentResolver().openInputStream(uri);
             Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-            if (bitmap == null)
-            {
+            if (bitmap == null) {
                 Log.e("TAG", "uri is not a bitmap," + uri.toString());
                 return;
             }
@@ -324,18 +323,13 @@ public class ProductCreation extends AppCompatActivity implements View.OnClickLi
             BinaryBitmap bBitmap = new BinaryBitmap(new HybridBinarizer(source));
             MultiFormatReader reader = new MultiFormatReader();
 
-            try
-            {
+            try {
                 Result result = reader.decode(bBitmap);
                 Toast.makeText(this, "The content of the QR image is: " + result.getText(), Toast.LENGTH_SHORT).show();
-            }
-            catch (NotFoundException e)
-            {
+            } catch (NotFoundException e) {
                 Log.e("TAG", "decode exception", e);
             }
-        }
-        catch (FileNotFoundException e)
-        {
+        } catch (FileNotFoundException e) {
             Log.e("TAG", "can not open file" + uri.toString(), e);
         }
     }
@@ -397,11 +391,6 @@ public class ProductCreation extends AppCompatActivity implements View.OnClickLi
     @Override
     protected void onResume() {
         super.onResume();
-        //Toast.makeText(this, "onResume() ProductCreation", Toast.LENGTH_SHORT).show();
-/*        AutoCompleteTextView autoCompletTextSpCategoria = findViewById(R.id.product_creation_spCategoria);
-        String[] categorias = getResources().getStringArray(R.array.array_producto_categoria_de_prueba);
-        ArrayAdapter arrayAdapter = new ArrayAdapter(this, R.layout.custom_text_view_dropdown_menu_producto_categoria, categorias);
-        autoCompletTextSpCategoria.setAdapter(arrayAdapter);*/
     }
 
     @Override
@@ -422,5 +411,10 @@ public class ProductCreation extends AppCompatActivity implements View.OnClickLi
         //Toast.makeText(this, "onDestroy() ProductCreation", Toast.LENGTH_SHORT).show();
     }
 
+    @Override
+    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
 
+
+    }
 }

@@ -23,18 +23,26 @@
     <string name="producto_input_error_costo">Ingrese el costo del producto</string>
     <string name="producto_input_error_categoria">Escoja categoría para el producto</string>
 
+    <string name="progressdialog_CARGANDO">Cargando…</string>
     <string name="progressdialog_crear_producto_mensaje">Añadiendo producto…</string>
-    <string name="progressdialog_actualizar_producto_mensaje">ÉXITO</string>
+    <string name="progressdialog_actualizar_producto_mensaje">Actualizando datos…</string>
 
     <string name="alertdialog_titulo_EXITO">ÉXITO</string>
-    <string name="alertdialog_titulo_ERROR">ERROR</string>
+    <string name="alertdialog_titulo_ERROR">!ERROR¡</string>
+    <string name="alertdialog_titulo_ADVERTENCIA">!ADVERTENCIA¡</string>
+    <string name="alertdialog_titulo_ATENCION">!ATENCIÓN¡</string>
     <string name="alertdialog_producto_btn_OK">OK</string>
+    <string name="alertdialog_producto_btn_CANCEL">CANCELAR</string>
 
     <string name="alertdialog_crear_producto_mensaje_EXITO">Se añadió el producto al registro.</string>
     <string name="alertdialog_crear_producto_mensaje_ERROR">Ocurrió un error al registrar el producto. Inténteno nuevamente.</string>
 
     <string name="alertdialog_actualizar_producto_mensaje_EXITO">Se actualizó el registro.</string>
     <string name="alertdialog_actualizar_producto_mensaje_ERROR">Ocurrió un error al actualizar el producto. Inténtelo nuevamente.</string>
+
+    <string name="alertdialog_borrar_producto_mensaje_EXITO">Se borró el producto del registro.</string>
+    <string name="alertdialog_borrar_producto_mensaje_ERROR">Ocurrió un error al borrar el producto.</string>
+    <string name="alertdialog_borrar_producto_mensaje_ADVENTENCIA">¿Está seguro de querer eliminar el producto?</string>
 
     <string name="producto_Cod_barras">Código de barras</string>
     <string name="producto_Cantidad">Cantidad disponible</string>

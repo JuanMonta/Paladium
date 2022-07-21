@@ -318,16 +318,6 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/activity_product_descrip_btnEditar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_weight="1"
-                android:text="@string/btn_Editar"
-                app:cornerRadius="@dimen/corner_radius" />
-
-            <Button
                 android:id="@+id/activity_product_descrip_btnEliminar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -337,6 +327,17 @@
                 android:backgroundTint="@color/red_darker"
                 android:text="@string/btn_Eliminar"
                 app:cornerRadius="@dimen/corner_radius" />
+
+            <Button
+                android:id="@+id/activity_product_descrip_btnEditar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_weight="1"
+                android:text="@string/btn_Editar"
+                app:cornerRadius="@dimen/corner_radius" />
+
 
         </LinearLayout>
     </LinearLayout>

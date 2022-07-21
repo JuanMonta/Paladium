@@ -1,9 +1,7 @@
 package com.paladium.Presentador;
 
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -74,7 +72,7 @@ public class PresentadorProductCreation implements View.OnClickListener, Interfa
         this.mContext = context;
         this.interfaceProductoCargado = interfaceProductoCargado;
         this.bundleProducto = bundleProducto;
-        progressDialog = new ProgressDialog(mContext);
+        progressDialog = new ProgressDialog(mContext.getApplicationContext());
     }
 
 
@@ -135,30 +133,22 @@ public class PresentadorProductCreation implements View.OnClickListener, Interfa
      */
     private void productAlertDialog(String tipoAlert, String mensaje) {
 
-        /*AlertDialog.Builder ok_or_error_dialog = new AlertDialog.Builder(mContext);
-        if (tipoAlert.equals(Utilidades.alertDialog_EXITO)) {
-            ok_or_error_dialog.setTitle(mContext.getString(R.string.alertdialog_titulo_EXITO));
-        } else {
-            ok_or_error_dialog.setTitle(mContext.getString(R.string.alertdialog_titulo_ERROR));
-        }
-        ok_or_error_dialog.setMessage(mensaje);
-        ok_or_error_dialog.setCancelable(false);
-        ok_or_error_dialog.setPositiveButton(mContext.getString(R.string.alertdialog_producto_btn_OK), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                dialogInterface.dismiss();
-                //notificamos con la interfaz de que debe borrarse el Uri filePath que contiene
-                //la ruta de la imagen en el dispositivo una vez la hayamos subido a firebase
-                if (tipoAlert.equals(Utilidades.alertDialog_EXITO)) {
-                    limpiarCampos();
-                    interfaceProductoCargado.productoCargado(true);
-                }
-            }
-        });
-        ok_or_error_dialog.show();*/
-
         PresenterCustomDialog dialog = new PresenterCustomDialog(this.mContext);
-        dialog.dialogSuccess();
+
+        if (tipoAlert.equals(Utilidades.alertDialog_EXITO)) {
+            dialog.dialogSuccess(mensaje, interfaceProductoCargado);
+            limpiarCampos();
+        }
+        if (tipoAlert.equals(Utilidades.alertDialog_ACTUALIZADO)) {
+            dialog.dialogSuccess(mensaje, interfaceProductoCargado);
+        }
+        if (tipoAlert.equals(Utilidades.alertDialog_ERROR)) {
+            dialog.dialogError(mensaje);
+        }
+        if (tipoAlert.equals(Utilidades.alertDialog_ADVERTENCIA)) {
+        }
+        if (tipoAlert.equals(Utilidades.alertDialog_ATENCION)) {
+        }
     }
 
     /**
@@ -249,13 +239,13 @@ public class PresentadorProductCreation implements View.OnClickListener, Interfa
         int cantidad;
         float precioUnit, costoUnit;
 
-        codBarras = inputEdCodBarras.getText().toString().trim();
-        nombre = inputEdNombreProducto.getText().toString().trim();
+        codBarras = inputEdCodBarras.getText().toString().trim().toUpperCase();
+        nombre = inputEdNombreProducto.getText().toString().trim().toUpperCase();
         cantidad = inputEdCantDisponible.getText().toString().trim().isEmpty() ? 0 : Integer.parseInt(inputEdCantDisponible.getText().toString().trim());
         precioUnit = Float.parseFloat(inputEdPrecioUnit.getText().toString().trim());
         costoUnit = Float.parseFloat(inputEdCostoUnit.getText().toString().trim());
         descrip = inputEdDescripcion.getText().toString().trim();
-        categoria = autoCompletTextSpCategoria.getText().toString().trim();
+        categoria = autoCompletTextSpCategoria.getText().toString().trim().toUpperCase();
 
         Log.d(TAG, "Guardando datos");
         Map<String, Object> productos = new HashMap<>();
@@ -291,7 +281,7 @@ public class PresentadorProductCreation implements View.OnClickListener, Interfa
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         productProgressDialog().dismiss();
-                        productAlertDialog(Utilidades.alertDialog_ERROR, mContext.getString(R.string.alertdialog_crear_producto_mensaje_EXITO));
+                        productAlertDialog(Utilidades.alertDialog_ERROR, mContext.getString(R.string.alertdialog_crear_producto_mensaje_ERROR));
                     }
                 });
         Log.d(TAG, "Datos Guardados");
@@ -304,6 +294,7 @@ public class PresentadorProductCreation implements View.OnClickListener, Interfa
         Log.d(TAG, "Cantidad: " + producto.getCantidad());
         Log.d(TAG, "Precio: " + producto.getPrecio());
         Log.d(TAG, "Costo: " + producto.getCosto());
+        Log.d(TAG, "Categoria: " + producto.getCategoria());
         Log.d(TAG, "Descrip: " + producto.getDescripcion());
         Log.d(TAG, "CobBar: " + producto.getCodBarras());
         Log.d(TAG, "ImagenURL: " + producto.getImagen());
@@ -315,6 +306,7 @@ public class PresentadorProductCreation implements View.OnClickListener, Interfa
         inputEdCostoUnit.setText(String.valueOf(producto.getCosto()));
         //categoria.setText(producto.getCategoria());
         inputEdDescripcion.setText(producto.getDescripcion());
+        autoCompletTextSpCategoria.setText(producto.getCategoria(), false);
         cargarImagenFirebase(producto.getImagen());
 
     }
@@ -398,7 +390,7 @@ public class PresentadorProductCreation implements View.OnClickListener, Interfa
         descrip = inputEdDescripcion.getText().toString().trim();
         categoria = autoCompletTextSpCategoria.getText().toString().trim();
 
-        Log.d(TAG, "Actualizando datos");
+        Log.d(TAG, "Actualizando datos INIT");
         Map<String, Object> productos = new HashMap<>();
         productos.put(Utilidades.codBarrasProducto, codBarras);
         productos.put(Utilidades.nombreProducto, nombre);
@@ -423,7 +415,7 @@ public class PresentadorProductCreation implements View.OnClickListener, Interfa
                         productProgressDialog().dismiss();
                         //dentro del alert llamo la interfaz que ayuda a verificar si el regsitro se logró
                         //mediante una interfaz
-                        productAlertDialog(Utilidades.alertDialog_EXITO, mContext.getString(R.string.alertdialog_actualizar_producto_mensaje_EXITO));
+                        productAlertDialog(Utilidades.alertDialog_ACTUALIZADO, mContext.getString(R.string.alertdialog_actualizar_producto_mensaje_EXITO));
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
@@ -432,12 +424,12 @@ public class PresentadorProductCreation implements View.OnClickListener, Interfa
                         productAlertDialog(Utilidades.alertDialog_ERROR, mContext.getString(R.string.alertdialog_actualizar_producto_mensaje_ERROR));
                     }
                 });
-        Log.d(TAG, "Datos Actualizados");
+        Log.d(TAG, "Actualizando datos FIN");
     }
 
     private void cargarImagenFirebase(String URLImagen) {
         //Log.d(TAG, "Cargando Imagen: " + URLImagen);
-        if (URLImagen !=null && !URLImagen.isEmpty()) {
+        if (URLImagen != null && !URLImagen.isEmpty()) {
             //Log.d("ADAPTER_PRODUCTOS", "Imagen no es vacia");
             Glide
                     .with(mContext.getApplicationContext())
@@ -472,28 +464,31 @@ public class PresentadorProductCreation implements View.OnClickListener, Interfa
     }
 
     private void cargarCategoriasProductos() {
-        BaseDeDatos.getFireDatabaseIntanceReference().child(Utilidades.nodoPadre).child(Utilidades.nodoCategoria).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                ArrayList<String> listaCateg = new ArrayList<>();
+        BaseDeDatos.getFireDatabaseIntanceReference()
+                .child(Utilidades.nodoPadre)
+                .child(Utilidades.nodoCategoria)
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        ArrayList<String> listaCateg = new ArrayList<>();
 
-                for (DataSnapshot datos : dataSnapshot.getChildren()) {
-                    // Log.d(TAG, "dataSnashot: "+datos.getKey());
-                    Producto p = datos.getValue(Producto.class);
-                    listaCateg.add(p.getCategoria());
-                    Log.d(TAG, "PresentadorProductDescription --------------------------------- ");
-                    Log.d(TAG, "Categoria: " + p.getCategoria());
-                    Log.d(TAG, "-----------------------------------------------------------");
-                }
-                ArrayAdapter arrayAdapter = new ArrayAdapter(mContext, R.layout.custom_text_view_dropdown_menu_producto_categoria, listaCateg);
-                autoCompletTextSpCategoria.setAdapter(arrayAdapter);
-            }
+                        for (DataSnapshot datos : dataSnapshot.getChildren()) {
+                            // Log.d(TAG, "dataSnashot: "+datos.getKey());
+                            Producto p = datos.getValue(Producto.class);
+                            listaCateg.add(p.getCategoria());
+                            Log.d(TAG, "PresentadorProductDescription --------------------------------- ");
+                            Log.d(TAG, "Categoria: " + p.getCategoria());
+                            Log.d(TAG, "-----------------------------------------------------------");
+                        }
+                        ArrayAdapter arrayAdapter = new ArrayAdapter(mContext, R.layout.custom_text_view_dropdown_menu_producto_categoria, listaCateg);
+                        autoCompletTextSpCategoria.setAdapter(arrayAdapter);
+                    }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
 
-            }
-        });
+                    }
+                });
     }
 
     @Override
@@ -506,11 +501,6 @@ public class PresentadorProductCreation implements View.OnClickListener, Interfa
 
             case R.id.product_creation_imgbCrearCategoria:
                 new PresenterCustomDialogCrearCategoria(this.mContext);
-                /*Dialog dialog = new Dialog(mContext);
-                dialog.setContentView(R.layout.custom_dialog_crear_categoria);
-                dialog.setCancelable(true);
-                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                dialog.show();*/
                 break;
         }
     }

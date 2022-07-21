@@ -1,5 +1,7 @@
 package com.paladium.Vista.Fragmentos;
 
+import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,14 +19,17 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.paladium.Model.Firebase.BaseDeDatos;
 import com.paladium.Model.Logica.Producto;
 import com.paladium.Model.Utils.Utilidades;
-import com.paladium.Vista.Activities.ProductCreation;
 import com.paladium.R;
+import com.paladium.Vista.Activities.MainActivity;
+import com.paladium.Vista.Activities.ProductCreation;
 import com.paladium.Vista.Activities.ProductDescription;
 import com.paladium.Vista.Adapters.CustomRVAdapter_Products_List;
 
@@ -35,15 +40,20 @@ import java.util.ArrayList;
  * Use the {@link Fragment_Inventario#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class Fragment_Inventario extends Fragment implements CustomRVAdapter_Products_List.ListItemClick , View.OnClickListener{
-    private final String TAG= "Fragment_Inventario";
-    private ArrayList<Producto> listaProductos;
-    private CustomRVAdapter_Products_List adapterProducts;
+public class Fragment_Inventario extends Fragment implements CustomRVAdapter_Products_List.ListItemClick, View.OnClickListener {
+    private final String TAG = "Fragment_Inventario";
+    private CustomRVAdapter_Products_List customAdapterProducts;
     private Toast toast;
     private Context mContext;
     private View mView;
     private RecyclerView customRecycler;
     private Parcelable recyclerViewState;
+    /**
+     * Para validar para cuando un producto es borrado desde la bd, en el recyclerView
+     * no haga el efecto de Blink cuando carga la old y new list de los productos de la Bd.
+     * Usado mediante childEventListener en cargarDatosProductosRecycler.
+     */
+    private boolean validarCalculoDiferenciasListasProductos;
     private int findFirtsVisiblePositionRecyclerView;
     private int findFirstCompletelyVisibleItemPositionRecyclerView;
     private int findLastVisibleItemPositionRecyclerView;
@@ -76,26 +86,64 @@ public class Fragment_Inventario extends Fragment implements CustomRVAdapter_Pro
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mContext = view.getContext();
-        mView = view.getRootView();
+        this.mContext = view.getContext();
+        this.mView = view.getRootView();
+        this.validarCalculoDiferenciasListasProductos = true;
         //------------------------------------------------------------------------------------------
         customRecycler = mView.findViewById(R.id.fragment_inventario_recyclerV_CustomProducts);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext);
         customRecycler.setLayoutManager(linearLayoutManager);
         //------------------------------------------------------------------------------------------
-        adapterProducts = new CustomRVAdapter_Products_List( Fragment_Inventario.this, mContext);
+        customAdapterProducts = new CustomRVAdapter_Products_List(Fragment_Inventario.this, mContext);
+        customAdapterProducts.setValidarCalculoDiferenciasListasProductos(this.validarCalculoDiferenciasListasProductos);
 
         Button btCrearProducto = view.findViewById(R.id.fragment_inventario_btnCrearProducto);
-
         btCrearProducto.setOnClickListener(this);
+
 
         cargarDatosProductosRecycler();
     }
 
     private void cargarDatosProductosRecycler() {
+
+
         //adValueChange Listener escuha cuando un valor se ha cambiado en la base de datos en tiempo real,
         //si cambia en la BD, la Ui se actualiza automáticamente gracias a este método
-        BaseDeDatos.getFireDatabaseIntanceReference().child(Utilidades.nodoPadre).child(Utilidades.nodoProducto).addValueEventListener(new ValueEventListener() {
+        DatabaseReference db = BaseDeDatos.getFireDatabaseIntanceReference().child(Utilidades.nodoPadre).child(Utilidades.nodoProducto);
+
+        ChildEventListener childEventListener = new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+                //cuando un child (que pertenece en este caso a los childs de producto) es eliminado,
+                //entonces cambio el boolean a falso para que en el adapatador de los productos del
+                //recycler view no cargue l efecto de blink que se colocó para identificar datos
+                //que han cambiado.
+                validarCalculoDiferenciasListasProductos = false;
+                //Log.d(TAG, " childEventListener: " + validarCalculoDiferenciasListasProductos);
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        };
+
+        ValueEventListener valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 /*LinearLayoutManager linearLayout = (LinearLayoutManager) (customRecycler.getLayoutManager());
@@ -117,29 +165,34 @@ public class Fragment_Inventario extends Fragment implements CustomRVAdapter_Pro
                 Log.d(TAG, "findLastCompletelyVisibleItemPositionRecyclerView: "+findLastCompletelyVisibleItemPositionRecyclerView);*/
 
                 ArrayList<Producto> productosList = new ArrayList<>();
-                for (DataSnapshot datos: dataSnapshot.getChildren()  ) {
-                   // Log.d(TAG, "dataSnashot: "+datos.getKey());
-                    Producto producto= datos.getValue(Producto.class);
+                for (DataSnapshot datos : dataSnapshot.getChildren()) {
+                    // Log.d(TAG, "dataSnashot: "+datos.getKey());
+                    Producto producto = datos.getValue(Producto.class);
                     producto.setProductoFirebaseKey(datos.getKey());
                     productosList.add(producto);
                 }
-
-
+                //Log.d(TAG, "colocando validarDiff: " + validarCalculoDiferenciasListasProductos);
+                customAdapterProducts.setValidarCalculoDiferenciasListasProductos(validarCalculoDiferenciasListasProductos);
                 /*adapterProducts.notifyItemRangeChanged(findFirstCompletelyVisibleItemPositionRecyclerView, adapterProducts.getItemCount());*/
-                adapterProducts.dataProductosChangeDiffCallUtil(productosList);
-                customRecycler.setAdapter(adapterProducts);
+                customAdapterProducts.dataProductosChangeDiffCallUtil(productosList);
+                customRecycler.setAdapter(customAdapterProducts);
                 //notifico que los datos del adaptador han cambiado
                 //luego colocaremos la insatncia guardada para recuperar el estado que tenía el
                 //recyclerview antes de los nuevos datos
                 //adapterProducts.notifyDataSetChanged();
                 customRecycler.getLayoutManager().onRestoreInstanceState(recyclerViewState);
+                validarCalculoDiferenciasListasProductos = true;
+                //Log.d(TAG, "colocando validar calculo en true del recycler: " + validarCalculoDiferenciasListasProductos);
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
-        });
+        };
+
+        db.addChildEventListener(childEventListener);
+        db.addValueEventListener(valueEventListener);
 
     }
 
@@ -159,17 +212,17 @@ public class Fragment_Inventario extends Fragment implements CustomRVAdapter_Pro
         toast.makeText(mView.getContext(), mensajeToast, Toast.LENGTH_SHORT).show();
     }
 
-
-
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.fragment_inventario_btnCrearProducto:
                 Intent crearProducto = new Intent(view.getContext(), ProductCreation.class);
                 startActivity(crearProducto);
                 break;
         }
     }
+
+
 
 
 

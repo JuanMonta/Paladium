@@ -30,8 +30,14 @@ public class Utilidades {
     //------------NOmbre de directorio para guardar imagenes de la app
     public static final String directorioName = "ImagenesCompressed";
 
+    public static final String alertDialog_OK = "alertDialog_OK";
+    public static final String alertDialog_CANCEL = "alertDialog_CANCEL";
+
     public static final String alertDialog_EXITO = "alertDialog_EXITO";
     public static final String alertDialog_ERROR = "alertDialog_ERROR";
+    public static final String alertDialog_ACTUALIZADO = "alertDialog_ACTUALIZADO";
+    public static final String alertDialog_ADVERTENCIA = "alertDialog_ADVERTENCIA";
+    public static final String alertDialog_ATENCION = "alertDialog_ATENCION";
 
     //----------para saber si la imagen de firebase ha sido descargada------------------------------
     public static final String imagenDescargada = "imagenDescargada";
