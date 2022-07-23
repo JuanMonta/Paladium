@@ -5,12 +5,16 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.view.Window;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.paladium.Model.Utils.Utilidades;
 import com.paladium.Presentador.Interfaces.InterfacePresenter_ProductCreation;
 import com.paladium.R;
+
+import java.util.ArrayList;
 
 public class PresenterCustomDialog {
 
@@ -141,6 +145,35 @@ public class PresenterCustomDialog {
 
         Button ok = this.customDialog.findViewById(R.id.custom_dialog_information_btnOk);
         ok.setOnClickListener(view -> customDialog.dismiss());
+        this.customDialog.show();
+    }
+
+    public void dialogInformationProductorepetido(
+            String mensajeInformation,
+            ArrayList<String[]> listaProductosRepetidos) {
+
+        this.customDialog.setContentView(R.layout.custom_dialog_information_productos_repetidos);
+        TextView mensaje = this.customDialog.findViewById(R.id.custom_dialog_information_productos_repetidos_tvMensaje);
+        mensaje.setText(mensajeInformation);
+
+        /*ArrayList<String> listaPrueba = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            listaPrueba.add("Producto #" + (i + 1));
+        }*/
+        ArrayList<String>listaProducto = new ArrayList<>();
+        for (int i = 0; i < listaProductosRepetidos.size(); i++) {
+            listaProducto.add(listaProductosRepetidos.get(i)[1]);
+        }
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(mContext.getApplicationContext(), android.R.layout.simple_list_item_1, listaProducto);
+        ListView lista = this.customDialog.findViewById(R.id.custom_dialog_information_productos_repetidos_listView);
+        lista.setAdapter(adapter);
+
+        Button ok = this.customDialog.findViewById(R.id.custom_dialog_information_productos_repetidos_btnOk);
+        ok.setOnClickListener(view -> {
+            customDialog.dismiss();
+
+        });
         this.customDialog.show();
     }
 

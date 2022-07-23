@@ -104,8 +104,10 @@ public class PresentadorMainActivity {
     }
 
     private void cargarFragmentos(Fragment fragment, FragmentManager supportFragmentManager) {
+
         supportFragmentManager
                 .beginTransaction()
+                .addToBackStack(null)
                 .replace(R.id.fragmentContainer, fragment)
                 .commit();
     }

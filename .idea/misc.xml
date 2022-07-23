@@ -60,6 +60,7 @@
         <entry key="..\:/AndroidProyectsInteliJIdea/Paladium/app/src/main/res/layout/custom_dialog_crear_categoria.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidProyectsInteliJIdea/Paladium/app/src/main/res/layout/custom_dialog_error.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidProyectsInteliJIdea/Paladium/app/src/main/res/layout/custom_dialog_information.xml" value="0.36666666666666664" />
+        <entry key="..\:/AndroidProyectsInteliJIdea/Paladium/app/src/main/res/layout/custom_dialog_information_productos_repetidos.xml" value="0.5" />
         <entry key="..\:/AndroidProyectsInteliJIdea/Paladium/app/src/main/res/layout/custom_dialog_success.xml" value="0.33" />
         <entry key="..\:/AndroidProyectsInteliJIdea/Paladium/app/src/main/res/layout/custom_dialog_warning.xml" value="0.365625" />
         <entry key="..\:/AndroidProyectsInteliJIdea/Paladium/app/src/main/res/layout/custom_list_productos.xml" value="0.5" />
@@ -71,6 +72,7 @@
         <entry key="..\:/AndroidProyectsInteliJIdea/Paladium/app/src/main/res/layout/fragment_inventario2.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidProyectsInteliJIdea/Paladium/app/src/main/res/menu/bottom_nav_menu_items.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidProyectsInteliJIdea/Paladium/app/src/main/res/menu/custom_bottom_nav_items.xml" value="0.36666666666666664" />
+        <entry key="..\:/AndroidProyectsInteliJIdea/Paladium/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.262" />
         <entry key="..\:/Users/DeathCrow/Documents/Paladium/app/src/main/res/layout/activity_main.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/DeathCrow/Documents/Paladium/app/src/main/res/layout/custom_list_productos.xml" value="0.30995475113122173" />
       </map>

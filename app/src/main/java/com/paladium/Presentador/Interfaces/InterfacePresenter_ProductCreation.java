@@ -26,4 +26,6 @@ public interface InterfacePresenter_ProductCreation {
         void seleccionMetodoScanQRBarcode(String metodoScan);
     }
 
+
+
 }

@@ -54,7 +54,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class ProductCreation extends AppCompatActivity implements View.OnClickListener, InterfacePresenter_ProductCreation.onProductoCargado,
-        InterfacePresenter_ProductCreation.onSeleccionarMetodoScanSQBarCode {
+        InterfacePresenter_ProductCreation.onSeleccionarMetodoScanSQBarCode{
 
     private String TAG = "ProductCreation";
 
@@ -424,6 +424,7 @@ public class ProductCreation extends AppCompatActivity implements View.OnClickLi
                 break;
         }
     }
+
 
     private void bottomSheetseleccionarMetodoScaneoQRBarCode(){
 

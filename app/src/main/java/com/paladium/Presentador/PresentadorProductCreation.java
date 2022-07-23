@@ -9,7 +9,6 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageButton;
@@ -50,13 +49,14 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
 
-public class PresentadorProductCreation implements View.OnClickListener, InterfacePresenter_ProductCreation.onImagenCargada {
+public class PresentadorProductCreation implements View.OnClickListener, InterfacePresenter_ProductCreation.onImagenCargada
+        {
     private final String TAG = "PresenterProdCreation";
     private Context mContext;
     private Uri filePath;
     private TextInputEditText inputEdCodBarras, inputEdCantDisponible, inputEdNombreProducto,
             inputEdPrecioUnit, inputEdCostoUnit, inputEdDescripcion;
-    private TextInputLayout inputLayoutCantDisponible, inputLayoutNombreProducto,
+    private TextInputLayout inputLayoutCodBarras, inputLayoutCantDisponible, inputLayoutNombreProducto,
             inputLayoutPrecioUnit, inputLayoutCostoUnit;
 
     private ImageButton imgBtnQuitarImagen, imgBtnCrearCategoria;
@@ -67,6 +67,11 @@ public class PresentadorProductCreation implements View.OnClickListener, Interfa
     private Bundle bundleProducto;
     private Producto producto;
     private ProgressDialog progressDialog;
+    /**
+     * pos[0] = codigoBarras; pos[1] = nombreProducto;
+     */
+    private ArrayList<String[]> listaCod_Barras_Nombre;
+    private ArrayList<String[]> listaProductosRepetidos;
 
     public PresentadorProductCreation(Context context, InterfacePresenter_ProductCreation.onProductoCargado interfaceProductoCargado
             , Bundle bundleProducto) {
@@ -79,6 +84,8 @@ public class PresentadorProductCreation implements View.OnClickListener, Interfa
 
     public void init(View view) {
         interfaceImagenCargada = this;
+
+        inputLayoutCodBarras = view.findViewById(R.id.product_creation_textInputLayout_CodBarras);
         inputEdCodBarras = view.findViewById(R.id.product_creation_edCodBarras);
 
         inputLayoutCantDisponible = view.findViewById(R.id.product_creation_textInputLayout_CantidadDisponible);
@@ -109,7 +116,7 @@ public class PresentadorProductCreation implements View.OnClickListener, Interfa
         //ArrayAdapter arrayAdapter = new ArrayAdapter(mContext, R.layout.custom_text_view_dropdown_menu_producto_categoria, categorias);
         //autoCompletTextSpCategoria.setAdapter(arrayAdapter);
 
-        cargarCategoriasProductos();
+        cargarCategorias_CodBar_Nombre_Productos();
         textWatcherInputEditText();
 
         //recibiré un bundle con la clase producto cuando se necesite editar los datos del producto
@@ -139,6 +146,8 @@ public class PresentadorProductCreation implements View.OnClickListener, Interfa
         if (tipoAlert.equals(Utilidades.alertDialog_EXITO)) {
             dialog.dialogSuccess(mensaje, interfaceProductoCargado);
             limpiarCampos();
+            this.validarCamposInputTextWacher = 0;
+            this.listaProductosRepetidos = null;
         }
         if (tipoAlert.equals(Utilidades.alertDialog_ACTUALIZADO)) {
             dialog.dialogSuccess(mensaje, interfaceProductoCargado);
@@ -149,6 +158,9 @@ public class PresentadorProductCreation implements View.OnClickListener, Interfa
         if (tipoAlert.equals(Utilidades.alertDialog_ADVERTENCIA)) {
         }
         if (tipoAlert.equals(Utilidades.alertDialog_ATENCION)) {
+        }
+        if (tipoAlert.equals(Utilidades.alertDialog_PRODUCTO_REPETIDO)) {
+
         }
     }
 
@@ -165,7 +177,6 @@ public class PresentadorProductCreation implements View.OnClickListener, Interfa
             if (bundleProducto != null) {
                 actualizarDatos();
             } else {//es registro
-
                 //nombre de como se guardará la imagen en firebase
                 registrarProductoConOSinImagenFirebase();
             }
@@ -290,7 +301,7 @@ public class PresentadorProductCreation implements View.OnClickListener, Interfa
 
     private void cargarDatosProductosParaEdicion() {
 
-        Log.d(TAG, "PresentadorProductCreation --------------------------------- ");
+       /* Log.d(TAG, "PresentadorProductCreation --------------------------------- ");
         Log.d(TAG, "Nombre: " + producto.getNombre());
         Log.d(TAG, "Cantidad: " + producto.getCantidad());
         Log.d(TAG, "Precio: " + producto.getPrecio());
@@ -299,7 +310,7 @@ public class PresentadorProductCreation implements View.OnClickListener, Interfa
         Log.d(TAG, "Descrip: " + producto.getDescripcion());
         Log.d(TAG, "CobBar: " + producto.getCodBarras());
         Log.d(TAG, "ImagenURL: " + producto.getImagen());
-        Log.d(TAG, "-----------------------------------------------------------");
+        Log.d(TAG, "-----------------------------------------------------------");*/
         inputEdCodBarras.setText(producto.getCodBarras());
         inputEdCantDisponible.setText(String.valueOf(producto.getCantidad()));
         inputEdNombreProducto.setText(producto.getNombre());
@@ -464,7 +475,7 @@ public class PresentadorProductCreation implements View.OnClickListener, Interfa
         }
     }
 
-    private void cargarCategoriasProductos() {
+    private void cargarCategorias_CodBar_Nombre_Productos() {
         BaseDeDatos.getFireDatabaseIntanceReference()
                 .child(Utilidades.nodoPadre)
                 .child(Utilidades.nodoCategoria)
@@ -490,7 +501,40 @@ public class PresentadorProductCreation implements View.OnClickListener, Interfa
 
                     }
                 });
+
+
+        BaseDeDatos.getFireDatabaseIntanceReference()
+                .child(Utilidades.nodoPadre)
+                .child(Utilidades.nodoProducto)
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        listaCod_Barras_Nombre = new ArrayList<>();
+
+                        for (DataSnapshot datos : dataSnapshot.getChildren()) {
+                            // Log.d(TAG, "dataSnashot: "+datos.getKey());
+                            Producto p = datos.getValue(Producto.class);
+                            String[] data =
+                                    {
+                                            p != null ? p.getCodBarras() : "",
+                                            p != null ? p.getNombre() : ""
+                                    };
+                            listaCod_Barras_Nombre.add(data);
+                            /*Log.d(TAG, "Categoria: " + p.getCategoria());
+                            Log.d(TAG, "PresentadorProductDescription --------------------------------- ");
+                            Log.d(TAG, "-----------------------------------------------------------");*/
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+
+
     }
+
 
     @Override
     public void onClick(View view) {
@@ -513,6 +557,19 @@ public class PresentadorProductCreation implements View.OnClickListener, Interfa
             actualizarDatosProducto(downloadLinkImage);
         } else {
             guardarDatosProductosFireBase(downloadLinkImage, rutaImagen);
+        }
+    }
+
+    @Override
+    public void onGuardarProductorepetido(String guardarDeTodasFormas) {
+        if (guardarDeTodasFormas.equals(Utilidades.alertDialog_PRODUCTO_REPETIDO_GUARDAR_DE_TODAS_FORMAS)){
+            //borramos los validadores colocados en textWatcherInputEditText()
+            //para que puedan pasar a guardar el producto de todas formas cuando existan agunas coincidencias
+            //con otros productos.
+            //Esta interfaz se llama en la Activity ProductCreation para llamar de nuevo al método
+            //que guarda el producto
+            this.validarCamposInputTextWacher = 0;
+            this.listaProductosRepetidos = null;
         }
     }
 
@@ -572,7 +629,44 @@ public class PresentadorProductCreation implements View.OnClickListener, Interfa
         return validar;
     }
 
-    private void textWatcherInputEditText() {
+    private int verificarCamposInputTextWatcher(){
+        return this.validarCamposInputTextWacher;
+    }
+
+    int validarCamposInputTextWacher;
+
+    private int textWatcherInputEditText() {
+
+        inputEdCodBarras.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                inputEdCodBarras.setError(null);
+                inputLayoutCodBarras.setEndIconVisible(true);
+                if (s.toString().length() > 0) {
+
+                    for (int i = 0; i < listaCod_Barras_Nombre.size(); i++) {
+                        //cuando el buldle es nulo indico que no es una actualizacion de datos del producto
+                        if (bundleProducto == null) {
+                            if (s.toString().toUpperCase().trim().equals(listaCod_Barras_Nombre.get(i)[0].trim().toUpperCase())) {
+                                inputLayoutCodBarras.setEndIconVisible(false);
+                                inputEdCodBarras.setError(mContext.getString(R.string.producto_input_error_codBarras));
+                                validarCamposInputTextWacher++;
+                            }
+                        }
+                    }
+                }
+            }
+        });
 
         inputEdCantDisponible.addTextChangedListener(new TextWatcher() {
             @Override
@@ -615,7 +709,10 @@ public class PresentadorProductCreation implements View.OnClickListener, Interfa
 
             @Override
             public void afterTextChanged(Editable editable) {
-
+                //cuando el buldle es nulo indico que no es una actualizacion de datos del producto
+                if (bundleProducto == null) {
+                    comprobarProductosRepetidos(editable.toString());
+                }
             }
         });
 
@@ -686,11 +783,86 @@ public class PresentadorProductCreation implements View.OnClickListener, Interfa
             }
         });
 
-        autoCompletTextSpCategoria.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterViewParent, View view, int pos, long l) {
-                Log.d(TAG, "selection: pos " + pos);
-            }
-        });
+        autoCompletTextSpCategoria.setOnItemClickListener((adapterViewParent, view, pos, l) -> Log.d(TAG, "selection: pos " + pos));
+
+        return validarCamposInputTextWacher;
     }
+
+    private void comprobarProductosRepetidos(String nombreProducto) {
+        //para contar las coincidencias de los nombres de un producto
+        //con el que es ingresado en el inputEd del nombre del producto
+        int contarCoincidencias = 0;
+        //máximo de item para la lista de nombres con coincidencias
+        int MAX_ITEMS = 5;
+        //lista para guardar los nombres de productos que ha coincidido con el texto ingresado
+        //en el inputEd del nombre del producto
+        ArrayList<String[]> listaCoincidencias = new ArrayList<>();
+        //cuando haya más de 2 caracteres ingresados en el input Ed
+        if (nombreProducto.trim().length() >= 3) {
+            //guardo el textoingresado
+            String nombreIngresadoEdText = nombreProducto.toString().trim();
+            //separo las palabras que contenga, libre de espacios vacios
+            String[] stringSplitDePalabras = nombreIngresadoEdText.trim().split("\\s+");
+            //borro para reasignar la nueva palabra
+            nombreIngresadoEdText = "";
+            for (int i = 0; i < stringSplitDePalabras.length; i++) {
+                //concateno todas las palabras que ahora no tienen espacios
+                nombreIngresadoEdText = nombreIngresadoEdText + stringSplitDePalabras[i];
+            }
+
+            for (int i = 0; i < listaCod_Barras_Nombre.size(); i++) {
+
+                Log.d(TAG, "-----------------------------------------------------------");
+                //tomo el nombre del producto guardado en la lista
+                String nombreEnLista = listaCod_Barras_Nombre.get(i)[1];
+                //separo las palabras que contenga, libre de espacios vacios
+                String[] stringSplitNombreLista = nombreEnLista.trim().split("\\s+");
+                //borro para reasignar la nueva palabra
+                nombreEnLista = "";
+                for (int j = 0; j < stringSplitNombreLista.length; j++) {
+                    //concateno todas las palabras que ahora no tienen espacios
+                    nombreEnLista = nombreEnLista + stringSplitNombreLista[j];
+                }
+                //mientras el texto ingresado sea menor o igual al de la lista
+                if (nombreIngresadoEdText.length() <= nombreEnLista.length()) {
+                    Log.d(TAG, "nombreIngresadoEdText:" + nombreIngresadoEdText + " -- " + nombreIngresadoEdText.length() + " letras");
+                    Log.d(TAG, "nombreEnLista #" + (i + 1) + ": " + nombreEnLista + " -- " + nombreEnLista.length() + " letras");
+                    //recorro cada char del nombre del inputEd ingresado y lo comparo con el de la lista
+                    for (int j = 0; j < nombreIngresadoEdText.length(); j++) {
+                        Log.d(TAG, "nombreIngresadoEdText char: " + nombreIngresadoEdText.charAt(j));
+                        char p1 = nombreIngresadoEdText.charAt(j);
+                        char p2 = nombreEnLista.charAt(j);
+                        if (String.valueOf(p1).equals(String.valueOf(p2))) {
+                            //si encuentra una coincidencia que sume la variable de coincidencias
+                            contarCoincidencias++;
+                        }
+                    }
+                }
+                //optengo el porcentaje de coincidencias encontradas con la palabra del nombre del producto
+                float porcentajeCoincidencia = (float) contarCoincidencias / nombreEnLista.length();
+                Log.d(TAG, "Numero de coincidencias palabra #" + (i + 1) + ": " + contarCoincidencias + " %: " + porcentajeCoincidencia);
+                //mientras la lista sea menor al numero de items que como máximo debe contener
+                if (listaCoincidencias.size() <= MAX_ITEMS) {
+                    //si las coincidencias son iguales al 50% del nombre del producto,
+                    //entonces que guarde el nombre del producto con el que tuvo esa mayor coincidencia
+                    if (porcentajeCoincidencia >= 0.5) {
+                        listaCoincidencias.add(listaCod_Barras_Nombre.get(i));
+                    }
+                }
+                //devolvemos la variable a cero para que continue con la siguente palabra en la lista
+                contarCoincidencias = 0;
+            /*for (int j = 0; j < listaCoincidencias.size(); j++) {
+                Log.d(TAG,"lista de coincidencias: "+listaCoincidencias.get(j)[1]);
+            }*/
+            }
+
+        }
+
+        if (listaCoincidencias.size() > 0) {
+            listaProductosRepetidos = listaCoincidencias;
+            validarCamposInputTextWacher++;
+        }
+    }
+
+
 }

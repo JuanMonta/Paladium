@@ -39,6 +39,8 @@ public class Utilidades {
     public static final String alertDialog_ATENCION = "alertDialog_ATENCION";
     public static final String alertDialog_ACTUALIZADO = "alertDialog_ACTUALIZADO";
     public static final String alertDialog_ADVERTENCIA = "alertDialog_ADVERTENCIA";
+    public static final String alertDialog_PRODUCTO_REPETIDO = "alertDialog_PRODUCTO_REPETIDO";
+    public static final String alertDialog_PRODUCTO_REPETIDO_GUARDAR_DE_TODAS_FORMAS = "alertDialog_PRODUCTO_REPETIDO_GUARDAR_DE_TODAS_FORMAS";
 
     public static final String metodoScanQRBarCode_Galeria = "metodoScanQRBarCode_Galeria";
     public static final String metodoScanQRBarCode_Camara = "metodoScanQRBarCode_Camara";
