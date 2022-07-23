@@ -78,7 +78,7 @@ public class PresentadorProductCreation implements View.OnClickListener, Interfa
         this.mContext = context;
         this.interfaceProductoCargado = interfaceProductoCargado;
         this.bundleProducto = bundleProducto;
-        progressDialog = new ProgressDialog(mContext.getApplicationContext());
+        progressDialog = new ProgressDialog(mContext);
     }
 
 
@@ -269,7 +269,7 @@ public class PresentadorProductCreation implements View.OnClickListener, Interfa
         productos.put(Utilidades.categoriaProducto, categoria);
         productos.put(Utilidades.descProducto, descrip);
 
-        if (!Uri.EMPTY.equals(downloadLinkImage)) {
+        if (downloadLinkImage !=null && !Uri.EMPTY.equals(downloadLinkImage)) {
             Log.d(TAG, "Guardando datos Uri no es Vacio");
             fotoProducto = downloadLinkImage.toString();
         } else {
@@ -560,18 +560,18 @@ public class PresentadorProductCreation implements View.OnClickListener, Interfa
         }
     }
 
-    @Override
-    public void onGuardarProductorepetido(String guardarDeTodasFormas) {
-        if (guardarDeTodasFormas.equals(Utilidades.alertDialog_PRODUCTO_REPETIDO_GUARDAR_DE_TODAS_FORMAS)){
-            //borramos los validadores colocados en textWatcherInputEditText()
-            //para que puedan pasar a guardar el producto de todas formas cuando existan agunas coincidencias
-            //con otros productos.
-            //Esta interfaz se llama en la Activity ProductCreation para llamar de nuevo al método
-            //que guarda el producto
-            this.validarCamposInputTextWacher = 0;
-            this.listaProductosRepetidos = null;
-        }
-    }
+//    @Override
+//    public void onGuardarProductorepetido(String guardarDeTodasFormas) {
+//        if (guardarDeTodasFormas.equals(Utilidades.alertDialog_PRODUCTO_REPETIDO_GUARDAR_DE_TODAS_FORMAS)){
+//            //borramos los validadores colocados en textWatcherInputEditText()
+//            //para que puedan pasar a guardar el producto de todas formas cuando existan agunas coincidencias
+//            //con otros productos.
+//            //Esta interfaz se llama en la Activity ProductCreation para llamar de nuevo al método
+//            //que guarda el producto
+//            this.validarCamposInputTextWacher = 0;
+//            this.listaProductosRepetidos = null;
+//        }
+//    }
 
     private void limpiarCampos() {
         //Log.d(TAG,"Limpiando campos");

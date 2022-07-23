@@ -82,7 +82,7 @@ public class ProductCreation extends AppCompatActivity implements View.OnClickLi
         filePath = null;
         View view = findViewById(android.R.id.content).getRootView();
         bundleProducto = getIntent().getExtras();
-        productCreation = new PresentadorProductCreation(this, this, bundleProducto);
+        productCreation = new PresentadorProductCreation(ProductCreation.this, this, bundleProducto);
         productCreation.init(view);
 
         onSeleccionarMetodoScanSQBarCode = this;
