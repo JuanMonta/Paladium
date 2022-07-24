@@ -149,12 +149,12 @@ public class PresenterCustomDialog {
     }
 
     public void dialogInformationProductorepetido(
-            String mensajeInformation,
-            ArrayList<String[]> listaProductosRepetidos) {
+            String mensajeInformacion1,
+            String mensajeInformacion2,
+            ArrayList<String[]> listaProductosRepetidos,
+            InterfacePresenter_ProductCreation.onProductoRepetido interfaceProductorepetido) {
 
         this.customDialog.setContentView(R.layout.custom_dialog_information_productos_repetidos);
-        TextView mensaje = this.customDialog.findViewById(R.id.custom_dialog_information_productos_repetidos_tvMensaje);
-        mensaje.setText(mensajeInformation);
 
         /*ArrayList<String> listaPrueba = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
@@ -165,15 +165,28 @@ public class PresenterCustomDialog {
             listaProducto.add(listaProductosRepetidos.get(i)[1]);
         }
 
+        TextView mensaje1 = this.customDialog.findViewById(R.id.custom_dialog_information_productos_repetidos_tvMensaje);
+        mensaje1.setText(mensajeInformacion1);
+
+        TextView mensaje2 = this.customDialog.findViewById(R.id.custom_dialog_information_productos_repetidos_tvMensaje2);
+        mensaje2.setText(mensajeInformacion2);
+
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(mContext.getApplicationContext(), android.R.layout.simple_list_item_1, listaProducto);
         ListView lista = this.customDialog.findViewById(R.id.custom_dialog_information_productos_repetidos_listView);
         lista.setAdapter(adapter);
 
         Button ok = this.customDialog.findViewById(R.id.custom_dialog_information_productos_repetidos_btnOk);
         ok.setOnClickListener(view -> {
+            interfaceProductorepetido.onProductoRepetido(Utilidades.alertDialog_PRODUCTO_REPETIDO_GUARDAR_DE_TODAS_FORMAS);
             customDialog.dismiss();
-
         });
+
+        Button cancelar = this.customDialog.findViewById(R.id.custom_dialog_information_productos_repetidos_btnCancelar);
+        cancelar.setOnClickListener(view -> {
+            interfaceProductorepetido.onProductoRepetido(Utilidades.alertDialog_PRODUCTO_REPETIDO_NO_GUARDAR);
+            customDialog.dismiss();
+        });
+
         this.customDialog.show();
     }
 

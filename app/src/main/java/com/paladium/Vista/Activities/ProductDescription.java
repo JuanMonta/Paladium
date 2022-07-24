@@ -20,7 +20,7 @@ public class ProductDescription extends AppCompatActivity implements PresenterCu
         View view = findViewById(android.R.id.content).getRootView();
         Bundle bundle = getIntent().getExtras();
 
-        PresentadorProductDescription presentadorProductDescription = new PresentadorProductDescription(this,bundle, view, this);
+        PresentadorProductDescription presentadorProductDescription = new PresentadorProductDescription(ProductDescription.this,bundle, view, this);
     }
 
     //cuando se borra un producto se carga esta interfaz

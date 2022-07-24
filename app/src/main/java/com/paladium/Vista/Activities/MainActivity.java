@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
 
         BaseDeDatos instanciarFirebase = new BaseDeDatos();
 
-        PresentadorMainActivity presentadorMainActivity = new PresentadorMainActivity(this);
+        PresentadorMainActivity presentadorMainActivity = new PresentadorMainActivity(MainActivity.this);
 
         /*bottomNavigation = findViewById(R.id.activity_main_BottomNavigation);
         presentadorMainActivity.crearBottomNavigation(bottomNavigation, getSupportFragmentManager());*/

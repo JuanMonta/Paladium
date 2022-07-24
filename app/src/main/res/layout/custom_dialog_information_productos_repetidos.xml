@@ -44,6 +44,7 @@
                 android:layout_marginTop="4dp"
                 android:layout_marginStart="6dp"
                 android:layout_marginEnd="4dp"
+                android:text="@string/alertdialog_crear_producto_mensaje_INFORMACION_ProductoRepetido"
                 android:gravity="center|left"
                 android:textColor="@color/white"
                 android:textSize="16sp" />
@@ -66,6 +67,19 @@
                 </LinearLayout>
 
             </ScrollView>
+
+
+            <TextView
+                android:id="@+id/custom_dialog_information_productos_repetidos_tvMensaje2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="4dp"
+                android:gravity="center|left"
+                android:text="@string/alertdialog_crear_producto_mensaje_INFORMACION_ProductoRepetido_DeseaContinuar"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"

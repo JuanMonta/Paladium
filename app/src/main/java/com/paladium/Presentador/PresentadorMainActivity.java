@@ -36,7 +36,7 @@ public class PresentadorMainActivity {
         this.bottomNavigation = bottomNav;
 
         bottomNavigation.add(new MeowBottomNavigation.Model(1, R.drawable.store_24px));
-        bottomNavigation.add(new MeowBottomNavigation.Model(2, R.drawable.account_balance_wallet_24px));
+        bottomNavigation.add(new MeowBottomNavigation.Model(2, R.drawable.account_balance_wallet_24dp));
         bottomNavigation.add(new MeowBottomNavigation.Model(3, R.drawable.inventory_24px));
 
         bottomNavigation.setOnShowListener(new MeowBottomNavigation.ShowListener() {

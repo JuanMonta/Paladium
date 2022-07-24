@@ -26,6 +26,8 @@ public interface InterfacePresenter_ProductCreation {
         void seleccionMetodoScanQRBarcode(String metodoScan);
     }
 
-
+    interface onProductoRepetido{
+        void onProductoRepetido(String guardarDeTodasFormas);
+    }
 
 }

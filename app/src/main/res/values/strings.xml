@@ -33,13 +33,17 @@
     <string name="alertdialog_crear_producto_mensaje_EXITO">Se añadió el producto al registro.</string>
     <string name="alertdialog_crear_producto_mensaje_ERROR">Ocurrió un error al registrar el producto. Inténteno nuevamente.</string>
 
-    <string name="alertdialog_crear_producto_mensaje_INFORMACION_QRImageCodeNotFound">
-        No se logró identificar un código.\nPosiblemente no se aprecie bien el código dentro de la imagen.</string>
-    <string name="alertdialog_crear_producto_mensaje_INFORMACION_FileNotFound">
-        Ocurrió un error al recuperar laimagen.\nInténtelo nuevamente.</string>
+    <string name="alertdialog_crear_producto_mensaje_INFORMACION_QRImageCodeNotFound">No se logró identificar un código.\nPosiblemente no se aprecie bien el código dentro de la imagen.</string>
+    <string name="alertdialog_crear_producto_mensaje_INFORMACION_FileNotFound">Ocurrió un error al recuperar la imagen.\nInténtelo nuevamente.</string>
+
+    <string name="alertdialog_crear_producto_mensaje_INFORMACION_ProductoRepetido">Se encontraron productos similares.\n\nPorfavor, compruebe que el producto que intenta registrar no esté repetido.</string>
+    <string name="alertdialog_crear_producto_mensaje_INFORMACION_ProductoRepetido_DeseaContinuar">¿Desea continuar con el resgitro?</string>
 
     <string name="alertdialog_actualizar_producto_mensaje_EXITO">Se actualizó el registro.</string>
     <string name="alertdialog_actualizar_producto_mensaje_ERROR">Ocurrió un error al actualizar el producto. Inténtelo nuevamente.</string>
+    <string name="alertdialog_actualizar_producto_mensaje_INFORMACION_ProductoRepetido">Se encontraron productos similares.\n\nPorfavor, compruebe que el producto que intenta actualizar no esté repetido.</string>
+    <string name="alertdialog_actualizar_producto_mensaje_INFORMACION_ProductoRepetido_DeseaContinuar">¿Desea continuar y actualizarlo?</string>
+
 
     <string name="alertdialog_borrar_producto_mensaje_EXITO">Se borró el producto del registro.</string>
     <string name="alertdialog_borrar_producto_mensaje_ERROR">Ocurrió un error al borrar el producto.</string>
@@ -49,6 +53,13 @@
     <string name="producto_Cod_barras_MetodoScan">Seleccione un método para escanear el código:</string>
     <string name="producto_Cod_barras_Galeria">Escanear mediante imagen.</string>
     <string name="producto_Cod_barras_Camara">Escanear mediante cámara.</string>
+    <string name="producto_Cod_barras_GenerarQRBarCode">Generar nuevo código.</string>
+    <string name="producto_Cod_barras_URLImagenInternet">Imagen desde URL.</string>
+
+    <string name="producto_Imagen_MetodoImagen">Seleccione un método para cargar la imagen:</string>
+    <string name="producto_Imagen_URLImagenInternet">Imagen desde URL.</string>
+    <string name="producto_Imagen_Galeria">Imagen desde galería.</string>
+
     <string name="producto_Cantidad">Cantidad disponible</string>
     <string name="producto_Nombre">Nombre</string>
     <string name="producto_Precio">Precio Unitario</string>

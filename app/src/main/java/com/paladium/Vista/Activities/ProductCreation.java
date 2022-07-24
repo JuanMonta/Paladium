@@ -420,7 +420,7 @@ public class ProductCreation extends AppCompatActivity implements View.OnClickLi
                 break;
 
             case R.id.product_creation_btnGuardarProducto:
-                productCreation.registrarProducto(filePath);
+                productCreation.verificacionRegistrarProducto(filePath);
                 break;
         }
     }

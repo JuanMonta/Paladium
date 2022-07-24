@@ -49,11 +49,12 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
 
-public class PresentadorProductCreation implements View.OnClickListener, InterfacePresenter_ProductCreation.onImagenCargada
-        {
+public class PresentadorProductCreation implements View.OnClickListener, InterfacePresenter_ProductCreation.onImagenCargada,
+        InterfacePresenter_ProductCreation.onProductoRepetido {
     private final String TAG = "PresenterProdCreation";
     private Context mContext;
     private Uri filePath;
+
     private TextInputEditText inputEdCodBarras, inputEdCantDisponible, inputEdNombreProducto,
             inputEdPrecioUnit, inputEdCostoUnit, inputEdDescripcion;
     private TextInputLayout inputLayoutCodBarras, inputLayoutCantDisponible, inputLayoutNombreProducto,
@@ -62,7 +63,6 @@ public class PresentadorProductCreation implements View.OnClickListener, Interfa
     private ImageButton imgBtnQuitarImagen, imgBtnCrearCategoria;
     private ImageView imgv_ImagenProducto;
     private AutoCompleteTextView autoCompletTextSpCategoria;
-    private InterfacePresenter_ProductCreation.onImagenCargada interfaceImagenCargada;
     private InterfacePresenter_ProductCreation.onProductoCargado interfaceProductoCargado;
     private Bundle bundleProducto;
     private Producto producto;
@@ -79,11 +79,13 @@ public class PresentadorProductCreation implements View.OnClickListener, Interfa
         this.interfaceProductoCargado = interfaceProductoCargado;
         this.bundleProducto = bundleProducto;
         progressDialog = new ProgressDialog(mContext);
+
+        listaCod_Barras_Nombre = new ArrayList<>();
+        listaProductosRepetidos = new ArrayList<>();
     }
 
 
     public void init(View view) {
-        interfaceImagenCargada = this;
 
         inputLayoutCodBarras = view.findViewById(R.id.product_creation_textInputLayout_CodBarras);
         inputEdCodBarras = view.findViewById(R.id.product_creation_edCodBarras);
@@ -146,8 +148,7 @@ public class PresentadorProductCreation implements View.OnClickListener, Interfa
         if (tipoAlert.equals(Utilidades.alertDialog_EXITO)) {
             dialog.dialogSuccess(mensaje, interfaceProductoCargado);
             limpiarCampos();
-            this.validarCamposInputTextWacher = 0;
-            this.listaProductosRepetidos = null;
+            this.listaProductosRepetidos = new ArrayList<>();
         }
         if (tipoAlert.equals(Utilidades.alertDialog_ACTUALIZADO)) {
             dialog.dialogSuccess(mensaje, interfaceProductoCargado);
@@ -161,6 +162,13 @@ public class PresentadorProductCreation implements View.OnClickListener, Interfa
         }
         if (tipoAlert.equals(Utilidades.alertDialog_PRODUCTO_REPETIDO)) {
 
+            String mensaje1 =mContext.getString(R.string.alertdialog_crear_producto_mensaje_INFORMACION_ProductoRepetido);
+            String mensaje2 =mContext.getString(R.string.alertdialog_crear_producto_mensaje_INFORMACION_ProductoRepetido_DeseaContinuar);
+            if (bundleProducto !=null){//es una actualización de producto
+                mensaje1 =mContext.getString(R.string.alertdialog_actualizar_producto_mensaje_INFORMACION_ProductoRepetido);
+                mensaje2 =mContext.getString(R.string.alertdialog_actualizar_producto_mensaje_INFORMACION_ProductoRepetido_DeseaContinuar);
+            }
+            dialog.dialogInformationProductorepetido(mensaje1,mensaje2, this.listaProductosRepetidos, this);
         }
     }
 
@@ -170,18 +178,35 @@ public class PresentadorProductCreation implements View.OnClickListener, Interfa
      *
      * @param rutaImagen Uri de la imagen en el dispositivo que será usada para subirse a firebase
      */
-    public void registrarProducto(Uri rutaImagen) {
+    public void verificacionRegistrarProducto(Uri rutaImagen) {
+        this.filePath = rutaImagen;
+        //verifica si los campos están llenos y si
+        //el campo de codigo de barras no está repetido
+        //con otro producto
         if (verificarCampos() == 0) {
-            this.filePath = rutaImagen;
-            //es una edicion
-            if (bundleProducto != null) {
-                actualizarDatos();
-            } else {//es registro
-                //nombre de como se guardará la imagen en firebase
-                registrarProductoConOSinImagenFirebase();
+            //la lista de nombres repetidos se llena en el inputEdTexWachers, para
+            //solicitar que durante la petición de guardado tiene otros poructos similares,
+            //el guardado se activa mediante una interfaz lazada por el alertDialog respectivo
+            if (this.listaProductosRepetidos.size() > 0) {
+
+                productAlertDialog(Utilidades.alertDialog_PRODUCTO_REPETIDO, "");
+            } else {
+                registrar_O_Editar_Producto();
             }
         }
     }
+
+
+    private void registrar_O_Editar_Producto() {
+        //es una edicion
+        if (bundleProducto != null) {
+            actualizarDatos();
+        } else {//es registro
+            //nombre de como se guardará la imagen en firebase
+            registrarProductoConOSinImagenFirebase();
+        }
+    }
+
 
     private void registrarProductoConOSinImagenFirebase() {
         if (productProgressDialog().isShowing()) {
@@ -269,7 +294,7 @@ public class PresentadorProductCreation implements View.OnClickListener, Interfa
         productos.put(Utilidades.categoriaProducto, categoria);
         productos.put(Utilidades.descProducto, descrip);
 
-        if (downloadLinkImage !=null && !Uri.EMPTY.equals(downloadLinkImage)) {
+        if (downloadLinkImage != null && !Uri.EMPTY.equals(downloadLinkImage)) {
             Log.d(TAG, "Guardando datos Uri no es Vacio");
             fotoProducto = downloadLinkImage.toString();
         } else {
@@ -514,15 +539,33 @@ public class PresentadorProductCreation implements View.OnClickListener, Interfa
                         for (DataSnapshot datos : dataSnapshot.getChildren()) {
                             // Log.d(TAG, "dataSnashot: "+datos.getKey());
                             Producto p = datos.getValue(Producto.class);
-                            String[] data =
-                                    {
-                                            p != null ? p.getCodBarras() : "",
-                                            p != null ? p.getNombre() : ""
+                            String[] data = null;
+                            //si es una edición, la lista guardará los nombres de los
+                            //productos, menos el nombre del que se está editando
+                            if (bundleProducto != null) {
+                                if (!p.getNombre().equals(producto.getNombre())) {
+                                    data = new String[]{
+                                            p.getCodBarras(),
+                                            p.getNombre()
                                     };
-                            listaCod_Barras_Nombre.add(data);
-                            /*Log.d(TAG, "Categoria: " + p.getCategoria());
-                            Log.d(TAG, "PresentadorProductDescription --------------------------------- ");
-                            Log.d(TAG, "-----------------------------------------------------------");*/
+                                    listaCod_Barras_Nombre.add(data);
+                                }
+
+                            } else {//caso contario, es un registro, guardará todos los nombres
+                                data = new String[]{
+                                        p != null ? p.getCodBarras() : "",
+                                        p != null ? p.getNombre() : ""
+                                };
+                                listaCod_Barras_Nombre.add(data);
+                            }
+
+                            Log.d(TAG, "PresentadorProductDescription Lista de nombres productos--------------------------------- ");
+                            if (listaCod_Barras_Nombre.size()>0){
+                                for (int i = 0; i < listaCod_Barras_Nombre.size(); i++) {
+                                    Log.d(TAG, "Nombre #" + (i + 1) + ": " + listaCod_Barras_Nombre.get(i)[1]);
+                                }
+                            }
+                            Log.d(TAG, "-----------------------------------------------------------");
                         }
                     }
 
@@ -560,18 +603,14 @@ public class PresentadorProductCreation implements View.OnClickListener, Interfa
         }
     }
 
-//    @Override
-//    public void onGuardarProductorepetido(String guardarDeTodasFormas) {
-//        if (guardarDeTodasFormas.equals(Utilidades.alertDialog_PRODUCTO_REPETIDO_GUARDAR_DE_TODAS_FORMAS)){
-//            //borramos los validadores colocados en textWatcherInputEditText()
-//            //para que puedan pasar a guardar el producto de todas formas cuando existan agunas coincidencias
-//            //con otros productos.
-//            //Esta interfaz se llama en la Activity ProductCreation para llamar de nuevo al método
-//            //que guarda el producto
-//            this.validarCamposInputTextWacher = 0;
-//            this.listaProductosRepetidos = null;
-//        }
-//    }
+    @Override
+    public void onProductoRepetido(String guardarDeTodasFormas) {
+        if (guardarDeTodasFormas.equals(Utilidades.alertDialog_PRODUCTO_REPETIDO_GUARDAR_DE_TODAS_FORMAS)) {
+            registrar_O_Editar_Producto();
+        }
+
+        Log.d(TAG, "onProductoRepetido: " + guardarDeTodasFormas);
+    }
 
     private void limpiarCampos() {
         //Log.d(TAG,"Limpiando campos");
@@ -625,17 +664,23 @@ public class PresentadorProductCreation implements View.OnClickListener, Interfa
             autoCompletTextSpCategoria.setError(mContext.getString(R.string.producto_input_error_categoria));
             validar++;
         }
+        if (getVerificarCodBarras() > 0) {
+            validar++;
+        }
 
         return validar;
     }
 
-    private int verificarCamposInputTextWatcher(){
-        return this.validarCamposInputTextWacher;
+
+    int verificarCodBarras;
+
+
+    public int getVerificarCodBarras() {
+        return verificarCodBarras;
     }
 
-    int validarCamposInputTextWacher;
 
-    private int textWatcherInputEditText() {
+    private void textWatcherInputEditText() {
 
         inputEdCodBarras.addTextChangedListener(new TextWatcher() {
             @Override
@@ -652,18 +697,20 @@ public class PresentadorProductCreation implements View.OnClickListener, Interfa
             public void afterTextChanged(Editable s) {
                 inputEdCodBarras.setError(null);
                 inputLayoutCodBarras.setEndIconVisible(true);
+                verificarCodBarras = 0;
                 if (s.toString().length() > 0) {
-
                     for (int i = 0; i < listaCod_Barras_Nombre.size(); i++) {
-                        //cuando el buldle es nulo indico que no es una actualizacion de datos del producto
+                        //cuando el buldle es nulo indico que no es una actualizacion de datos del producto,
+                        //si no un registro
                         if (bundleProducto == null) {
                             if (s.toString().toUpperCase().trim().equals(listaCod_Barras_Nombre.get(i)[0].trim().toUpperCase())) {
                                 inputLayoutCodBarras.setEndIconVisible(false);
                                 inputEdCodBarras.setError(mContext.getString(R.string.producto_input_error_codBarras));
-                                validarCamposInputTextWacher++;
+                                verificarCodBarras++;
                             }
                         }
                     }
+
                 }
             }
         });
@@ -709,10 +756,7 @@ public class PresentadorProductCreation implements View.OnClickListener, Interfa
 
             @Override
             public void afterTextChanged(Editable editable) {
-                //cuando el buldle es nulo indico que no es una actualizacion de datos del producto
-                if (bundleProducto == null) {
-                    comprobarProductosRepetidos(editable.toString());
-                }
+                comprobarProductosRepetidos(editable.toString());
             }
         });
 
@@ -785,7 +829,6 @@ public class PresentadorProductCreation implements View.OnClickListener, Interfa
 
         autoCompletTextSpCategoria.setOnItemClickListener((adapterViewParent, view, pos, l) -> Log.d(TAG, "selection: pos " + pos));
 
-        return validarCamposInputTextWacher;
     }
 
     private void comprobarProductosRepetidos(String nombreProducto) {
@@ -860,7 +903,6 @@ public class PresentadorProductCreation implements View.OnClickListener, Interfa
 
         if (listaCoincidencias.size() > 0) {
             listaProductosRepetidos = listaCoincidencias;
-            validarCamposInputTextWacher++;
         }
     }
 

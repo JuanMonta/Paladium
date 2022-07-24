@@ -19,7 +19,7 @@
             android:lines="2"
             android:textColor="?attr/color_texto_normal"
             android:textSize="16sp"
-            android:text="@string/producto_Cod_barras_MetodoScan"
+            android:text="@string/producto_Imagen_MetodoImagen"
              />
 
         <LinearLayout
@@ -35,7 +35,7 @@
                 android:paddingEnd="15dp">
 
                 <ImageButton
-                    android:id="@+id/custom_bottom_sheet_dialog_qrbarcode_scan_imgbtnGaleria"
+                    android:id="@+id/custom_bottom_sheet_dialog_seleccionar_imagen_producto_imgbtnGaleria"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginStart="15dp"
@@ -46,7 +46,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="@string/producto_Cod_barras_Galeria"
+                    android:text="@string/producto_Imagen_Galeria"
                     android:textSize="16sp"
                     android:textColor="?attr/color_texto_normal" />
 
@@ -61,65 +61,7 @@
                 android:paddingEnd="15dp">
 
                 <ImageButton
-                    android:id="@+id/custom_bottom_sheet_dialog_qrbarcode_scan_imgbtnCamara"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="15dp"
-                    android:layout_marginEnd="15dp"
-                    app:srcCompat="@drawable/baseline_camera_alt_green_black_48dp" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="@string/producto_Cod_barras_Camara"
-                    android:textSize="16sp"
-                    android:textColor="?attr/color_texto_normal" />
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:paddingStart="20dp"
-                android:paddingEnd="15dp">
-
-                <ImageButton
-                    android:id="@+id/custom_bottom_sheet_dialog_qrbarcode_scan_imgbtGenerarCodQRBarCode"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="15dp"
-                    android:layout_marginEnd="15dp"
-                    app:srcCompat="@drawable/barcode_48px" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="@string/producto_Cod_barras_GenerarQRBarCode"
-                    android:textSize="16sp"
-                    android:textColor="?attr/color_texto_normal" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:paddingStart="20dp"
-                android:paddingEnd="15dp">
-
-                <ImageButton
-                    android:id="@+id/custom_bottom_sheet_dialog_qrbarcode_scan_imgbtnImageURLInternet"
+                    android:id="@+id/custom_bottom_sheet_dialog_seleccionar_imagen_producto_imgbtnImageURLInternet"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginStart="15dp"
@@ -130,13 +72,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="@string/producto_Cod_barras_URLImagenInternet"
+                    android:text="@string/producto_Imagen_URLImagenInternet"
                     android:textSize="16sp"
                     android:textColor="?attr/color_texto_normal" />
 
             </LinearLayout>
 
         </LinearLayout>
+
 
     </LinearLayout>
 
