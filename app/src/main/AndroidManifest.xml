@@ -14,6 +14,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Paladium"
         tools:targetApi="31">
+        <activity
+            android:name=".Vista.Activities.SplashActivity"
+            android:theme="@style/Splash_Screen_Theme"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <!-- activiti para el escaneo de zxin -->
         <activity
             android:name="com.journeyapps.barcodescanner.CaptureActivity"
@@ -21,8 +31,9 @@
             tools:replace="screenOrientation" />
         <!-- activity para image cropper -->
         <!-- optional (needed if default theme has no action bar) -->
-        <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
-            android:theme="@style/Base.Theme.AppCompat"/>
+        <activity
+            android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
+            android:theme="@style/Base.Theme.AppCompat" />
         <activity
             android:name=".Vista.Activities.ProductDescription"
             android:exported="false" /> <!-- android:windowSoftInputMode="stateUnchanged|adjustPan" -->
@@ -36,11 +47,6 @@
             android:name=".Vista.Activities.MainActivity"
             android:exported="true"
             android:windowSoftInputMode="stateUnchanged|adjustPan">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
         <meta-data
@@ -56,10 +62,10 @@
                 android:resource="@xml/file_paths" />
         </provider>
     </application>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
-
     <uses-permission android:name="android.permission.INTERNET" />
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
 </manifest>

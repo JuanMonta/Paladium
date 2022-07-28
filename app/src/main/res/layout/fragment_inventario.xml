@@ -107,7 +107,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="4"
-            app:startIconDrawable="@drawable/search_24px">
+            app:startIconDrawable="@drawable/search_24dp">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"

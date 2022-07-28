@@ -31,4 +31,8 @@
         <item name="android:windowExitAnimation">@anim/custom_bottom_sheet_slide_out_bottom</item>
     </style>
 
+    <style name="Splash_Screen_Theme" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowBackground">@drawable/splash_screen</item>
+    </style>
+
 </resources>

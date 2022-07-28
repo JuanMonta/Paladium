@@ -23,7 +23,7 @@ public interface InterfacePresenter_ProductCreation {
     }
 
     interface onSeleccionarMetodoScanSQBarCode {
-        void seleccionMetodoScanQRBarcode(String metodoScan);
+        void seleccionMetodoScanQRBarcode(String metodoScanm, String codeData);
     }
 
     interface onProductoRepetido{

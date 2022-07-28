@@ -1,7 +1,14 @@
 package com.paladium.Presentador;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.RectF;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -9,10 +16,13 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -35,22 +45,34 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.EncodeHintType;
+import com.google.zxing.Writer;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.oned.Code128Writer;
+import com.google.zxing.qrcode.QRCodeWriter;
+import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import com.paladium.Model.Firebase.BaseDeDatos;
 import com.paladium.Model.Logica.Producto;
 import com.paladium.Model.Utils.Utilidades;
 import com.paladium.Presentador.Customs.PresenterCustomDialog;
 import com.paladium.Presentador.Customs.PresenterCustomDialogCrearCategoria;
+import com.paladium.Presentador.Customs.PresenterCustomDialog_GenerarQRBarCode;
 import com.paladium.Presentador.Interfaces.InterfacePresenter_ProductCreation;
 import com.paladium.R;
+import com.paladium.Vista.Activities.ProductCreation;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Map;
+import java.util.Random;
 
 public class PresentadorProductCreation implements View.OnClickListener, InterfacePresenter_ProductCreation.onImagenCargada,
-        InterfacePresenter_ProductCreation.onProductoRepetido {
+        InterfacePresenter_ProductCreation.onProductoRepetido, InterfacePresenter_ProductCreation.onSeleccionarMetodoScanSQBarCode {
     private final String TAG = "PresenterProdCreation";
     private Context mContext;
     private Uri filePath;
@@ -67,6 +89,7 @@ public class PresentadorProductCreation implements View.OnClickListener, Interfa
     private Bundle bundleProducto;
     private Producto producto;
     private ProgressDialog progressDialog;
+    public InterfacePresenter_ProductCreation.onSeleccionarMetodoScanSQBarCode interfazSeleccionarMetodoScanSQBarCode;
     /**
      * pos[0] = codigoBarras; pos[1] = nombreProducto;
      */
@@ -77,6 +100,7 @@ public class PresentadorProductCreation implements View.OnClickListener, Interfa
             , Bundle bundleProducto) {
         this.mContext = context;
         this.interfaceProductoCargado = interfaceProductoCargado;
+        this.interfazSeleccionarMetodoScanSQBarCode = this;
         this.bundleProducto = bundleProducto;
         progressDialog = new ProgressDialog(mContext);
 
@@ -162,13 +186,13 @@ public class PresentadorProductCreation implements View.OnClickListener, Interfa
         }
         if (tipoAlert.equals(Utilidades.alertDialog_PRODUCTO_REPETIDO)) {
 
-            String mensaje1 =mContext.getString(R.string.alertdialog_crear_producto_mensaje_INFORMACION_ProductoRepetido);
-            String mensaje2 =mContext.getString(R.string.alertdialog_crear_producto_mensaje_INFORMACION_ProductoRepetido_DeseaContinuar);
-            if (bundleProducto !=null){//es una actualización de producto
-                mensaje1 =mContext.getString(R.string.alertdialog_actualizar_producto_mensaje_INFORMACION_ProductoRepetido);
-                mensaje2 =mContext.getString(R.string.alertdialog_actualizar_producto_mensaje_INFORMACION_ProductoRepetido_DeseaContinuar);
+            String mensaje1 = mContext.getString(R.string.alertdialog_crear_producto_mensaje_INFORMACION_ProductoRepetido);
+            String mensaje2 = mContext.getString(R.string.alertdialog_crear_producto_mensaje_INFORMACION_ProductoRepetido_DeseaContinuar);
+            if (bundleProducto != null) {//es una actualización de producto
+                mensaje1 = mContext.getString(R.string.alertdialog_actualizar_producto_mensaje_INFORMACION_ProductoRepetido);
+                mensaje2 = mContext.getString(R.string.alertdialog_actualizar_producto_mensaje_INFORMACION_ProductoRepetido_DeseaContinuar);
             }
-            dialog.dialogInformationProductorepetido(mensaje1,mensaje2, this.listaProductosRepetidos, this);
+            dialog.dialogInformationProductorepetido(mensaje1, mensaje2, this.listaProductosRepetidos, this);
         }
     }
 
@@ -206,7 +230,6 @@ public class PresentadorProductCreation implements View.OnClickListener, Interfa
             registrarProductoConOSinImagenFirebase();
         }
     }
-
 
     private void registrarProductoConOSinImagenFirebase() {
         if (productProgressDialog().isShowing()) {
@@ -560,7 +583,7 @@ public class PresentadorProductCreation implements View.OnClickListener, Interfa
                             }
 
                             Log.d(TAG, "PresentadorProductDescription Lista de nombres productos--------------------------------- ");
-                            if (listaCod_Barras_Nombre.size()>0){
+                            if (listaCod_Barras_Nombre.size() > 0) {
                                 for (int i = 0; i < listaCod_Barras_Nombre.size(); i++) {
                                     Log.d(TAG, "Nombre #" + (i + 1) + ": " + listaCod_Barras_Nombre.get(i)[1]);
                                 }
@@ -608,8 +631,20 @@ public class PresentadorProductCreation implements View.OnClickListener, Interfa
         if (guardarDeTodasFormas.equals(Utilidades.alertDialog_PRODUCTO_REPETIDO_GUARDAR_DE_TODAS_FORMAS)) {
             registrar_O_Editar_Producto();
         }
+        //Log.d(TAG, "onProductoRepetido: " + guardarDeTodasFormas);
+    }
 
-        Log.d(TAG, "onProductoRepetido: " + guardarDeTodasFormas);
+    @Override
+    public void seleccionMetodoScanQRBarcode(String metodoScanm, String codeData) {
+        //Log.d(TAG, "metodo PresenterProductCreation: "+metodoScanm);
+        PresenterCustomDialog_GenerarQRBarCode generarQRBarCode = new PresenterCustomDialog_GenerarQRBarCode(mContext);
+
+        if (metodoScanm.equals(Utilidades.metodoScanQRBarCode_QR_Code)) {
+            generarQRBarCode.dialogGenerar_BAR_Code( this.listaCod_Barras_Nombre,this.inputEdCodBarras, BarcodeFormat.QR_CODE, 500,300);
+
+        } else if (metodoScanm.equals(Utilidades.metodoScanQRBarCode_Bar_Code)) {
+            generarQRBarCode.dialogGenerar_BAR_Code( this.listaCod_Barras_Nombre,this.inputEdCodBarras, BarcodeFormat.CODE_128, 500,300);
+        }
     }
 
     private void limpiarCampos() {
@@ -671,14 +706,11 @@ public class PresentadorProductCreation implements View.OnClickListener, Interfa
         return validar;
     }
 
-
     int verificarCodBarras;
-
 
     public int getVerificarCodBarras() {
         return verificarCodBarras;
     }
-
 
     private void textWatcherInputEditText() {
 

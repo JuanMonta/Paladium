@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="300dp"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:padding="10dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:cardCornerRadius="20dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="10dp"
+            android:orientation="vertical">
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageButton
+                        android:id="@+id/custom_dialog_crear_barcode_imgBtnCerrarDialog"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginTop="0dp"
+                        android:layout_marginEnd="0dp"
+                        android:background="#00FFFFFF"
+                        app:srcCompat="@drawable/baseline_cancel_icon_32dp" />
+
+                </RelativeLayout>
+
+
+            <TextView
+                android:id="@+id/custom_dialog_crear_barcode_tvTitulo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:lines="2"
+                android:textSize="16sp"
+                android:gravity="center"
+                android:textColor="?attr/color_texto_titulo"/>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                android:id="@+id/custom_dialog_crear_barcode_inputLayout_QR_EscribirAlgo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                app:counterEnabled="true"
+                app:counterMaxLength="255">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/custom_dialog_crear_barcode_inputEd_QR_EscribirAlgo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPersonName"
+                    android:lines="1"
+                    android:maxLength="255"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="2dp"
+                android:background="@drawable/custom_frame_layout_photo_product">
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:cardCornerRadius="@dimen/corner_radius">
+
+                    <ImageView
+                        android:id="@+id/custom_dialog_crear_barcode_ImgvCodigo"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        app:srcCompat="@drawable/barcode_48dp"/>
+
+                </androidx.cardview.widget.CardView>
+
+            </FrameLayout>
+
+
+
+            <TextView
+                android:id="@+id/custom_dialog_crear_barcode_tvMensaje"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:gravity="center_vertical"
+                android:textColor="?attr/color_texto_titulo"
+                android:visibility="invisible"/>
+
+            <Button
+                android:id="@+id/custom_dialog_crear_barcode_btnGenerarQR"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:text="GENERAR QR"/>
+
+            <Button
+                android:id="@+id/custom_dialog_crear_barcode_btnGuardarImagenCodigo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="GUARDAR IMAGEN"/>
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</LinearLayout>

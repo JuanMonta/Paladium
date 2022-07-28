@@ -35,7 +35,7 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="90dp"
-                app:srcCompat="@drawable/baseline_check_icon"/>
+                app:srcCompat="@drawable/baseline_check_icon_48dp"/>
 
             <TextView
                 android:id="@+id/custom_dialog_success_tvMensaje"

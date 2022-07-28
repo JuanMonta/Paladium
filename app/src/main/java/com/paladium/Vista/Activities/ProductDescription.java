@@ -4,6 +4,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.paladium.Presentador.Customs.PresenterCustomDialog;
+import com.paladium.Presentador.PresentadorMainActivity;
 import com.paladium.Presentador.PresentadorProductDescription;
 import com.paladium.R;
 
@@ -21,6 +22,8 @@ public class ProductDescription extends AppCompatActivity implements PresenterCu
         Bundle bundle = getIntent().getExtras();
 
         PresentadorProductDescription presentadorProductDescription = new PresentadorProductDescription(ProductDescription.this,bundle, view, this);
+
+
     }
 
     //cuando se borra un producto se carga esta interfaz

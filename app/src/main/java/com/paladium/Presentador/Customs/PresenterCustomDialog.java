@@ -7,6 +7,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 

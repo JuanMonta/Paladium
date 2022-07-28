@@ -42,7 +42,9 @@ import com.journeyapps.barcodescanner.ScanOptions;
 import com.paladium.Model.Utils.ImageCompression;
 import com.paladium.Model.Utils.Utilidades;
 import com.paladium.Presentador.Customs.PresenterCustomDialog;
+import com.paladium.Presentador.Customs.PresenterCustomDialog_GenerarQRBarCode;
 import com.paladium.Presentador.Interfaces.InterfacePresenter_ProductCreation;
+import com.paladium.Presentador.PresentadorMainActivity;
 import com.paladium.Presentador.PresentadorProductCreation;
 import com.paladium.R;
 import com.theartofdev.edmodo.cropper.CropImage;
@@ -53,8 +55,10 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
+
+
 public class ProductCreation extends AppCompatActivity implements View.OnClickListener, InterfacePresenter_ProductCreation.onProductoCargado,
-        InterfacePresenter_ProductCreation.onSeleccionarMetodoScanSQBarCode{
+        InterfacePresenter_ProductCreation.onSeleccionarMetodoScanSQBarCode {
 
     private String TAG = "ProductCreation";
 
@@ -109,6 +113,8 @@ public class ProductCreation extends AppCompatActivity implements View.OnClickLi
         ActivityResultLauncherScanQRBarcode();
         ActivityResultLauncherScanQRBarcodeFromImage();
         ActivityResultLauncherCropImage();
+
+        PresentadorMainActivity.progresBarMainActivity().dismiss();
     }
 
 
@@ -326,7 +332,7 @@ public class ProductCreation extends AppCompatActivity implements View.OnClickLi
                 });
     }
 
-    private void escojerImagenConQRBarCode(){
+    private void escojerImagenConQRBarCode() {
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
@@ -354,7 +360,7 @@ public class ProductCreation extends AppCompatActivity implements View.OnClickLi
 
             try {
                 Result result = reader.decode(bBitmap);
-                if( result !=null && !result.getText().trim().isEmpty()){
+                if (result != null && !result.getText().trim().isEmpty()) {
                     this.inputEdScanQRBarCode.setText(result.getText());
                 }
             } catch (NotFoundException e) {
@@ -404,6 +410,7 @@ public class ProductCreation extends AppCompatActivity implements View.OnClickLi
     }
 
 
+
     private void borrarTodasLasImagenEnCarpeTasCompressedYCache() {
 
     }
@@ -426,7 +433,7 @@ public class ProductCreation extends AppCompatActivity implements View.OnClickLi
     }
 
 
-    private void bottomSheetseleccionarMetodoScaneoQRBarCode(){
+    private void bottomSheetseleccionarMetodoScaneoQRBarCode() {
 
         final Dialog bottomSheetDialog = new Dialog(ProductCreation.this);
         bottomSheetDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -436,7 +443,7 @@ public class ProductCreation extends AppCompatActivity implements View.OnClickLi
         galeria.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onSeleccionarMetodoScanSQBarCode.seleccionMetodoScanQRBarcode(Utilidades.metodoScanQRBarCode_Galeria);
+                onSeleccionarMetodoScanSQBarCode.seleccionMetodoScanQRBarcode(Utilidades.metodoScanQRBarCode_Galeria, "");
                 bottomSheetDialog.dismiss();
             }
         });
@@ -446,10 +453,33 @@ public class ProductCreation extends AppCompatActivity implements View.OnClickLi
         camara.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onSeleccionarMetodoScanSQBarCode.seleccionMetodoScanQRBarcode(Utilidades.metodoScanQRBarCode_Camara);
+                onSeleccionarMetodoScanSQBarCode.seleccionMetodoScanQRBarcode(Utilidades.metodoScanQRBarCode_Camara, "");
                 bottomSheetDialog.dismiss();
             }
         });
+
+        ImageButton generarQR = bottomSheetDialog.findViewById(R.id.custom_bottom_sheet_dialog_qrbarcode_scan_imgbtGenerarQRCode);
+        generarQR.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //onSeleccionarMetodoScanSQBarCode.seleccionMetodoScanQRBarcode(Utilidades.metodoScanQRBarCode_QR_Code, "");
+                //creado en el PresenterProductoCreation
+                productCreation.interfazSeleccionarMetodoScanSQBarCode.seleccionMetodoScanQRBarcode(Utilidades.metodoScanQRBarCode_QR_Code, "");
+                bottomSheetDialog.dismiss();
+            }
+        });
+
+        ImageButton generarBarCode = bottomSheetDialog.findViewById(R.id.custom_bottom_sheet_dialog_qrbarcode_scan_imgbtGenerarBarCode);
+        generarBarCode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //onSeleccionarMetodoScanSQBarCode.seleccionMetodoScanQRBarcode(Utilidades.metodoScanQRBarCode_Bar_Code, "");
+                //creado en el PresenterProductoCreation
+                productCreation.interfazSeleccionarMetodoScanSQBarCode.seleccionMetodoScanQRBarcode(Utilidades.metodoScanQRBarCode_Bar_Code, "");
+                bottomSheetDialog.dismiss();
+            }
+        });
+
 
         bottomSheetDialog.show();
         bottomSheetDialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -478,10 +508,15 @@ public class ProductCreation extends AppCompatActivity implements View.OnClickLi
     }
 
     @Override
-    public void seleccionMetodoScanQRBarcode(String metodoScan) {
-        if (metodoScan.equals(Utilidades.metodoScanQRBarCode_Galeria)){
+    public void seleccionMetodoScanQRBarcode(String metodoScan, String codeData) {
+        Log.d(TAG, "metodo ProductCreation: "+metodoScan);
+
+
+
+        if (metodoScan.equals(Utilidades.metodoScanQRBarCode_Galeria)) {
             escojerImagenConQRBarCode();
-        }else if (metodoScan.equals(Utilidades.metodoScanQRBarCode_Camara)){
+
+        } else if (metodoScan.equals(Utilidades.metodoScanQRBarCode_Camara)) {
             scanQRBarCode();
         }
     }

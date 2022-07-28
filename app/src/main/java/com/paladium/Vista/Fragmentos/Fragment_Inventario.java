@@ -24,6 +24,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.paladium.Model.Firebase.BaseDeDatos;
 import com.paladium.Model.Logica.Producto;
 import com.paladium.Model.Utils.Utilidades;
+import com.paladium.Presentador.PresentadorMainActivity;
 import com.paladium.R;
 import com.paladium.Vista.Activities.ProductCreation;
 import com.paladium.Vista.Activities.ProductDescription;
@@ -31,11 +32,6 @@ import com.paladium.Presentador.Adapters.CustomRVAdapter_Products_List;
 
 import java.util.ArrayList;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link Fragment_Inventario#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class Fragment_Inventario extends Fragment implements CustomRVAdapter_Products_List.ListItemClick, View.OnClickListener {
     private final String TAG = "Fragment_Inventario";
     private CustomRVAdapter_Products_List customAdapterProducts;
@@ -96,8 +92,9 @@ public class Fragment_Inventario extends Fragment implements CustomRVAdapter_Pro
         Button btCrearProducto = view.findViewById(R.id.fragment_inventario_btnCrearProducto);
         btCrearProducto.setOnClickListener(this);
 
-
         cargarDatosProductosRecycler();
+
+        PresentadorMainActivity.progresBarMainActivity().dismiss();
     }
 
     private void cargarDatosProductosRecycler() {
@@ -195,6 +192,7 @@ public class Fragment_Inventario extends Fragment implements CustomRVAdapter_Pro
 
     @Override
     public void onListenItemClick(int itemClicado, Producto producto) {
+        PresentadorMainActivity.progresBarMainActivity().show();
         String mensajeToast = "item # " + itemClicado + " clicado.";
         Intent intent = new Intent(mView.getContext(), ProductDescription.class);
         Bundle bundle = new Bundle();
@@ -212,6 +210,7 @@ public class Fragment_Inventario extends Fragment implements CustomRVAdapter_Pro
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.fragment_inventario_btnCrearProducto:
+                PresentadorMainActivity.progresBarMainActivity().show();
                 Intent crearProducto = new Intent(view.getContext(), ProductCreation.class);
                 startActivity(crearProducto);
                 break;

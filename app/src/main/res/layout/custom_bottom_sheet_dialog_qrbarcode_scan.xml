@@ -93,18 +93,18 @@
                 android:paddingEnd="15dp">
 
                 <ImageButton
-                    android:id="@+id/custom_bottom_sheet_dialog_qrbarcode_scan_imgbtGenerarCodQRBarCode"
+                    android:id="@+id/custom_bottom_sheet_dialog_qrbarcode_scan_imgbtGenerarQRCode"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginStart="15dp"
                     android:layout_marginEnd="15dp"
-                    app:srcCompat="@drawable/barcode_48px" />
+                    app:srcCompat="@drawable/baseline_qr2_48px" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="@string/producto_Cod_barras_GenerarQRBarCode"
+                    android:text="@string/producto_Cod_barras_GenerarQRCode"
                     android:textSize="16sp"
                     android:textColor="?attr/color_texto_normal" />
 
@@ -119,18 +119,18 @@
                 android:paddingEnd="15dp">
 
                 <ImageButton
-                    android:id="@+id/custom_bottom_sheet_dialog_qrbarcode_scan_imgbtnImageURLInternet"
+                    android:id="@+id/custom_bottom_sheet_dialog_qrbarcode_scan_imgbtGenerarBarCode"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginStart="15dp"
                     android:layout_marginEnd="15dp"
-                    app:srcCompat="@drawable/baseline_link_48dp" />
+                    app:srcCompat="@drawable/barcode_48dp" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="@string/producto_Cod_barras_URLImagenInternet"
+                    android:text="@string/producto_Cod_barras_GenerarBarCode"
                     android:textSize="16sp"
                     android:textColor="?attr/color_texto_normal" />
 

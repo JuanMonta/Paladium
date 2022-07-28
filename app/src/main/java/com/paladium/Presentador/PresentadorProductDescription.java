@@ -32,6 +32,7 @@ import com.paladium.Model.Logica.Producto;
 import com.paladium.Model.Utils.Utilidades;
 import com.paladium.Presentador.Customs.PresenterCustomDialog;
 import com.paladium.R;
+import com.paladium.Vista.Activities.MainActivity;
 import com.paladium.Vista.Activities.ProductCreation;
 
 import java.util.Objects;
@@ -61,6 +62,8 @@ public class PresentadorProductDescription implements View.OnClickListener, Pres
         }
         init();
         cargarDatosProductos();
+
+        PresentadorMainActivity.progresBarMainActivity().dismiss();
     }
 
     private void init() {

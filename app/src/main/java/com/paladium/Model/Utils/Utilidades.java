@@ -45,6 +45,8 @@ public class Utilidades {
 
     public static final String metodoScanQRBarCode_Galeria = "metodoScanQRBarCode_Galeria";
     public static final String metodoScanQRBarCode_Camara = "metodoScanQRBarCode_Camara";
+    public static final String metodoScanQRBarCode_QR_Code = "metodoScanQRBarCode_QR_Code";
+    public static final String metodoScanQRBarCode_Bar_Code = "metodoScanQRBarCode_BarCode";
 
 
 

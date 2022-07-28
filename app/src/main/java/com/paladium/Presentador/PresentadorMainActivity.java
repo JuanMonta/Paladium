@@ -1,7 +1,9 @@
 package com.paladium.Presentador;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.view.MenuItem;
+import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -17,69 +19,27 @@ import com.paladium.Vista.Fragmentos.Fragment_Inventario;
 
 public class PresentadorMainActivity {
 
-    private final Context mContext;
+    private static Context mContext;
     private MeowBottomNavigation bottomNavigation;
     private final String TAG = "PresentadorMainActivity";
 
     private Fragment_Home fragment_home;
     private Fragment_Balance fragment_balance;
     private Fragment_Inventario fragment_inventario;
+    private static ProgressDialog dialog;
 
     public PresentadorMainActivity(Context mContext) {
-        this.mContext = mContext;
+        PresentadorMainActivity.mContext = mContext;
         fragment_home = new Fragment_Home();
         fragment_balance = new Fragment_Balance();
         fragment_inventario = new Fragment_Inventario();
+        dialog = new ProgressDialog(mContext);
     }
 
-    public void crearBottomNavigation(MeowBottomNavigation bottomNav, androidx.fragment.app.FragmentManager supportFragmentManager) {
-        this.bottomNavigation = bottomNav;
-
-        bottomNavigation.add(new MeowBottomNavigation.Model(1, R.drawable.store_24px));
-        bottomNavigation.add(new MeowBottomNavigation.Model(2, R.drawable.account_balance_wallet_24dp));
-        bottomNavigation.add(new MeowBottomNavigation.Model(3, R.drawable.inventory_24px));
-
-        bottomNavigation.setOnShowListener(new MeowBottomNavigation.ShowListener() {
-            @Override
-            public void onShowItem(MeowBottomNavigation.Model item) {
-                Fragment fragment = null;
-
-                switch (item.getId()) {
-                    case 1:
-                        fragment = new Fragment_Home();
-                        break;
-                    case 2:
-                        fragment = new Fragment_Balance();
-                        break;
-                    case 3:
-                        fragment = new Fragment_Inventario();
-                        break;
-                }
-                //cargarFragmentos
-                cargarFragmentos(fragment, supportFragmentManager);
-            }
-        });
-        //agrega una burbuja con un número de notificaciones en el boton por su id
-        bottomNavigation.setCount(1, "10");
-        //setFragment inicial selected
-        bottomNavigation.show(1, true);
-
-
-        bottomNavigation.setOnClickMenuListener(new MeowBottomNavigation.ClickListener() {
-            @Override
-            public void onClickItem(MeowBottomNavigation.Model item) {
-
-            }
-        });
-
-        bottomNavigation.setOnReselectListener(new MeowBottomNavigation.ReselectListener() {
-            @Override
-            public void onReselectItem(MeowBottomNavigation.Model item) {
-
-            }
-        });
-
-
+    public static ProgressDialog progresBarMainActivity(){
+        dialog.setMessage(mContext.getString(R.string.progressdialog_CARGANDO));
+        dialog.setCancelable(false);
+        return dialog;
     }
 
     public void materialBottomNavigation(BottomNavigationView bottomNavigationView, androidx.fragment.app.FragmentManager supportFragmentManager) {
@@ -104,12 +64,13 @@ public class PresentadorMainActivity {
     }
 
     private void cargarFragmentos(Fragment fragment, FragmentManager supportFragmentManager) {
-
+        progresBarMainActivity().show();
         supportFragmentManager
                 .beginTransaction()
                 .addToBackStack(null)
                 .replace(R.id.fragmentContainer, fragment)
                 .commit();
+
     }
 
 }

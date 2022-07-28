@@ -99,7 +99,7 @@
                 android:id="@+id/product_creation_textInputLayout_CodBarras"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:endIconDrawable="@drawable/barcode_scanner_24px"
+                app:endIconDrawable="@drawable/barcode_scanner_24dp"
                 app:endIconTint="?attr/drawable_producto_tintColor"
                 app:endIconMode="custom">
 
@@ -125,7 +125,7 @@
                 app:errorEnabled="true"
                 app:errorIconDrawable="@android:drawable/ic_dialog_info"
                 app:errorIconTint="@color/red"
-                app:endIconDrawable="@drawable/quantity_24px"
+                app:endIconDrawable="@drawable/quantity_24dp"
                 app:endIconTint="?attr/drawable_producto_tintColor"
                 app:endIconMode="custom"
                 app:helperText="@string/input_text_helper_text_requrido"
