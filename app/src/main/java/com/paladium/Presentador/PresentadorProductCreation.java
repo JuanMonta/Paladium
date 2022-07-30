@@ -220,7 +220,6 @@ public class PresentadorProductCreation implements View.OnClickListener, Interfa
         }
     }
 
-
     private void registrar_O_Editar_Producto() {
         //es una edicion
         if (bundleProducto != null) {
@@ -524,9 +523,11 @@ public class PresentadorProductCreation implements View.OnClickListener, Interfa
     }
 
     private void cargarCategorias_CodBar_Nombre_Productos() {
+        //CARGAR CATEGORIAS-------------------------------------------------------------------------
         BaseDeDatos.getFireDatabaseIntanceReference()
                 .child(Utilidades.nodoPadre)
                 .child(Utilidades.nodoCategoria)
+                .orderByChild(Utilidades.nodoCategoria)
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -550,10 +551,11 @@ public class PresentadorProductCreation implements View.OnClickListener, Interfa
                     }
                 });
 
-
+        //CARGAR NOMBRE DEL PRODUCTO Y SU COD DE BARRAS---------------------------------------------
         BaseDeDatos.getFireDatabaseIntanceReference()
                 .child(Utilidades.nodoPadre)
                 .child(Utilidades.nodoProducto)
+                .orderByChild(Utilidades.nombreProducto)
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

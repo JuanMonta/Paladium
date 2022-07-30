@@ -46,6 +46,7 @@ import com.paladium.Presentador.Customs.PresenterCustomDialog_GenerarQRBarCode;
 import com.paladium.Presentador.Interfaces.InterfacePresenter_ProductCreation;
 import com.paladium.Presentador.PresentadorMainActivity;
 import com.paladium.Presentador.PresentadorProductCreation;
+import com.paladium.Presentador.PresentadorProductDescription;
 import com.paladium.R;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
@@ -115,6 +116,10 @@ public class ProductCreation extends AppCompatActivity implements View.OnClickLi
         ActivityResultLauncherCropImage();
 
         PresentadorMainActivity.progresBarMainActivity().dismiss();
+
+        if (PresentadorProductDescription.getProgressDialogProductDescr() !=null){
+            PresentadorProductDescription.progresBarProductDescription().dismiss();
+        }
     }
 
 

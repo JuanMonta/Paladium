@@ -32,14 +32,13 @@ import com.paladium.Model.Logica.Producto;
 import com.paladium.Model.Utils.Utilidades;
 import com.paladium.Presentador.Customs.PresenterCustomDialog;
 import com.paladium.R;
-import com.paladium.Vista.Activities.MainActivity;
 import com.paladium.Vista.Activities.ProductCreation;
 
 import java.util.Objects;
 
 public class PresentadorProductDescription implements View.OnClickListener, PresenterCustomDialog.ProductoBorrado {
     private final String TAG = "PresentadorProductDescr";
-    private Context mContext;
+    private static Context mContext;
     private View mView;
     private Producto producto = null;
 
@@ -48,22 +47,32 @@ public class PresentadorProductDescription implements View.OnClickListener, Pres
     private ProgressBar progressBarFoto;
     private Button btnEditar, btnEliminar;
     private ProgressDialog progressDialog;
+    private static ProgressDialog progressDialogProductDescr;
     //para que se cierre la activity cuando un producto es borrado
     private PresenterCustomDialog.ProductoBorradoFinish productoBorradoFinish;
 
     public PresentadorProductDescription(Context mContext, Bundle bundle, View view, PresenterCustomDialog.ProductoBorradoFinish productoBorradoFinish) {
-        this.mContext = mContext;
+        PresentadorProductDescription.mContext = mContext;
         this.mView = view;
         this.productoBorradoFinish = productoBorradoFinish;
-        this.progressDialog = new ProgressDialog(mContext.getApplicationContext());
+        this.progressDialog = new ProgressDialog(mContext);
+        progressDialogProductDescr = new ProgressDialog(mContext);
 
         if (bundle.keySet() != null) {
             producto = (Producto) bundle.getSerializable(Utilidades.bundleProduto);
         }
         init();
         cargarDatosProductos();
+    }
 
-        PresentadorMainActivity.progresBarMainActivity().dismiss();
+    public static ProgressDialog getProgressDialogProductDescr() {
+        return progressDialogProductDescr;
+    }
+
+    public static ProgressDialog progresBarProductDescription(){
+        progressDialogProductDescr.setMessage(PresentadorProductDescription.mContext.getString(R.string.progressdialog_CARGANDO));
+        progressDialogProductDescr.setCancelable(false);
+        return progressDialogProductDescr;
     }
 
     private void init() {
@@ -81,6 +90,8 @@ public class PresentadorProductDescription implements View.OnClickListener, Pres
         btnEditar.setOnClickListener(this);
         btnEliminar = mView.findViewById(R.id.activity_product_descrip_btnEliminar);
         btnEliminar.setOnClickListener(this);
+
+        PresentadorMainActivity.progresBarMainActivity().dismiss();
     }
 
     private ProgressDialog productProgressDialog() {
@@ -195,40 +206,47 @@ public class PresentadorProductDescription implements View.OnClickListener, Pres
             productProgressDialog().setMessage(mContext.getString(R.string.progressdialog_CARGANDO));
             productProgressDialog().show();
         }
+        if (producto.getImagen() !=null && !producto.getImagen().isEmpty()){
+            StorageReference storageReference = BaseDeDatos.getFireStorageInstanceReference();
+            StorageReference desertRef = storageReference.getStorage().getReferenceFromUrl(producto.getImagen());
+            desertRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void unused) {
+                    Log.d(TAG, "Imagen borrada, comenzando borrado de datos");
+                    borrarDatosProducto();
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.d(TAG, "no se borró la imagen");
+                    productProgressDialog().dismiss();
+                }
+            });
 
-        StorageReference storageReference = BaseDeDatos.getFireStorageInstanceReference();
-        StorageReference desertRef = storageReference.getStorage().getReferenceFromUrl(producto.getImagen());
-        desertRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+        }else {
+            Log.d(TAG, "Producto no tiene Imagen, comenzando borrado de datos");
+            borrarDatosProducto();
+        }
+    }
+
+    private void borrarDatosProducto(){
+        DatabaseReference firebaseDatabase = BaseDeDatos.getFireDatabaseIntanceReference()
+                .child(Utilidades.nodoPadre)
+                .child(Utilidades.nodoProducto)
+                .child(producto.getProductoFirebaseKey());
+        firebaseDatabase.setValue(null).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
-                Log.d(TAG, "Imagen borrada, comenzando borrado de datos");
-
-                DatabaseReference firebaseDatabase = BaseDeDatos.getFireDatabaseIntanceReference()
-                        .child(Utilidades.nodoPadre)
-                        .child(Utilidades.nodoProducto)
-                        .child(producto.getProductoFirebaseKey());
-                firebaseDatabase.setValue(null).addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void unused) {
-                        productProgressDialog().dismiss();
-                        Log.d(TAG, "datos borrados");
-                        productAlertDialog(Utilidades.alertDialog_EXITO, mContext.getApplicationContext().getString(R.string.alertdialog_borrar_producto_mensaje_EXITO));
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.d(TAG, "No se borraron los datos");
-                        productProgressDialog().dismiss();
-                        productAlertDialog(Utilidades.alertDialog_ERROR, mContext.getApplicationContext().getString(R.string.alertdialog_borrar_producto_mensaje_ERROR));
-                    }
-                });
-
+                productProgressDialog().dismiss();
+                Log.d(TAG, "datos borrados");
+                productAlertDialog(Utilidades.alertDialog_EXITO, mContext.getApplicationContext().getString(R.string.alertdialog_borrar_producto_mensaje_EXITO));
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Log.d(TAG, "no se borró la imagen");
+                Log.d(TAG, "No se borraron los datos");
                 productProgressDialog().dismiss();
+                productAlertDialog(Utilidades.alertDialog_ERROR, mContext.getApplicationContext().getString(R.string.alertdialog_borrar_producto_mensaje_ERROR));
             }
         });
     }
@@ -238,6 +256,7 @@ public class PresentadorProductDescription implements View.OnClickListener, Pres
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.activity_product_descrip_btnEditar:
+                progresBarProductDescription().show();
                 Intent intent = new Intent(mContext, ProductCreation.class);
                 Bundle bundleProducto = new Bundle();
                 bundleProducto.putSerializable(Utilidades.bundleProduto, this.producto);

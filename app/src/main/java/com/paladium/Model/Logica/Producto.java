@@ -17,6 +17,8 @@ public class Producto implements Serializable {
     private float Costo;
     //la key solo se recupera de firebase, no se la guarda en un campo del la Bd
     private String productoFirebaseKey;
+    //la key solo se recupera de firebase, no se la guarda en un campo del la Bd
+    private String categoriaFirebaseKey;
 
     public Producto() {
     }
@@ -91,5 +93,13 @@ public class Producto implements Serializable {
 
     public void setProductoFirebaseKey(String productoFirebaseKey) {
         this.productoFirebaseKey = productoFirebaseKey;
+    }
+
+    public String getCategoriaFirebaseKey() {
+        return categoriaFirebaseKey;
+    }
+
+    public void setCategoriaFirebaseKey(String categoriaFirebaseKey) {
+        this.categoriaFirebaseKey = categoriaFirebaseKey;
     }
 }

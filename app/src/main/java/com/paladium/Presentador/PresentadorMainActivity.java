@@ -3,7 +3,6 @@ package com.paladium.Presentador;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.view.MenuItem;
-import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -23,6 +22,7 @@ public class PresentadorMainActivity {
     private MeowBottomNavigation bottomNavigation;
     private final String TAG = "PresentadorMainActivity";
 
+    private Fragment currentFragment;
     private Fragment_Home fragment_home;
     private Fragment_Balance fragment_balance;
     private Fragment_Inventario fragment_inventario;
@@ -36,7 +36,7 @@ public class PresentadorMainActivity {
         dialog = new ProgressDialog(mContext);
     }
 
-    public static ProgressDialog progresBarMainActivity(){
+    public static ProgressDialog progresBarMainActivity() {
         dialog.setMessage(mContext.getString(R.string.progressdialog_CARGANDO));
         dialog.setCancelable(false);
         return dialog;
@@ -63,7 +63,17 @@ public class PresentadorMainActivity {
         });
     }
 
+
     private void cargarFragmentos(Fragment fragment, FragmentManager supportFragmentManager) {
+        if (getCurrentFragmento() == null) {
+           beginFragmentTransacction(fragment, supportFragmentManager);
+        }
+        if (getCurrentFragmento() != fragment){
+            beginFragmentTransacction(fragment, supportFragmentManager);
+        }
+    }
+
+    private void beginFragmentTransacction(Fragment fragment, FragmentManager supportFragmentManager){
         progresBarMainActivity().show();
         supportFragmentManager
                 .beginTransaction()
@@ -71,6 +81,15 @@ public class PresentadorMainActivity {
                 .replace(R.id.fragmentContainer, fragment)
                 .commit();
 
+        setCurrentFragmento(fragment);
+    }
+
+    private void setCurrentFragmento(Fragment fragmento) {
+        this.currentFragment = fragmento;
+    }
+
+    private Fragment getCurrentFragmento() {
+        return this.currentFragment;
     }
 
 }

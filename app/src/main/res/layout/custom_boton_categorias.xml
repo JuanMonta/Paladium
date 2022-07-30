@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.button.MaterialButton xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:textColor="?attr/color_texto_titulo">
+
+    <!-- este botón personalizado sireve para ser inflater para un botón que se agregará
+    de manera programática en el buttonToggleButtomGroup del fragmento inventario
+    a fin de que funja como las categorías que haya en firebase -->
+
+</com.google.android.material.button.MaterialButton>

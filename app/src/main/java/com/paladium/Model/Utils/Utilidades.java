@@ -23,12 +23,18 @@ public class Utilidades {
     public static final String costoProducto = "Costo";
     //la key no se guarda en firebase, solo se recupera
     public static final String productoFirebaseKey = "productoFirebaseKey";
+    //la key no se guarda en firebase, solo se recupera
+    public static final String categoriaFirebaseKey = "categoriaFirebaseKey";
+
+    ///---------------------filtrado de productos por categoria-----------------------------------
+    public static final String categoriaTodo = "categoriaTodo";
 
     //key para recuperar la clase producto enviado mediante un bundle
     public static final String bundleProduto = "bundleProduto";
 
     //------------NOmbre de directorio para guardar imagenes de la app
     public static final String directorioName = "ImagenesCompressed";
+
 
     // para los alertdialog customs utilizados para borrar, guardar o actualizar un produco---------
     public static final String alertDialog_OK = "alertDialog_OK";

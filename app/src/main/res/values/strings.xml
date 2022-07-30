@@ -10,6 +10,8 @@
 
     <string name="btn_actualizar">ACTUALIZAR DATOS</string>
 
+    <string name="btn_categoria_TODO">TODO</string>
+
     <string name="seleccione">Seleccione…</string>
     <string name="producto_input_error_codBarras">Este código ya está registrado.</string>
     <string name="producto_input_error_cantidad">Ingrese una cantidad</string>
