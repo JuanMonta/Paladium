@@ -28,7 +28,7 @@
                     <androidx.cardview.widget.CardView
                         android:layout_width="150dp"
                         android:layout_height="match_parent"
-                        android:layout_margin="5dp"
+                        android:layout_margin="2dp"
                         app:cardCornerRadius="10dp">
 
                         <LinearLayout
@@ -211,7 +211,8 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:src="@drawable/baseline_category_24dp" />
+            android:src="@drawable/baseline_category_24dp"
+            app:tint="?attr/drawable_producto_tintColor"/>
 
         <HorizontalScrollView
             android:layout_width="0dp"

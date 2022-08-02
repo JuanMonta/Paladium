@@ -334,8 +334,14 @@ public class Fragment_Inventario extends Fragment implements CustomRVAdapter_Pro
         switch (view.getId()) {
             case R.id.fragment_inventario_btnCrearProducto:
                 PresentadorMainActivity.progresBarMainActivity().show();
-                Intent crearProducto = new Intent(view.getContext(), ProductCreation.class);
-                startActivity(crearProducto);
+                new android.os.Handler().post(new Runnable() {
+                    @Override
+                    public void run() {
+                        Intent crearProducto = new Intent(view.getContext(), ProductCreation.class);
+                        startActivity(crearProducto);
+                    }
+                });
+
                 break;
         }
     }

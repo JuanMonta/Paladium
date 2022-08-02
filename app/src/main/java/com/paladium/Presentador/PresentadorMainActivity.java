@@ -2,6 +2,7 @@ package com.paladium.Presentador;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.os.Handler;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
@@ -34,7 +35,10 @@ public class PresentadorMainActivity {
         fragment_balance = new Fragment_Balance();
         fragment_inventario = new Fragment_Inventario();
         dialog = new ProgressDialog(mContext);
+
     }
+    //llamar al recolector de basura para liberar meoria
+    //System.gc();
 
     public static ProgressDialog progresBarMainActivity() {
         dialog.setMessage(mContext.getString(R.string.progressdialog_CARGANDO));
@@ -75,13 +79,22 @@ public class PresentadorMainActivity {
 
     private void beginFragmentTransacction(Fragment fragment, FragmentManager supportFragmentManager){
         progresBarMainActivity().show();
-        supportFragmentManager
-                .beginTransaction()
-                .addToBackStack(null)
-                .replace(R.id.fragmentContainer, fragment)
-                .commit();
 
-        setCurrentFragmento(fragment);
+        new android.os.Handler().post(new Runnable() {
+            @Override
+            public void run() {
+
+                supportFragmentManager
+                        .beginTransaction()
+                        .addToBackStack(null)
+                        .replace(R.id.fragmentContainer, fragment)
+                        .commit();
+
+                setCurrentFragmento(fragment);
+            }
+        });
+
+
     }
 
     private void setCurrentFragmento(Fragment fragmento) {
